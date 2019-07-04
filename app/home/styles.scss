@@ -525,3 +525,8 @@ footer {
 .goodbye:global(.alert) {
     margin-bottom: 0;
 }
+
+.navbar-collapse.collapse.in {
+  overflow-y: visible !important;
+}
+
