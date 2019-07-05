@@ -11,6 +11,11 @@
                 {{t 'auth_dropdown.sign_in'}}
             </a>
             {{else}}
+            <style>
+                .navbar-collapse .collapse .in {
+                    overflow-y: visible !important;
+                }
+            </style> 
             <div id='embDS' />
             {{embedded-ds 'embDS'}}
             {{/if}}
