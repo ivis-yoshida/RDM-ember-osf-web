@@ -8,7 +8,11 @@
     width: unset !important;
 }
 
-.navbar-collapse.collapse.in {
-    overflow-y: visible !important;
+.NavbarCollapse {
+    .Collapse {
+        .In {
+            overflow-y: visible !important;
+        }
+    }
 }
 
