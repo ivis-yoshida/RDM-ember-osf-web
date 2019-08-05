@@ -38,13 +38,13 @@
                                         <p class="text-center f-w-lg">{{t 'dashboard.quicksearch.other_links'}}</p>
                                         <div local-class='quick-search-table'>
                                             <div class="row m-t-md" local-class="node-col-headers">
-                                                <div class="col-sm-3 col-md-6">
+                                                <div class="col-sm-3 col-md-3">
                                                     <div local-class="quick-search-col">
                                                         <span>{{t 'general.title'}}</span>
                                                         {{sort-button sortAction=(action 'sortProjects') sort=sort sortBy='title' class='sort_button'}}
                                                     </div>
                                                 </div>
-                                                <div class="col-sm-3 col-md-3">
+                                                <div class="col-sm-2 col-md-2">
                                                     <div local-class="quick-search-col">
                                                         <span>{{t 'general.contributors'}}</span>
                                                     </div>
@@ -53,6 +53,16 @@
                                                     <div local-class="quick-search-col">
                                                         <span>{{t 'general.modified'}}</span>
                                                         {{sort-button sortAction=(action 'sortProjects') sort=sort sortBy='last_logged' class='sort_button'}}
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-2 col-md-2">
+                                                    <div local-class="quick-search-col">
+                                                        <span>{{t 'general.proj_admin'}}</span>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-2 col-md-2">
+                                                    <div local-class="quick-search-col">
+                                                        <span>{{t 'general.quota_notice'}}</span>
                                                     </div>
                                                 </div>
                                             </div>

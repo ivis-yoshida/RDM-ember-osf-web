@@ -73,6 +73,8 @@ export default {
         component: 'component',
         hosted_on_the_osf: `Hosted on ${shortBrand}`,
         please_confirm: 'Please confirm',
+        proj_admin: 'Project Administrator',
+        quota_notice: 'NII Storage Quota Notice',
     },
     maintenance: {
         line1: 'The site will undergo maintenance between <strong>{{start}} and {{end}}</strong> ({{utc}} UTC).',
