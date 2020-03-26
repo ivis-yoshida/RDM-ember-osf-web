@@ -528,7 +528,7 @@ export default {
         },
     },
     tos_consent: {
-        paragraph: '<a href="{{link1}}">利用規約</a> and <a href="{{link2}}">プライバシーポリシー</a>を更新しました。注意深くお読みください。',
+        paragraph: '<a href="{{link1}}">利用規約</a>と<a href="{{link2}}">プライバシーポリシー</a>を更新しました。注意深くお読みください。',
         have_read_and_agree: '規約を読み、同意します',
         continue: '続ける',
     },
