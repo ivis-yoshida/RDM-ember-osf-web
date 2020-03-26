@@ -34,7 +34,7 @@ export default {
         },
     },
     general: {
-        OSF: 'GakuNin RDM',
+        OSF: pageName,
         share: '共有',
         embed: '埋め込み',
         download: 'ダウンロード',
