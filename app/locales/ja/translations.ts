@@ -1,4 +1,19 @@
 /* tslint:disable:object-literal-sort-keys max-line-length */
+import config from 'ember-get-config';
+
+const {
+    OSF: {
+        pageName,
+        longBrand,
+    },
+    signUpPolicy: {
+        privacyPolicyLink,
+        cookiesLink,
+    },
+    navbar: {
+        useSearch,
+    },
+} = config;
 
 export default {
     documentType: {
@@ -34,7 +49,7 @@ export default {
         },
     },
     general: {
-        OSF: 'GakuNin RDM',
+        OSF: pageName,
         share: '共有',
         embed: '埋め込み',
         download: 'ダウンロード',
@@ -216,7 +231,7 @@ export default {
         create_new_project_button: '新規プロジェクト作成',
         quicksearch: {
             search: 'プロジェクトを検索',
-            other_links: 'あなたのプロジェクトを整理、<a href="/search/">検索</a>するには、<a href="/myprojects/">マイプロジェクト</a>を開きます',
+	    other_links: `あなたのプロジェクトを整理${useSearch ? '、<a href="/search/">検索</a>' : ''}するには、<a href="/myprojects/">マイプロジェクト</a>を開きます`,
             no_results: 'プロジェクトが見つかりません。',
             no_projects: {
                 line1: 'まだプロジェクトがありません。画面右上のボタンからプロジェクトを作成して下さい。',
@@ -389,7 +404,7 @@ export default {
         title: 'ホーム',
         youtube_modal_title: 'GakuNin RDMを始める',
         alert_logged_out: 'ログアウトしました。',
-        brand: 'GakuNin RDM',
+        brand: longBrand,
         tagline: '研究データ管理による研究推進と研究公正',
         youtube_label: 'GakuNin RDM YouTube ビデオ',
         osf_screenshot_alt: 'GakuNin RDMのスクリーンショット',
@@ -528,7 +543,7 @@ export default {
         },
     },
     tos_consent: {
-        paragraph: '<a href="{{link1}}">利用規約</a>と<a href="{{link2}}">プライバシーポリシー</a>を更新しました。注意深くお読みください。',
+        paragraph: '<a href="{{link1}}">利用規約</a> and <a href="{{link2}}">プライバシーポリシー</a>を更新しました。注意深くお読みください。',
         have_read_and_agree: '規約を読み、同意します',
         continue: '続ける',
     },
@@ -1502,7 +1517,7 @@ export default {
         `,
     },
     cookieBanner: {
-        cookieWarning: 'このWebサイトは、ユーザー体験を向上させるためにCookieに依存しています。 [同意する]をクリックするか、サイトの使用を継続することで同意します。詳細については、<a href="https://github.com/CenterForOpenScience/NII.io/blob/master/PRIVACY_POLICY.md">プライバシーポリシー</a>、または<a href="https://github.com/CenterForOpenScience/cos.io/blob/master/PRIVACY_POLICY.md#7-types-of-information-we-collect">クッキーの使用</a>に関する情報をご覧ください。',
+    cookieWarning: `このWebサイトは、ユーザー体験を向上させるためにCookieに依存しています。 [同意する]をクリックするか、サイトの使用を継続することで同意します。詳細については、<a href="${privacyPolicyLink}">プライバシーポリシー</a>、または<a href="${cookiesLink}">クッキーの使用</a>に関する情報をご覧ください。`,
         accept: '同意',
     },
     discover: {
