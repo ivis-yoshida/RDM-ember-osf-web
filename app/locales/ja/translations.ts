@@ -408,7 +408,7 @@ export default {
         youtube_modal_title: 'GakuNin RDMを始める',
         alert_logged_out: 'ログアウトしました。',
         brand: longBrand,
-        tagline: '研究データ管理による研究推進と研究公正',
+        tagline: 'FIT2020デモ実演中',
         youtube_label: 'GakuNin RDM YouTube ビデオ',
         osf_screenshot_alt: 'GakuNin RDMのスクリーンショット',
         signup_title: '無料でオープンソース。 今すぐ始めましょう。',
