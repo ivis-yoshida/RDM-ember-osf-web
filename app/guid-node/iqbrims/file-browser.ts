@@ -1,7 +1,5 @@
-import EmberObject from '@ember/object';
-
-import { action, computed } from '@ember/object';
 import { A } from '@ember/array';
+import EmberObject, { action, computed } from '@ember/object';
 import { later } from '@ember/runloop';
 import { all, task, timeout } from 'ember-concurrency';
 

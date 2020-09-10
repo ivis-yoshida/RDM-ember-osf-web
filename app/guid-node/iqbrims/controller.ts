@@ -1,8 +1,8 @@
+import Controller from '@ember/controller';
+import EmberError from '@ember/error';
 import { action, computed } from '@ember/object';
 import { reads } from '@ember/object/computed';
 import { inject as service } from '@ember/service';
-import Controller from '@ember/controller';
-import EmberError from '@ember/error';
 
 import DS from 'ember-data';
 
