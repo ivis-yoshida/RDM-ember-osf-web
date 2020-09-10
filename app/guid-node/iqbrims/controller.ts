@@ -953,7 +953,7 @@ export default class GuidNodeIQBRIMS extends Controller {
             }, 500);
             return undefined;
         }
-        const files = defaultStorage.rootFolder.filter(f => f.name === this.workingFolderName);
+        const files = defaultStorage.rootFolder.files.filter(f => f.name === this.workingFolderName);
         if (files.length === 0) {
             this.createWorkingDirectory(defaultStorage);
             return undefined;

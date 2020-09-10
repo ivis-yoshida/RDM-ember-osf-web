@@ -235,7 +235,7 @@ export default class IQBRIMSFileBrowser extends EmberObject {
             }, 500);
             return undefined;
         }
-        const files = defaultStorage.rootFolder.filter(f => f.name === this.folderName);
+        const files = defaultStorage.rootFolder.files.filter(f => f.name === this.folderName);
         if (files.length === 0) {
             return undefined;
         }
