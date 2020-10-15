@@ -12,83 +12,12 @@ For details, see the web site:
 
 --------------------------------------------------------
 */
-function checkDiscofeedList(json, list){
-  var newList = new Array();
-  var index = 0;
-  var matchFlg = false;
-
-  for (var j = 0, length = list.length; j < length; j++) {
-    for (var i in json) {
-      if (json[i].entityID == list[j][0]) {
-        newList[index] = list[j];
-        matchFlg = true;
-        index++;
-        break;
-      }
-    }
-  }
-  return newList;
-}
-
-function setDiscofeedList(json){
-  if (!json) return;
-  inc_search_list = checkDiscofeedList(json, inc_search_list);
-  favorite_list = checkDiscofeedList(json, favorite_list);
-  hint_list = checkDiscofeedList(json, hint_list);
-}
-
-// It adds it to window event.
-function start() {
-  new Suggest.Local(
-        "keytext",                // element id of input area
-        "view_incsearch",         // element id of IdP list display area
-        "view_incsearch_animate", // element id of IdP list display animate area
-        "view_incsearch_scroll",  // element id of IdP list display scroll area
-        inc_search_list,          // IdP list
-        favorite_list,            // IdP list (Favorite)
-  hint_list,                // IdP list (Hint IP, Domain)
-        "dropdown_img",           // element id of dropdown image
-        "wayf_submit_button",     // element id of select button
-        "clear_a",                // element id of clear
-        initdisp,                 // Initial display of input area
-        dispDefault,              // Select IdP display of input area
-        dropdown_down,            // URL of deropdown down image 
-        dropdown_up,              // URL of deropdown up image
-        favorite_idp_group,       // favorite idp list group
-  hint_idp_group,           // hint idp list group
-        {dispMax: 500, showgrp: wayf_show_categories}); // option
-}
-
-// DiscoFeed
-if (typeof(wayf_discofeed_url) != "undefined" && wayf_discofeed_url != ''){
-  var urldomain = wayf_discofeed_url.split('/')[2];
-  if(location.hostname != urldomain && window.XDomainRequest){
-    var xdr = new XDomainRequest();
-    xdr.onload = function(){
-        setDiscofeedList(eval("(" + xdr.responseText + ")"));
-    }
-    xdr.open("get", wayf_discofeed_url, false);
-    xdr.send( null );
-  } else {
-    $.ajax({
-      type: 'get',
-      url: wayf_discofeed_url,
-      dataType: 'json',
-      async: false,
-      success: function(json) {
-        setDiscofeedList(json);
-      }
-    });
-  }
-}
-
-window.addEventListener ?
-        window.addEventListener('load', start, false) :
-        window.attachEvent('onload', start);
-
 if (!Suggest) {
   var Suggest = {};
 }
+
+function start(){
+
 /*-- KeyCodes -----------------------------------------*/
 Suggest.Key = {
   TAB:     9,
@@ -112,7 +41,8 @@ Suggest.Local = function() {
 };
 Suggest.Local.prototype = {
   initialize: function(input, suggestArea, animateArea, scrollArea, candidateList, favoriteList, hintList,
-                       dnupImgElm, selectElm, clearElm, initDisp, dispDefault, dnImgURL, upImgURL, favoriteIdpGroup, hintIdpGroup) {
+                       dnupImgElm, geolocationImgElm, selectElm, mapElm, clearElm, initDisp, dispDefault, 
+                       dnImgURL, upImgURL, geoOffImgURL, geoOnImgURL, favoriteIdpGroup, hintIdpGroup, embeddedFlg, optionElm) {
 
     this.input = this._getElement(input);
     this.suggestArea = this._getElement(suggestArea);
@@ -122,21 +52,26 @@ Suggest.Local.prototype = {
     this.favoriteList = favoriteList;
     this.hintList = hintList;
     this.dnupImgElm = this._getElement(dnupImgElm);
+    this.geolocationImgElm = this._getElement(geolocationImgElm);
     this.selectElm = this._getElement(selectElm);
+    this.mapElm = this._getElement(mapElm);
     this.clearElm = this._getElement(clearElm);
     this.initDisp = initDisp;
     this.dispDefault = dispDefault;
     this.dnImgURL = dnImgURL;
     this.upImgURL = upImgURL;
+    this.geoOffImgURL = geoOffImgURL;
+    this.geoOnImgURL = geoOnImgURL;
     this.favoriteIdpGroup = favoriteIdpGroup;
     this.hintIdpGroup = hintIdpGroup;
+    this.embeddedFlg = embeddedFlg;
     this.setInputText(dispidp);
     this.oldText = (this.initDisp == this.getInputText()) ?
       '': this.getInputText();
     this.searchFlg = false;
     this.noMatch = true;
     this.userAgentFlg = 0;
-    this.discofeedFlg = false;
+    this.optionElm = this._getElement(optionElm);
 
     if (this.candidateList.length > 0) {
       // favorite IdP List
@@ -148,11 +83,14 @@ Suggest.Local.prototype = {
         this.candidateList = this.hintList.concat(this.candidateList);
       }
     }
+    if (!discofeed_flg){
+      this.candidateList = new Array();
+    }
     if (this.candidateList.length == 0) {
       this.setInputText(this.initDisp);
     }
 
-    if (arguments[16]) this.setOptions(arguments[16]);
+    if (arguments[22]) this.setOptions(arguments[22]);
 
     // reg event
     this._addEvent(this.input, 'focus', this._bind(this.tabFocus));
@@ -164,13 +102,14 @@ Suggest.Local.prototype = {
     }
     this._addEvent(this.input, keyevent, this._bindEvent(this.keyEvent));
     this._addEvent(this.dnupImgElm, keyevent, this._bindEvent(this.keyEvent));
+    this._addEvent(this.geolocationImgElm, keyevent, this._bindEvent(this.keyEvent));
+    this._addEvent(this.mapElm, keyevent, this._bindEvent(this.keyEvent));
     this._addEvent(this.clearElm, keyevent, this._bindEvent(this.keyEvent));
     this._addEvent(this.dnupImgElm, 'click', this._bindEvent(this.elementClick));
+    this._addEvent(this.geolocationImgElm, 'click', this._bindEvent(this.elementClick));
+    this._addEvent(this.mapElm, 'click', this._bindEvent(this.elementClick));
     this._addEvent(this.clearElm, 'click', this._bindEvent(this.elementClick));
-    this._addEvent(this.clearElm, 'focus', this._bindEvent(this.changeClass, this.classActive));
-    this._addEvent(this.clearElm, 'blur', this._bindEvent(this.changeClass, this.classDefault));
-    this._addEvent(this.clearElm, 'mouseover', this._bindEvent(this.changeClass, this.classActive));
-    this._addEvent(this.clearElm, 'mouseout', this._bindEvent(this.changeClass, this.classDefault));
+    this._addEvent(this.optionElm, 'click', this._bindEvent(this.elementClick, 'optionElm'));
 
     // init
     this.clearSuggestArea();
@@ -180,6 +119,8 @@ Suggest.Local.prototype = {
     if (this.userAgentFlg == 1){
       this.touchScroll();
     }
+
+    this.geolocationImgElm.src = this.geoOffImgURL;
 
   },
 
@@ -191,16 +132,17 @@ Suggest.Local.prototype = {
   ignoreCase: true,
   highlight: false,
   dispAllKey: false,
-  classMouseOver: 'over',
-  classSelect: 'select',
-  classDefault: 'default',
-  classActive: 'active',
-  classGroup: 'list_group',
-  classIdPNm: 'list_idp',
-  classGroupFavorite: 'list_group_favorite',
-  classIdPNmFavorite: 'list_idp_favorite',
-  classGroupHint: 'list_group_hint',
-  classIdPNmHint: 'list_idp_hint',
+  classMouseOver: 'wayf_over',
+  classSelect: 'wayf_select',
+  classDefault: 'wayf_default',
+  classActive: 'wayf_active',
+  classGroup: 'wayf_list_group',
+  classIdPNm: 'wayf_list_idp',
+  classIdPRegURL: 'wayf_list_idp_regurl',
+  classGroupFavorite: 'wayf_list_group_favorite',
+  classIdPNmFavorite: 'wayf_list_idp_favorite',
+  classGroupHint: 'wayf_list_group_hint',
+  classIdPNmHint: 'wayf_list_idp_hint',
   dispListTime: 300,
   showgrp: true,
   hookBeforeSearch: function(){},
@@ -224,11 +166,14 @@ Suggest.Local.prototype = {
 
   checkNoMatch: function(text) {
     var flg = true;
+    var search_cnt = 0;
+    var countHintList = 0;
+    var countFavoriteList = 0;
 
     if (text != '') {
-      for (var i = 0, length = this.candidateList.length; i < length; i++) {
-        for (var j = 3, length2 = this.candidateList[i].length; j < length2; j++) {
-          if (text.toLowerCase() == this.candidateList[i][j].toLowerCase()) {
+      for (var i=0; i<this.candidateList.length; i++){
+        for (var j=0; j<this.candidateList[i].search.length; j++){
+          if (text.toLowerCase() == this.candidateList[i].search[j].toLowerCase()) {
             flg = false;
             break;
           }
@@ -239,21 +184,35 @@ Suggest.Local.prototype = {
       }
     }
 
-    var search_cnt = 0;
     if (this.suggestList){
-      search_cnt = this.suggestList.length - this.hintList.length - this.favoriteList.length;
+      for (var i=0; i<this.hintList.length; i++){
+        if (this.isMatchKind(this.hintList[i]) && this.isMatchLocation(this.hintList[i])){
+          countHintList++;
+        }
+      }
+      for (var i=0; i<this.favoriteList.length; i++){
+        if (this.isMatchKind(this.favoriteList[i]) && this.isMatchLocation(this.favoriteList[i])){
+          countFavoriteList++;
+        }
+      }
+      search_cnt = this.suggestList.length - countHintList - countFavoriteList;
     }
     if (search_cnt == 1) {
-      this.setStyleActive(this.suggestList[this.hintList.length + this.favoriteList.length]);
-      hiddenKeyText = this.candidateList[this.suggestIndexList[this.hintList.length + this.favoriteList.length]][2];
-      this.activePosition = this.hintList.length + this.favoriteList.length;
+      this.setStyleActive(this.suggestList[countHintList + countFavoriteList]);
+      hiddenKeyText = this.candidateList[this.suggestIndexList[countHintList + countFavoriteList]].name;
+      this.activePosition = countHintList + countFavoriteList;
       flg = false;
     }
 
     this.noMatch = flg;
   },
 
-  elementClick: function(event) {
+  elementClick: function(event, optionflg) {
+    if (optionflg == 'optionElm') {
+      if (this.dnupImgElm.src == this.upImgURL) {
+        this.search();
+      }
+    } else {
     var element = this._getEventElement(event);
     if (element.id == this.input.id) {
       this.execSearch();
@@ -264,15 +223,25 @@ Suggest.Local.prototype = {
       } else {
         this.closeList();
       }
+    } else if (element.id == this.geolocationImgElm.id) {
+      if (this.geolocationImgElm.src == this.geoOffImgURL) {
+        addGeoHintList();
+      } else {
+        delGeoHintList();
+      }
     } else if (element.id == this.clearElm.id) {
       this.setInputText('');
-      this.execSearch();
+      hiddenKeyText = '';
+      refresh_flg = false;
+      this.input.focus();
+      this.search();
+      if (this.userAgentFlg == 0) {
+        this.scrollArea.scrollTop = 0;
+      }
+    } else if (element.id == this.mapElm.id) {
+      displayMapIdP(false);
     }
-  },
-
-  changeClass: function(event, classname) {
-    var element = this._getEventElement(event);
-    element.className = classname;
+    }
   },
 
   execSearch: function() {
@@ -316,7 +285,6 @@ Suggest.Local.prototype = {
     }
 
     this.noMatch = true;
-
     if (text != this.oldText || this.searchFlg) {
       hiddenKeyText = '';
       this.searchFlg = false;
@@ -336,11 +304,10 @@ Suggest.Local.prototype = {
     var text = this.getInputText();
 
     if (text == null || text == this.initDisp) return;
-
-    if (!this.discofeedFlg){
-      this.candidateList = inc_search_list;
-      this.favoriteList = favorite_list;
-      this.hintList = hint_list;
+    if ((!geolocation_flg || !refresh_flg ) && discofeed_flg){
+      this.candidateList = json_idp_list;
+      this.favoriteList = json_idp_favoritelist;
+      this.hintList = json_idp_hintlist;
       if (this.candidateList.length > 0) {
         // favorite IdP List
         if (this.favoriteList.length > 0) {
@@ -351,10 +318,11 @@ Suggest.Local.prototype = {
           this.candidateList = this.hintList.concat(this.candidateList);
         }
       }
-      if (this.candidateList.length == 0) {
-        this.setInputText(this.initDisp);
-      }
-      this.discofeedFlg = true;
+      geolocation_flg = true;
+      refresh_flg = true;
+    }
+    if (this.candidateList.length == 0) {
+      this.setInputText(this.initDisp);
     }
 
     this.hookBeforeSearch(text);
@@ -371,23 +339,55 @@ Suggest.Local.prototype = {
   _search: function(text) {
 
     var resultList = [];
-    var temp; 
+    var temp;
+    var chkFlg;
     this.suggestIndexList = [];
-
-    for (var i = 0, length = this.candidateList.length; i < length; i++) {
-      for (var j = 3, length2 = this.candidateList[i].length; j < length2; j++) {
-        if (text == '' ||
-             this.isMatch(this.candidateList[i][j], text) != null ||
-             this.candidateList[i][1] == this.hintIdpGroup ||
-             this.candidateList[i][1] == this.favoriteIdpGroup) {
-          resultList.push(this.candidateList[i]);
-          this.suggestIndexList.push(i);
-          break;
+    for (var i=0; i<this.candidateList.length; i++){
+      if (this.isMatchKind(this.candidateList[i]) && this.isMatchLocation(this.candidateList[i])){
+        if (this.embeddedFlg == false ||
+              isAllowedType(this.candidateList[i].entityid,this.candidateList[i].categoryKey)){
+          if (text == '' ||
+               this.candidateList[i].categoryName == this.hintIdpGroup ||
+               this.candidateList[i].categoryName == this.favoriteIdpGroup) {
+            resultList.push(this.candidateList[i]);
+            this.suggestIndexList.push(i);
+          } else {
+            for (var j=0; j<this.candidateList[i].search.length; j++){
+              if (this.isMatch(this.candidateList[i].search[j], text) != null) {
+                resultList.push(this.candidateList[i]);
+                this.suggestIndexList.push(i);
+                break;
+              }
+            }
+          }
         }
       }
       if (this.dispMax != 0 && resultList.length >= this.dispMax) break;
     }
     return resultList;
+  },
+
+  isMatchKind: function(chkIdP) {
+    var chkFlg = false;
+    if (selkind == '' || selkind == 'all' || selkind == chkIdP.kind) {
+      chkFlg = true;
+    } else if (typeof chkIdP.kind != "undefined"){
+      for (var i=0; i<chkIdP.kind.length; i++){
+        if (selkind == chkIdP.kind[i]){
+          chkFlg = true;
+          break;
+        }
+      }
+    }
+    return chkFlg;
+  },
+
+  isMatchLocation: function(chkIdP) {
+    var chkFlg = false;
+    if (sellocation == '' || sellocation == 'all' || sellocation == chkIdP.type || (sellocation == 'others' && chkIdP.type == 'unknown')) {
+      chkFlg = true;
+    }
+    return chkFlg;
   },
 
   isMatch: function(value, pattern) {
@@ -426,54 +426,72 @@ Suggest.Local.prototype = {
     }
     var oldGroup = '';
     $('#' + this.suggestArea.id).css('width', '');
-    for (var i = 0, length = resultList.length; i < length; i++) {
-      if (this.showgrp && oldGroup != resultList[i][1]) {
+    for (var i=0; i<resultList.length; i++){
+      if (this.showgrp && oldGroup != resultList[i].categoryName) {
         var element = document.createElement(this.listTagName);
-        if (resultList[i][1] == this.hintIdpGroup) {
+        if (resultList[i].categoryName == this.hintIdpGroup) {
           element.className = this.classGroupHint;
           element.innerHTML = '&nbsp;' + this.hintIdpGroup;
-        } else if (resultList[i][1] == this.favoriteIdpGroup) {
+        } else if (resultList[i].categoryName == this.favoriteIdpGroup) {
           element.className = this.classGroupFavorite;
           element.innerHTML = '&nbsp;' + this.favoriteIdpGroup;
         } else {
           element.className = this.classGroup;
-          element.innerHTML = '&nbsp;' + resultList[i][1];
+          element.innerHTML = '&nbsp;' + resultList[i].categoryName;
         }
         this.suggestArea.appendChild(element);
-        oldGroup = resultList[i][1];
+        oldGroup = resultList[i].categoryName;
       }
         
-      var element = document.createElement(this.listTagName);
-      if (resultList[i][1] == this.hintIdpGroup) {
-        element.className = this.classIdPNmHint;
-      } else if (resultList[i][1] == this.favoriteIdpGroup) {
-        element.className = this.classIdPNmFavorite;
+      var element1 = document.createElement(this.listTagName);
+      var element2 = document.createElement(this.listTagName);
+      if (resultList[i].categoryName == this.hintIdpGroup) {
+        element1.className = this.classIdPNmHint;
+        element2.className = this.classIdPNmHint;
+      } else if (resultList[i].categoryName == this.favoriteIdpGroup) {
+        element1.className = this.classIdPNmFavorite;
+        element2.className = this.classIdPNmFavorite;
       } else {
-        element.className = this.classIdPNm;
+        element1.className = this.classIdPNm;
+        element2.className = this.classIdPNm;
       }
-      if (this.userAgentFlg == 0) {
-        element.innerHTML = resultList[i][2];
+
+      var logo = '';
+      if (resultList[i].logoURL && resultList[i].logoURL != '') {
+        logo = '&nbsp;<span style="vertical-align: middle; padding:0px; margin:0px;"><img src="' + resultList[i].logoURL + '" height="18"/></span>';
+      }
+     
+      if (this.userAgentFlg == 0 || this.userAgentFlg == 2) {
+        element1.innerHTML = resultList[i].name + logo;
       } else {
-        element.innerHTML = '<a onclick="">' + resultList[i][2] + '</a>';
+        element1.innerHTML = '<a onclick="">' + resultList[i].name + '</a>' + logo;
       }
-      this.suggestArea.appendChild(element);
 
-      this._addEvent(element, 'click', this._bindEvent(this.listClick, i));
-      this._addEvent(element, 'mouseover', this._bindEvent(this.listMouseOver, i));
-      this._addEvent(element, 'mouseout', this._bindEvent(this.listMouseOut, i));
+      this.suggestArea.appendChild(element1);
 
-      this.suggestList.push(element);
+      this._addEvent(element1, 'click', this._bindEvent(this.listClick, i));
+      this._addEvent(element1, 'mouseover', this._bindEvent(this.listMouseOver, i));
+      this._addEvent(element1, 'mouseout', this._bindEvent(this.listMouseOut, i));
+
+      var regurl = '';
+      if ((typeof wayf_sp_entityID != 'undefined') && (typeof wayf_return_url != 'undefined') && (resultList[i].registrationURL != '')) {
+        element2.innerHTML = '<a href="javascript:void(0)" class="' + this.classIdPRegURL + '">' + reg_button + '</a>';
+        this.suggestArea.appendChild(element2);
+        this._addEvent(element2, 'click', this._bindEvent(this.listClick2, i));
+      }
+
+      this.suggestList.push(element1);
     }
 
     this.scrollArea.scrollTop = 0;
     this.dnupImgElm.src = this.upImgURL;
     $('#' + this.animateArea.id).slideDown(this.dispListTime);
-    var scrollbarWidth = 0;
-    if (this.userAgentFlg == 0) scrollbarWidth = 19;
-    var scrollAreaWidth = Number($('#' + this.scrollArea.id).css('width').replace('px', ''));
-    var suggestAreaWidth = Number($('#' + this.suggestArea.id).css('width').replace('px', ''));
+    var scrollAreaWidth = this.scrollArea.clientWidth;
+    var suggestAreaWidth = this.suggestArea.scrollWidth;
     if (scrollAreaWidth > suggestAreaWidth) {
-      $('#' + this.suggestArea.id).css('width', scrollAreaWidth - scrollbarWidth + 'px');
+      $('#' + this.suggestArea.id).css('width', scrollAreaWidth + 'px');
+    } else {
+      $('#' + this.suggestArea.id).css('width', suggestAreaWidth + 'px');
     }
     if (this.userAgentFlg == 1) {
       $('#' + this.scrollArea.id).flickable('enable');
@@ -551,14 +569,13 @@ Suggest.Local.prototype = {
   },
 
   keyEventDispAll: function() {
-
     // init
     this.clearSuggestArea();
 
     this.oldText = this.getInputText();
 
     this.suggestIndexList = [];
-    for (var i = 0, length = this.candidateList.length; i < length; i++) {
+    for (var i=0; i<this.candidateList.length; i++){
       this.suggestIndexList.push(i);
     }
 
@@ -621,11 +638,8 @@ Suggest.Local.prototype = {
   keyEventOther: function(event) {},
 
   changeActive: function(index) {
-
     this.setStyleActive(this.suggestList[index]);
-
-    this.setInputText(this.candidateList[this.suggestIndexList[index]][2]);
-
+    this.setInputText(this.candidateList[this.suggestIndexList[index]].name);
     this.oldText = this.getInputText();
     this.input.focus();
     this.selectElm.disabled = false;
@@ -642,6 +656,27 @@ Suggest.Local.prototype = {
 
   listClick: function(event, index) {
 
+    this.closeList();
+    this.changeUnactive();
+    this.activePosition = index;
+    this.changeActive(index);
+
+    this.moveEnd();
+
+    if (index != null && index >= 0) {
+      this.selectElm.disabled = false;
+    }
+  },
+
+  listClick2: function(event, index) {
+    var regURL = this.candidateList[this.suggestIndexList[index]].registrationURL;
+    var return_url = wayf_sp_samlDSURL + getGETArgumentSeparator(wayf_sp_samlDSURL);
+    return_url += 'target=' + encodeURIComponent(wayf_return_url);
+    return_url += '&amp;entityID=' + encodeURIComponent(this.candidateList[this.suggestIndexList[index]].entityid);
+    regURL += '?entityID=' + encodeURIComponent(wayf_sp_entityID);
+    regURL += '&amp;return=' + encodeURIComponent(return_url);
+    location.href = regURL;
+    
     this.closeList();
     this.changeUnactive();
     this.activePosition = index;
@@ -686,8 +721,21 @@ Suggest.Local.prototype = {
   },
 
   setStyleUnactive: function(element, index) {
-    if (index < this.hintList.length + this.favoriteList.length){
-      if (this.hintList.length > 0 && index < this.hintList.length){
+    var countHintList = 0;
+    var countFavoriteList = 0;
+    for (var i=0; i<this.hintList.length; i++){
+      if (this.isMatchKind(this.hintList[i]) && this.isMatchLocation(this.hintList[i])){
+        countHintList++;
+      }
+    }
+    for (var i=0; i<this.favoriteList.length; i++){
+      if (this.isMatchKind(this.favoriteList[i]) && this.isMatchLocation(this.favoriteList[i])){
+        countFavoriteList++;
+      }
+    }
+
+    if (index < countHintList + countFavoriteList){
+      if (countHintList > 0 && index < countHintList){
         element.className = this.classIdPNmHint;
       } else {
         element.className = this.classIdPNmFavorite;
@@ -825,5 +873,6 @@ Suggest.LocalMulti.prototype.setInputText = function(text) {
 Suggest.LocalMulti.prototype.getLastTokenPos = function() {
   return this.input.value.lastIndexOf(this.delim);
 };
+});
 
 start();
