@@ -7902,7 +7902,7 @@ function clone(obj) {
 			wayf_authReq_URL += '?providerId=' + encodeURIComponent(wayf_sp_entityID);
 			wayf_authReq_URL += '&amp;target=' + encodeURIComponent(wayf_return_url);
 			wayf_authReq_URL += '&amp;shire=' + encodeURIComponent(wayf_sp_samlACURL);
-			wayf_authReq_URL += '&amp;time=1602748329';
+			wayf_authReq_URL += '&amp;time=1602754154';
 		}
 		
 		// Add form element
@@ -7914,7 +7914,7 @@ function clone(obj) {
 		writeHTML('<script type="text/javascript" src="https://maps.google.com/maps/api/js?key=' + wayf_googlemap_key + '"></script>');
 		writeHTML('<script type="text/javascript" src="https://test-ds.gakunin.nii.ac.jp/GakuNinDS/incsearch/functions-geolocation.js"></script>');
 		writeHTML('<script type="text/javascript" src="https://test-ds.gakunin.nii.ac.jp/GakuNinDS/incsearch/functions-common.js"></script>');
-		writeHTML('<script type="text/javascript" src="https://test-ds.gakunin.nii.ac.jp/GakuNinDS/incsearch/suggest.js"></script>');
+		writeHTML('<script type="text/javascript" src="/ember_osf_web/suggest_js"></script>');
 		writeHTML('<script language="JavaScript" type="text/javascript">');
 		writeHTML('	//$(function(){checkDiscofeed();});');
 		writeHTML('</script>');
