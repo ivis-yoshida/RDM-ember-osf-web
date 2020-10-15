@@ -16,7 +16,7 @@ if (!Suggest) {
   var Suggest = {};
 }
 
-function start(){
+function startSuggest(){
 
 /*-- KeyCodes -----------------------------------------*/
 Suggest.Key = {
@@ -875,4 +875,4 @@ Suggest.LocalMulti.prototype.getLastTokenPos = function() {
 };
 };
 
-start();
+startSuggest();
