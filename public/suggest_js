@@ -59,6 +59,29 @@ function start() {
         {dispMax: 500, showgrp: wayf_show_categories}); // option
 }
 
+// DiscoFeed
+if (typeof(wayf_discofeed_url) != "undefined" && wayf_discofeed_url != ''){
+  var urldomain = wayf_discofeed_url.split('/')[2];
+  if(location.hostname != urldomain && window.XDomainRequest){
+    var xdr = new XDomainRequest();
+    xdr.onload = function(){
+        setDiscofeedList(eval("(" + xdr.responseText + ")"));
+    }
+    xdr.open("get", wayf_discofeed_url, false);
+    xdr.send( null );
+  } else {
+    $.ajax({
+      type: 'get',
+      url: wayf_discofeed_url,
+      dataType: 'json',
+      async: false,
+      success: function(json) {
+        setDiscofeedList(json);
+      }
+    });
+  }
+}
+
 window.addEventListener ?
         window.addEventListener('load', start, false) :
         window.attachEvent('onload', start);
