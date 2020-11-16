@@ -1,0 +1,295 @@
+{{! using unsafeTitle here to avoid double encoding because the title helper does its own }}
+{{title 'integromat'}}
+<div class='container' local-class='Integromat'>
+    {{#if this.loading}}
+        {{t 'integromat.loading'}}
+    {{else}}
+<!--
+        <div local-class='Integromat__editor'>
+            <h2 local-class='Integromat__header'>integromatheader</h2>
+            <div class='form-group row'>
+                <label class='col-sm-2' for='param1'>integromatparam1</label>
+                <div data-test-param1 class='col-sm-10'>
+                    {{input
+                        name='param1'
+                        placeholder='integromat.placeholders.param1'
+                        class='form-control'
+                        value=this.param1
+                        type='text'
+                    }}
+                </div>
+            </div>
+            <div class='text-right' local-class='Integromat__buttons'>
+                <OsfButton data-test-save-button
+                           @type='success'
+                           @onClick={{action this.save}}>
+                    integromatsave_button12
+                </OsfButton>
+            </div>
+        </div>
+-->
+
+    <div class="row project-page">
+        <!-- Begin left column -->
+        <div class="col-md-3 col-xs-12 affix-parent scrollspy">
+
+                <div class="panel panel-default osf-affix" data-spy="affix" data-offset-top="0" data-offset-bottom="263"><!-- Begin sidebar -->
+                    <ul class="nav nav-stacked nav-pills">
+
+                            <li><a href="#" onclick="document.getElementById('allMeeting').style.display = '';">Schedule Meetings</a></li>
+
+                    </ul>
+                </div><!-- End sidebar -->
+        </div>
+    
+    
+    <div class="col-md-9 col-xs-12">
+    <div id="allMeeting" style="display: none;">
+      <div class="row tb-header-row" style="background: #efefef">
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MEETING SCHEDULE
+            <button
+                data-test-project-contributors-search-button
+                local-class='Integromat__buttons'
+                class='text-danger pull-right'
+                type='text'
+            >
+                <i class='fa fa-trash'>Register Meeting</i>
+            </button>
+            <button
+                data-test-project-contributors-search-button
+                local-class='Integromat__buttons'
+                class='text-info pull-right'
+                type='text'
+            >
+                <i class='fa fa-edit'>Register Meeting</i>
+            </button>
+            <button
+                data-test-project-contributors-search-button
+                local-class='Integromat__buttons'
+                class='text-success pull-right'
+                type='text'
+                onClick={{action (mut this.showRegisterMeetingDialog) true}}
+            >
+                <i class='fa fa-plus'>Register Meeting</i>
+            </button>
+      </div>
+        <div class="row" id="pagination-row">
+            <div class="col-sm-8">
+                <ul class="pagination-wrap" style="display: none;">
+                    <li class="pagination-prev">
+                        <a class="page">&#060;</a>
+                    </li>
+                    <ul class="listjs-pagination"></ul>
+                    <li class="pagination-next">
+                        <a class="page">&#062;</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-sm-2">
+                <label class="pull-right" style="margin: 20px 0;">per page:</label>
+            </div>
+            <div class="col-sm-2">
+                <select id="pageLength" class="form-control" style="margin: 15px 0;">
+                    <option value="10">10</option>
+                    <option value="20">20</option>
+                    <option value="30">30</option>
+                </select>
+            </div>
+        </div>
+        <div class="row" id="teamsMeeting-table-row" style="width: 90%">
+            <div class="col-xs-12">
+                <table class="table table-bordered table-addon-terms">
+                    <thead class="block-head">
+                        <tr style="background-color: #f5f5f5;">
+                            <th width="3%">
+                                <input type="checkBox" id="addTimestampAllCheck" style="width: 15px; height: 15px;"/>
+                            </th>
+                            <th width="14%">
+                                <span class="sorter">
+                                    <i id="sort_up_provider" class="fa fa-chevron-up tb-sort-inactive asc-btn m-r-xs"></i>
+                                    <i id="sort_down_provider" class="fa fa-chevron-down tb-sort-inactive desc-btn"></i>
+                                </span>
+                                <span class="header_text m-r-sm" title="Provider">Start Date</span>
+                            </th>
+                            <th width="29%">
+                                <span class="sorter">
+                                    <i id="sort_up_file_path" class="fa fa-chevron-up tb-sort-inactive asc-btn m-r-xs"></i>
+                                    <i id="sort_down_file_path" class="fa fa-chevron-down tb-sort-inactive desc-btn"></i>
+                                </span>
+                                <span class="header_text m-r-sm" title="File Path">End Date</span>
+                            </th>
+                            <th width="15%">
+                                <span class="sorter">
+                                    <i id="sort_up_verify_user_name_id" class="fa fa-chevron-up tb-sort-inactive asc-btn m-r-xs"></i>
+                                    <i id="sort_down_verify_user_name_id" class="fa fa-chevron-down tb-sort-inactive desc-btn"></i>
+                                </span>
+                                <span class="header_text m-r-sm" title="Timestamp by">Attendees</span>
+                            </th>
+                            <th width="19%">
+                                <span class="sorter">
+                                    <i id="sort_up_verify_date" class="fa fa-chevron-up tb-sort-inactive asc-btn m-r-xs"></i>
+                                    <i id="sort_down_verify_date" class="fa fa-chevron-down tb-sort-inactive desc-btn"></i>
+                                </span>
+                                <span class="header_text m-r-sm" title="Updated at">Host</span>
+                            </th>
+                            <th width="20%">
+                                <span class="sorter">
+                                    <i id="sort_up_verify_result_title" class="fa fa-chevron-up tb-sort-inactive asc-btn m-r-xs"></i>
+                                    <i id="sort_down_verify_result_title" class="fa fa-chevron-down tb-sort-inactive desc-btn"></i>
+                                </span>
+                                <span class="header_text m-r-sm" title="Timestamp Verification">Invitation URL</span>
+                            </th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+    </div>
+    </div>
+    </div>
+    {{/if}}
+</div>
+
+<div id="integromatRegisterMeetingModal" class="modal fade" style="display: none;">
+    <div class="modal-dialog text-lef">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h3>Register Teams Meeting</h3>
+            </div>
+
+            <form>
+                <div class="modal-body">
+
+                            <div class="form-group">
+                                <input type="hidden" name="teams_Guid" id="teams_guid" value="${node['id']}">
+                                <input type="hidden" name="teams_Action" id="teams_action" value="create">
+                                <label >Subject</label>
+                                <input class="form-control" data-bind="value: teamsSubject" id="teams_subject" name="teams_Subject" placeholder="input teams meeting subject"/>
+                            </div>
+                            <div class="form-group">
+                                <label >Attendees</label>
+                                <input class="form-control" data-bind="value: teamsAttendees" id="teams_attendees" name="teams_Attendees" placeholder="input teams meeting attendees"/>
+                            </div>
+                            <div class="form-group">
+                                <label >Start Date and Time</label>
+                                <input class="form-control" data-bind="value: teamsStartDate" id="teams_start_date" name="teams_Start_Date" placeholder="YYYY/MM/DD"/>
+                                <input type="time" step="1800" class="form-control" data-bind="value: teamsStartTime" id="teams_start_time" name="teams_Start_Time" min="00:00" max="23:59">
+                                <label >End Date and Time</label>
+                                <input class="form-control" data-bind="value: teamsEndDate" id="teams_end_date" name="teams_End_Date" placeholder="YYYY/MM/DD"/>
+                                <input type="time" step="1800" class="form-control" data-bind="value: teamsEndTime" id="teams_end_time" name="teams_End_Time" min="00:00" max="23:59">
+                            </div>
+                            <div class="form-group">
+                                <label >Location</label>
+                                <input class="form-control" data-bind="value: teamsLocation" id="teams_location" name="teams_Location" placeholder="input teams meeting location"/>
+                            </div>
+
+                    <!-- Flashed Messages -->
+                    <div class="help-block">
+                        <p data-bind="html: message, attr: {class: messageClass}"></p>
+                    </div>
+
+                </div><!-- end modal-body -->
+
+                <div class="modal-footer">
+
+                    <a href="#" class="btn btn-default" data-bind="click: clearModal" data-dismiss="modal">Cancel</a>
+
+                    <!-- Save Button -->
+                    <button id="startScenario" class="btn btn-success">Register</button>
+
+                </div><!-- end modal-footer -->
+
+            </form>
+
+        </div><!-- end modal-content -->
+    </div>
+</div>
+
+<BsModal
+    data-test-paper-confirm-modal
+    @open={{this.showRegisterMeetingDialog}}
+    @onSubmit={{action this.startRegisterMeetingScenario}}
+    @onHidden={{action (mut this.showRegisterMeetingDialog) false}}
+    as |modal|
+>
+    <modal.header>
+        <h4>
+            Register Teams Meeting
+        </h4>
+    </modal.header>
+    <modal.body>
+        <div class='form-group'>
+            <label>Subject</label>
+                {{input
+                    name='teams_Subject'
+                    placeholder='input teams meeting subject'
+                    class='form-control'
+                    type='text'
+                    value=this.teams_subject
+                }}
+            <label>Attendees</label>
+                {{input
+                    name='teams_Attendees'
+                    placeholder='input teams meeting attendees'
+                    class='form-control'
+                    type='text'
+                    value=this.teams_attendees
+                }}
+            <label>Start Date and Time</label>
+                {{input
+                    name='teams_Start_Date'
+                    placeholder='YYYY/MM/DD'
+                    class='form-control'
+                    type='text'
+                    value=this.teams_startDate
+                }}
+                {{input
+                    name='teams_Start_Time'
+                    class='form-control'
+                    type='time'
+                    value=this.teams_startTime
+                }}
+            <label>End Date and Time</label>
+                {{input
+                    name='teams_End_Date'
+                    placeholder='YYYY/MM/DD'
+                    class='form-control'
+                    type='text'
+                    value=this.teams_endDate
+                }}
+                {{input
+                    name='teams_End_Time'
+                    class='form-control'
+                    type='time'
+                    value=this.teams_endTime
+                }}
+            <label>Location</label>
+                {{input
+                    name='teams_Location'
+                    placeholder='input teams meeting location'
+                    class='form-control'
+                    type='text'
+                    value=this.teams_location
+                }}
+            <label>Content</label>
+                {{textarea
+                    name='teams_Content'
+                    class='form-control'
+                    value=this.teams_content
+                }}
+        </div>
+    </modal.body>
+    <modal.footer>
+        <BsButton
+            @onClick={{action modal.close}}
+        >
+            Cancel
+        </BsButton>
+            <OsfButton
+                    @type='success'
+                    @onClick={{action modal.submit}}>
+                Register
+            </OsfButton>
+    </modal.footer>
+</BsModal>

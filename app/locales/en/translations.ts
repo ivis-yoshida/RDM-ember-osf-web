@@ -1811,4 +1811,16 @@ export default {
         files_comment: 'コメント',
         uploader_comment: 'コメント',
     },
+    integromat: {
+        page_title: '{nodeTitle} Integromat'
+        header: 'Integromat'
+        loading: 'Loading Integromat config...'
+        param1: 'Param 1'
+        save_button: 'Save'
+        failed_to_submit: 'Failed to save'
+        failed_to_save: 'Failed to save'
+        placeholders: {
+            param1: 'anything',
+        },
+    },
 };
