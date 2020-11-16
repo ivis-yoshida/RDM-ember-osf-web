@@ -1,3 +1,4 @@
+import { attr } from '@ember-decorators/data';
 import DS from 'ember-data';
 import OsfModel from './osf-model';
 

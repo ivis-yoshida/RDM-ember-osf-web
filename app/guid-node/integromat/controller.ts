@@ -6,7 +6,6 @@ import { inject as service } from '@ember/service';
 
 import DS from 'ember-data';
 
-import Intl from 'ember-intl/services/intl';
 import IntegromatConfigModel from 'ember-osf-web/models/integromat-config';
 import Node from 'ember-osf-web/models/node';
 import Analytics from 'ember-osf-web/services/analytics';
@@ -15,7 +14,6 @@ import Toast from 'ember-toastr/services/toast';
 
 export default class GuidNodeIntegromat extends Controller {
     @service toast!: Toast;
-    @service intl!: Intl;
     @service statusMessages!: StatusMessages;
     @service analytics!: Analytics;
 
@@ -98,7 +96,7 @@ export default class GuidNodeIntegromat extends Controller {
 
     saveError(config: IntegromatConfigModel) {
         config.rollbackAttributes();
-        const message = this.intl.t('integromat.failed_to_save');
+        const message = 'integromat.failed_to_save';
         this.toast.error(message);
     }
 
