@@ -1969,13 +1969,13 @@ export default {
         uploader_comment: 'コメント',
     },
     integromat: {
-        page_title: '{nodeTitle} Integromat'
-        header: 'Integromat'
-        loading: 'ロード中...'
-        param1: 'Param 1'
-        save_button: 'Save'
-        failed_to_submit: 'Failed to save'
-        failed_to_save: 'Failed to save'
+        page_title: '{nodeTitle} Integromat',
+        header: 'Integromat',
+        loading: 'ロード中...',
+        param1: 'Param 1',
+        save_button: 'Save',
+        failed_to_submit: 'Failed to save',
+        failed_to_save: 'Failed to save',
         placeholders: {
             param1: 'anything',
         },

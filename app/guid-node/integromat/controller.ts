@@ -102,24 +102,6 @@ export default class GuidNodeIntegromat extends Controller {
         this.toast.error(message);
     }
 
-    @computed('config.param1')
-    get param1() {
-        if (!this.config || !this.config.get('isFulfilled')) {
-            return '';
-        }
-        const config = this.config.content as IntegromatConfigModel;
-        return config.param1;
-    }
-
-    set param1(v: string) {
-        if (!this.config) {
-            throw new EmberError('Illegal config');
-        }
-        const config = this.config.content as IntegromatConfigModel;
-        config.set('param1', v);
-        this.set('isPageDirty', true);
-    }
-
     @computed('node')
     get config(): DS.PromiseObject<IntegromatConfigModel> | undefined {
         if (this.configCache) {
