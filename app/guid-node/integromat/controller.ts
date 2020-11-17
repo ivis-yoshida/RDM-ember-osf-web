@@ -95,7 +95,6 @@ export default class GuidNodeIntegromat extends Controller {
             method: 'POST',
         })
     }
-    }
 
     @action
     closeDialogs() {
