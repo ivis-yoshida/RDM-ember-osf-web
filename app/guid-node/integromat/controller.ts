@@ -43,6 +43,22 @@ export default class GuidNodeIntegromat extends Controller {
     }
 
     @action
+    save(this: GuidNodeIntegromat) {
+        if (!this.config) {
+            throw new EmberError('Illegal config');
+        }
+        const config = this.config.content as IntegromatConfigModel;
+
+        config.save()
+            .then(() => {
+                this.set('isPageDirty', false);
+            })
+            .catch(() => {
+                this.saveError(config);
+            });
+    }
+
+    @action
     startRegisterMeetingScenario(this: GuidNodeIntegromat) {
         const guid = this.model.guid;
         const teams_subject = this.teams_subject;
@@ -85,6 +101,12 @@ export default class GuidNodeIntegromat extends Controller {
     @action
     closeDialogs() {
         this.set('showRegisterMeetingDialog', false);
+    }
+
+    saveError(config: IntegromatConfigModel) {
+        config.rollbackAttributes();
+        const message = 'integromat.failed_to_save';
+        this.toast.error(message);
     }
 
     @computed('node')
