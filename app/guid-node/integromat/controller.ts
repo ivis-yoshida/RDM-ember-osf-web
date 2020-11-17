@@ -114,6 +114,11 @@ export default class GuidNodeIntegromat extends Controller {
     }
 }
 
+    @computed('config.isFulfilled')
+    get isPageDirty() {
+        return isPageDirty;
+    }
+
 declare module '@ember/controller' {
     interface Registry {
         'guid-node/integromat': GuidNodeIntegromat;
