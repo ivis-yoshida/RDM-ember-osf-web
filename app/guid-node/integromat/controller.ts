@@ -114,7 +114,7 @@ export default class GuidNodeIntegromat extends Controller {
     }
 }
 
-    get isPageDirty() {
+    get isPageDirty(): boolean {
         return false;
     }
 
