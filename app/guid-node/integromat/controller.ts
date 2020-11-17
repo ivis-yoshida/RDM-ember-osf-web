@@ -87,6 +87,14 @@ export default class GuidNodeIntegromat extends Controller {
         const webhookUrl = config.webhook_url;
         console.log(payload + webhookUrl)
         this.set('showRegisterMeetingDialog', false);
+
+        return $.post(webhookUrl, {
+            contentType: 'application/json',
+            data: JSON.stringify(payload),
+            dataType: 'json',
+            method: 'POST',
+        })
+    }
     }
 
     @action
