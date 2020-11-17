@@ -28,6 +28,6 @@ export default class GuidNodeIntegromatRoute extends Route.extend(ConfirmationMi
     @computed('controller.isPageDirty')
     get isPageDirty() {
         const controller = this.controller as GuidNodeIntegromat;
-        return () => controller.isPageDirty;
+        return () => false;
     }
 }
