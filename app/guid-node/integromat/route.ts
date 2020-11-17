@@ -3,7 +3,7 @@ import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 import ConfirmationMixin from 'ember-onbeforeunload/mixins/confirmation';
 
-import GuidNodeIntegromat from 'ember-osf-web/guid-node/integromat/controller';
+//import GuidNodeIntegromat from 'ember-osf-web/guid-node/integromat/controller';
 import Node from 'ember-osf-web/models/node';
 import { GuidRouteModel } from 'ember-osf-web/resolve-guid/guid-route';
 import Analytics from 'ember-osf-web/services/analytics';
