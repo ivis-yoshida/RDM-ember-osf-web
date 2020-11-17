@@ -27,7 +27,7 @@ export default class GuidNodeIntegromatRoute extends Route.extend(ConfirmationMi
     // This tells ember-onbeforeunload's ConfirmationMixin whether or not to stop transitions
     @computed('controller.isPageDirty')
     get isPageDirty() {
-        const controller = this.controller as GuidNodeIntegromat;
+//        const controller = this.controller as GuidNodeIntegromat;
         return () => false;
     }
 }
