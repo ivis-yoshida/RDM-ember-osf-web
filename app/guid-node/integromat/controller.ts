@@ -6,6 +6,8 @@ import { inject as service } from '@ember/service';
 
 import DS from 'ember-data';
 
+import $ from 'jquery';
+
 import IntegromatConfigModel from 'ember-osf-web/models/integromat-config';
 import Node from 'ember-osf-web/models/node';
 import Analytics from 'ember-osf-web/services/analytics';
