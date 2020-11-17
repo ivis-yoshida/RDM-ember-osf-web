@@ -20,7 +20,7 @@ export default class GuidNodeIntegromat extends Controller {
     @reads('model.taskInstance.value')
     node?: Node;
 
-//    isPageDirty = false;
+    isPageDirty = false;
 
     configCache?: DS.PromiseObject<IntegromatConfigModel>;
 
@@ -113,11 +113,6 @@ export default class GuidNodeIntegromat extends Controller {
         return this.configCache!;
     }
 }
-
-    @computed('config.isFulfilled')
-    get isPageDirty(): boolean {
-        return false;
-    }
 
 declare module '@ember/controller' {
     interface Registry {
