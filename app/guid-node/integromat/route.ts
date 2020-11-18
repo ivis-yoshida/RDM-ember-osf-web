@@ -1,12 +1,13 @@
 import { action, computed } from '@ember-decorators/object';
+import { service } from '@ember-decorators/service';
 import Route from '@ember/routing/route';
-import { inject as service } from '@ember/service';
 import ConfirmationMixin from 'ember-onbeforeunload/mixins/confirmation';
 
-import GuidNodeIntegromat from './controller';
 import Node from 'ember-osf-web/models/node';
 import { GuidRouteModel } from 'ember-osf-web/resolve-guid/guid-route';
 import Analytics from 'ember-osf-web/services/analytics';
+
+import GuidNodeIntegromat from './controller';
 
 export default class GuidNodeIntegromatRoute extends Route.extend(ConfirmationMixin, {}) {
     @service analytics!: Analytics;
