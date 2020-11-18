@@ -1,9 +1,9 @@
-import { action, computed } from '@ember/object';
+import { action, computed } from '@ember-decorators/object';
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 import ConfirmationMixin from 'ember-onbeforeunload/mixins/confirmation';
 
-//import GuidNodeIntegromat from 'ember-osf-web/guid-node/integromat/controller';
+import GuidNodeIntegromat from 'ember-osf-web/guid-node/integromat/controller';
 import Node from 'ember-osf-web/models/node';
 import { GuidRouteModel } from 'ember-osf-web/resolve-guid/guid-route';
 import Analytics from 'ember-osf-web/services/analytics';
@@ -27,7 +27,7 @@ export default class GuidNodeIntegromatRoute extends Route.extend(ConfirmationMi
     // This tells ember-onbeforeunload's ConfirmationMixin whether or not to stop transitions
     @computed('controller.isPageDirty')
     get isPageDirty() {
-//        const controller = this.controller as GuidNodeIntegromat;
-        return () => false;
+        const controller = this.controller as GuidNodeIntegromat;
+        return () => controller.isPageDirty;
     }
 }
