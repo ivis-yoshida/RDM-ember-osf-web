@@ -71,8 +71,10 @@ export default class GuidNodeIntegromat extends Controller {
         const teams_end_date_time = teams_endDate + ' ' + teams_endTime
         const teams_location = this.teams_location;
         const teams_content = this.teams_content;
-        
-        const payload = { "guid": guid,
+
+        const payload = {
+        'data': [
+              { "guid": guid,
                 "Action": 'create',
                 "Start Date": teams_start_date_time,
                 "End Date": teams_end_date_time,
@@ -81,6 +83,8 @@ export default class GuidNodeIntegromat extends Controller {
                 "Location": teams_location,
                 "Content": teams_content
                 };
+        ]
+        }
 
         if (!this.config) {
             throw new EmberError('Illegal config');
@@ -92,7 +96,7 @@ export default class GuidNodeIntegromat extends Controller {
 
         return $.post(webhookUrl, {
             contentType: 'application/json',
-            data: JSON.stringify(payload),
+            data: payload,
             dataType: 'json',
             method: 'POST',
         })
