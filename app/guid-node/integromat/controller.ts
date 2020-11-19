@@ -12,6 +12,8 @@ import Analytics from 'ember-osf-web/services/analytics';
 import StatusMessages from 'ember-osf-web/services/status-messages';
 import Toast from 'ember-toastr/services/toast';
 
+import $ from 'jquery';
+
 export default class GuidNodeIntegromat extends Controller {
     @service toast!: Toast;
     @service statusMessages!: StatusMessages;
@@ -87,6 +89,13 @@ export default class GuidNodeIntegromat extends Controller {
         const webhookUrl = config.webhook_url;
         console.log(payload + webhookUrl)
         this.set('showRegisterMeetingDialog', false);
+
+        return $.post(webhookUrl, {
+            contentType: 'application/json',
+            data: JSON.stringify(payload),
+            dataType: 'json',
+            method: 'POST',
+        })
 
     }
 
