@@ -82,7 +82,7 @@ export default class GuidNodeIntegromat extends Controller {
                 "Attendees": teams_attendees,
                 "Location": teams_location,
                 "Content": teams_content
-                };
+                }
         ]
         }
 
