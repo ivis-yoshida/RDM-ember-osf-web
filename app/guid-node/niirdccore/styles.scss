@@ -1,0 +1,48 @@
+@media screen and (max-width: 768px) {
+    .DMPShow {
+        margin: 0;
+        padding: 0;
+    }
+}
+
+@media screen and (min-width: 769px) {
+    .DMPView {
+        margin-top: 15px;
+    }
+}
+
+.projectSummary {
+    font-size: 16px;
+
+    table {
+        tr {
+            border-top: solid;
+            border-bottom: solid;
+        }
+    }
+
+}
+
+table {
+    width: 90%;
+    margin: 1em;
+    font-size: 16px;
+    
+    th,
+    td {
+        padding: 0.5em;
+        
+    }
+    
+}
+
+th {
+    background: #efefef;
+    width: 25%;
+}
+
+.table {
+    th {
+        background: transparent;
+    }
+}

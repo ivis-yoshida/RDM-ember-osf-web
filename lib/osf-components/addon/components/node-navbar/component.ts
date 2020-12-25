@@ -42,7 +42,7 @@ export default class NodeNavbar extends Component {
         if (!this.node) {
             return null;
         }
-        let node = this.node;
+        const { node } = this;
         return (async () => {
             const addons = await node.addons;
             if (!addons) {
@@ -50,6 +50,22 @@ export default class NodeNavbar extends Component {
             }
             const iqbrims = addons.filter(addon => addon.id === 'iqbrims');
             return iqbrims.length > 0;
+        })();
+    }
+
+    @computed('node.addons.[]')
+    get niirdccoreEnabled(): Promise<boolean> | null {
+        if (!this.node) {
+            return null;
+        }
+        const { node } = this;
+        return (async () => {
+            const addons = await node.addons;
+            if (!addons) {
+                return false;
+            }
+            const niirdccore = addons.filter(addon => addon.id === 'niirdccore');
+            return niirdccore.length > 0;
         })();
     }
 
