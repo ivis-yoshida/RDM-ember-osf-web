@@ -1,0 +1,100 @@
+{{! using unsafeTitle here to avoid double encoding because the title helper does its own }}
+{{title ('ページタイトル' nodeTitle=this.model.taskInstance.value.unsafeTitle)}}
+
+<div class='container' local-class='DMPView'>
+    {{#if this.loading}}
+        loading
+    {{else}}
+    {{/if}}
+    
+	<span id="projectSummaryAnchor" class="anchor"></span>
+    <!-- Begin left column -->
+ 
+	<div class="col-sm-3 affix-parent scrollspy">
+		<div class="panel panel-default osf-affix" data-spy="affix" data-offset-top="0" data-offset-bottom="263"><!-- Begin sidebar -->
+			<ul class="nav nav-stacked nav-pills">
+				<li><a href="#projectSummaryAnchor">プロジェクト概要</a></li>
+				<li><a href="#membersAnchor">メンバー</a></li>
+				<li><a href="#dataCollectMethodAnchor">研究データの収集・作成方法</a></li>
+				<li><a href="#ethicsAnchor">研究倫理</a></li>
+				<li><a href="#dataSetAnchor">研究データセット</a></li>
+			</ul>
+		</div><!-- End sidebar -->
+	</div>
+
+    <!-- End left column -->
+
+	<div class="col-sm-9">
+		<div class="panel panel-default" id="projectSummary">
+			<div class="panel-heading clearfix">
+				<div class="row">
+					<div class="col-md-12">
+						<h3 class="panel-title">プロジェクト概要</h3>
+					</div>
+				</div>
+			</div>
+			<div class="panel-body projectSummary">
+				<table>
+					<tr>
+						<th>タイトル</th>
+						<td>{{title}}</td>
+					</tr>
+					<tr>
+						<th>説明</th>
+						<td>{{this.description}}</td>
+					</tr>
+				</table>
+			</div>  
+		</div>
+
+		<div class="panel panel-default" id="members">
+			<span id="membersAnchor" class="anchor"></span>
+			<div class="panel-heading clearfix">
+				<div class="row">
+					<div class="col-md-12">
+					<h3 class="panel-title">メンバー</h3>
+					</div>
+				</div>
+			</div>
+			<div class="panel-body">
+				<table class="table">
+					<thead>
+						<tr>
+							<th>氏名</th>
+							<th>メールアドレス</th>
+							<th>Project Role</th>
+							<th>ORCID</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>{{this.name}}</td>
+							<td>{{this.mbox}}</td>
+							<td>test</td>
+							<td>test</td>
+						</tr>
+					</tbody>
+				</table>
+				<h3>研究データ管理者</h3>
+				<table class="table">
+					<thead>
+						<tr>
+							<th>氏名</th>
+							<th>メールアドレス</th>
+							<th>Project Role</th>
+							<th>ORCID</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>{{this.name}}</td>
+							<td>{{this.mbox}}</td>
+							<td>test</td>
+							<td>test</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>  
+		</div>
+	</div>
+</div>
