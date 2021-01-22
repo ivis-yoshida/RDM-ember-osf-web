@@ -3,12 +3,26 @@ import OsfModel from './osf-model';
 
 const { attr } = DS;
 
+export interface MemberModel {
+    mbox: string;
+    name: string;
+    role: string;
+    orcid: string;
+}
+
+export interface ProjectModel {
+    title: string;
+    description: string;
+}
+
+export interface DMPModel {
+    project: ProjectModel;
+    contact: MemberModel;
+    contributors: MemberModel;
+}
+
 export default class DMPStatusModel extends OsfModel {
-        
-    @attr('string') name!: string;
-    @attr('string') mbox!: string;
-    @attr('string') title!: string;
-    @attr('string') description!: string;
+    @attr() dmp!: DMPModel;
 }
 
 declare module 'ember-data/types/registries/model' {

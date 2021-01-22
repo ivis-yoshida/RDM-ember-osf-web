@@ -11,38 +11,47 @@
     }
 }
 
-.projectSummary {
-    font-size: 16px;
-
-    table {
-        tr {
-            border-top: solid;
-            border-bottom: solid;
-        }
-    }
-
+.anchor {
+    margin-top: -100px;
+    padding-top: 100px;
+    display: block;
+    z-index: -1;
+    position: relative;
 }
 
-table {
-    width: 90%;
+.affix {
+    position: fixed;
+}
+
+.projectSummaryTable {
+    width: 95%;
     margin: 1em;
     font-size: 16px;
-    
-    th,
+    margin-bottom: 20px;
+
+    th {
+        background: #efefef;
+        width: 230px;
+        padding: 0.5em;
+        font-weight: normal;
+    }
+
+    tr {
+        border-top: 2px solid #ddd;
+        border-bottom: 2px solid #ddd;
+    }
+
     td {
         padding: 0.5em;
-        
     }
-    
 }
 
-th {
-    background: #efefef;
-    width: 25%;
+.peopleTable {
+    width: 95%;
+    max-width: 95%;
+    margin-bottom: 20px;
 }
 
-.table {
-    th {
-        background: transparent;
-    }
+.peopleTableHeadding {
+    font-weight: bold;
 }

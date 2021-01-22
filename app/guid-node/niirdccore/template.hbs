@@ -1,100 +1,182 @@
 {{! using unsafeTitle here to avoid double encoding because the title helper does its own }}
-{{title ('ページタイトル' nodeTitle=this.model.taskInstance.value.unsafeTitle)}}
-
+{{title (t 'niirdccore.page_title' nodeTitle=this.model.taskInstance.value.unsafeTitle)}}
 <div class='container' local-class='DMPView'>
-    {{#if this.loading}}
-        loading
-    {{else}}
-    {{/if}}
-    
-	<span id="projectSummaryAnchor" class="anchor"></span>
-    <!-- Begin left column -->
- 
-	<div class="col-sm-3 affix-parent scrollspy">
-		<div class="panel panel-default osf-affix" data-spy="affix" data-offset-top="0" data-offset-bottom="263"><!-- Begin sidebar -->
-			<ul class="nav nav-stacked nav-pills">
-				<li><a href="#projectSummaryAnchor">プロジェクト概要</a></li>
-				<li><a href="#membersAnchor">メンバー</a></li>
-				<li><a href="#dataCollectMethodAnchor">研究データの収集・作成方法</a></li>
-				<li><a href="#ethicsAnchor">研究倫理</a></li>
-				<li><a href="#dataSetAnchor">研究データセット</a></li>
-			</ul>
-		</div><!-- End sidebar -->
-	</div>
 
+    <!-- Begin left column -->
+	<div class="col-sm-3 col-xs-12">
+		<!-- Begin sidebar -->
+		<div class="panel panel-default" local-class="affix">
+			<ul class="side-menu nav nav-stacked nav-pills">
+				<li><a href="#projectSummaryAnchor">{{t 'niirdccore.dmp_project.heading'}}</a></li>
+				<li><a href="#peopleAnchor">{{t 'niirdccore.dmp_people.heading'}}</a></li>
+				<li><a href="#dataCollectMethodAnchor">{{t 'niirdccore.dmp_data_collection.heading'}}</a></li>
+				<li><a href="#ethicsAnchor">{{t 'niirdccore.dmp_ethics.heading'}}</a></li>
+				<li><a href="#dataSetAnchor">{{t 'niirdccore.dmp_data_record.heading'}}</a></li>
+			</ul>
+		</div>
+		<!-- End sidebar -->
+	</div>
     <!-- End left column -->
 
+	<!-- Begin right column -->
 	<div class="col-sm-9">
+		<!-- Begin projectSummary -->
 		<div class="panel panel-default" id="projectSummary">
+			<span id="projectSummaryAnchor" local-class="anchor" class="tableAnchor"></span>
 			<div class="panel-heading clearfix">
 				<div class="row">
 					<div class="col-md-12">
-						<h3 class="panel-title">プロジェクト概要</h3>
-					</div>
-				</div>
-			</div>
-			<div class="panel-body projectSummary">
-				<table>
-					<tr>
-						<th>タイトル</th>
-						<td>{{title}}</td>
-					</tr>
-					<tr>
-						<th>説明</th>
-						<td>{{this.description}}</td>
-					</tr>
-				</table>
-			</div>  
-		</div>
-
-		<div class="panel panel-default" id="members">
-			<span id="membersAnchor" class="anchor"></span>
-			<div class="panel-heading clearfix">
-				<div class="row">
-					<div class="col-md-12">
-					<h3 class="panel-title">メンバー</h3>
+						<h3 class="panel-title">{{t 'niirdccore.dmp_project.heading'}}</h3>
 					</div>
 				</div>
 			</div>
 			<div class="panel-body">
-				<table class="table">
-					<thead>
-						<tr>
-							<th>氏名</th>
-							<th>メールアドレス</th>
-							<th>Project Role</th>
-							<th>ORCID</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td>{{this.name}}</td>
-							<td>{{this.mbox}}</td>
-							<td>test</td>
-							<td>test</td>
-						</tr>
-					</tbody>
-				</table>
-				<h3>研究データ管理者</h3>
-				<table class="table">
-					<thead>
-						<tr>
-							<th>氏名</th>
-							<th>メールアドレス</th>
-							<th>Project Role</th>
-							<th>ORCID</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td>{{this.name}}</td>
-							<td>{{this.mbox}}</td>
-							<td>test</td>
-							<td>test</td>
-						</tr>
-					</tbody>
+				<table class="table" local-class="projectSummaryTable">
+					<tr>
+						<th>{{t 'niirdccore.dmp_project.title'}}</th>
+						<td>{{this.title}}</td>
+					</tr>
+					<tr>
+						<th>{{t 'niirdccore.dmp_project.description'}}</th>
+						<td>{{this.description}}</td>
+					</tr>
+					<tr>
+						<th>{{t 'niirdccore.dmp_project.id'}}</th>
+						<td>{{this.projectID}}</td>
+					</tr>
+					<tr>
+						<th>{{t 'niirdccore.dmp_project.final_keywords'}}</th>
+						<td>{{this.keyword}}</td>
+					</tr>
+					<tr>
+						<th>{{t 'niirdccore.dmp_project.website'}}</th>
+						<td>{{this.projectWebSite}}</td>
+					</tr>
+					<tr>
+						<th>{{t 'niirdccore.dmp_project.start_day'}}</th>
+						<td>{{this.projectStartDay}}</td>
+					</tr>
+					<tr>
+						<th>{{t 'niirdccore.dmp_project.end_day'}}</th>
+						<td>{{this.projectEndDay}}</td>
+					</tr>
+					<tr>
+						<th>{{t 'niirdccore.dmp_project.foaf_fundedby_vivo_grant'}}</th>
+						<td>{{this.researchFundingSource}}</td>
+					</tr>
+					<tr>
+						<th>{{t 'niirdccore.dmp_project.foaf_fundedby_foaf_agent'}}</th>
+						<td>{{this.researchGrantNumber}}</td>
+					</tr>
+					<tr>
+						<th>{{t 'niirdccore.dmp_project.activity_type'}}</th>
+						<td>{{this.researchActivityType}}</td>
+					</tr>
 				</table>
 			</div>  
 		</div>
+		<!-- end projectSummary -->
+		<!-- Begin member -->
+		<div class="panel panel-default">
+			<span id="peopleAnchor" local-class="anchor" class="tableAnchor"></span>
+			<div class="panel-heading clearfix">
+				<div class="row">
+					<div class="col-md-12">
+						<h3 class="panel-title">{{t 'niirdccore.dmp_people.heading'}}</h3>
+					</div>
+				</div>
+			</div>
+
+			<div class="panel-body">
+				<table class="table" local-class="peopleTable">
+					<thead>
+						<tr>
+							<th>{{t 'niirdccore.dmp_people.name'}}</th>
+							<th>{{t 'niirdccore.dmp_people.email_hdr'}}</th>
+							<th>{{t 'niirdccore.dmp_people.project_role'}}</th>
+							<th>{{t 'niirdccore.dmp_people.orcid_hdr'}}</th>
+						</tr>
+					</thead>
+					<tbody>
+						{{#each this.contributors as | item | }}
+						<tr>
+							<td>{{item.name}}</td>
+							<td>{{item.mbox}}</td>
+							<td>{{item.role}}</td>
+							<td>{{item.orcid}}</td>
+						</tr>
+						{{/each}}
+					</tbody>
+				</table>
+				<h5 local-class="peopleTableHeadding">{{t 'niirdccore.dmp_people.data_manager'}}</h5>
+				<table class="table" local-class="peopleTable">
+					<thead>
+						<tr>
+							<th>{{t 'niirdccore.dmp_people.name'}}</th>
+							<th>{{t 'niirdccore.dmp_people.email_hdr'}}</th>
+							<th>{{t 'niirdccore.dmp_people.project_role'}}</th>
+							<th>{{t 'niirdccore.dmp_people.orcid_hdr'}}</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>{{this.contact.name}}</td>
+							<td>{{this.contact.mbox}}</td>
+							<td>{{this.contact.role}}</td>
+							<td>{{this.contact.orcid}}</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		<!-- end member -->
 	</div>
+	<!-- End right column -->
 </div>
+
+<script>
+	// Activate the menu depending on the position of the content
+	$(function(){
+		var timeoutId;
+		var elementTop = new Array;
+		var current = -1;
+
+		// Store the anchor position in the elementTop array
+		$(".tableAnchor").each(function(i){
+			elementTop[i] = $(this).offset().top;
+		});
+
+		// Set the initial display
+		changeBackColor(0);
+
+		// Scroll event
+		$(window).scroll(function(){
+
+			// Skip if Timeout
+			if(timeoutId) return;
+
+			// Perform every 500ms (To improve performance)
+			timeoutId = setTimeout(function(){
+				timeoutId = 0;
+
+				var currentPosition = $(window).scrollTop();
+				for (var i = elementTop.length - 1 ; i >= 0; i--) {
+					if (currentPosition > elementTop[i]) {
+						changeBackColor(i);
+						break;
+					}
+				}
+			}, 500);
+		});
+
+		// Side menu background color setting
+		function changeBackColor(secNum) {
+			if(secNum != current) {
+				current = secNum;
+				secNum2 = secNum + 1; // For HTML order
+				$('.side-menu li').removeClass('active');
+				$('.side-menu li:nth-child(' + secNum2 + ')').addClass('active');
+			}
+		}
+	});
+</script>
