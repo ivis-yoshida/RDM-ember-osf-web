@@ -53,31 +53,13 @@ export default class GuidNode_niirdccore extends Controller {
         this.toast.error(message);
     }
 
-    @computed('config.name')
-    get name2() {
-        if (!this.config || !this.config.get('isFulfilled')) {
-            return '';
-        }
-        const config = this.config.content as DMPStatusModel;
-        return config.name;
-    }
-
-    @computed('config.mbox')
-    get mbox() {
-        if (!this.config || !this.config.get('isFulfilled')) {
-            return '';
-        }
-        const config = this.config.content as DMPStatusModel;
-        return config.mbox;
-    }
-
     @computed('config.title')
     get title() {
         if (!this.config || !this.config.get('isFulfilled')) {
             return '';
         }
         const config = this.config.content as DMPStatusModel;
-        return config.title;
+        return config.dmp.project.title;
     }
 
     @computed('config.description')
@@ -86,7 +68,25 @@ export default class GuidNode_niirdccore extends Controller {
             return '';
         }
         const config = this.config.content as DMPStatusModel;
-        return config.description;
+        return config.dmp.project.description;
+    }
+
+    @computed('config.contributors')
+    get contributors(){
+        if (!this.config || !this.config.get('isFulfilled')) {
+            return undefined;
+        }
+        const config = this.config.content as DMPStatusModel;
+        return config.dmp.contributors;
+    }
+
+    @computed('config.contact')
+    get contact() {
+        if (!this.config || !this.config.get('isFulfilled')) {
+            return '';
+        }
+        const config = this.config.content as DMPStatusModel;
+        return config.dmp.contact;
     }
 
     @computed('node')

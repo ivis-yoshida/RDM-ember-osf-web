@@ -238,7 +238,7 @@ new_project:
     storage_region: 'Storage location'
     could_not_create_project: 'Could not create project'
     creating: 'Saving your project...'
-    create_failed_header: 'Couldn\'t create your project'
+    create_failed_header: 'Couldn''t create your project'
     create_failed_msg: 'There was an unknown error. Please try again later.'
 banners:
     prereg:
@@ -542,6 +542,7 @@ node_navbar:
     toggle: 'Toggle navigation'
     project_nav: 'Project Navigation'
     iqbrims: 'IQB-RIMS'
+    niirdccore: 'NII RDC Core'
     wiki: Wiki
     analytics: Analytics
     registrations: Registrations
@@ -1680,7 +1681,7 @@ dev_tools:
         toast_events: 'Display toast for tracked events'
         show_url_bar: 'Show URL bar -- navigate by URL without reloading'
 iqbrims:
-    page_title: '{{nodeTitle}} IQB-RIMS'
+    page_title: '{nodeTitle} IQB-RIMS'
     header_overview: 'Overview of Paper'
     header_manuscripts: 'Final Manuscript/Composition'
     header_data: 'Raw Data'
@@ -1742,3 +1743,33 @@ iqbrims:
     has_checklist: 'チェックリスト'
     files_comment: 'コメント'
     uploader_comment: 'コメント'
+
+niirdccore:
+    page_title: '{nodeTitle} NII RDC Core'
+    header: 'NII RDC Core'
+    loading: 'Loading DMP data...'
+    dmp_project:
+        heading: 'プロジェクト概要'
+        title: 'タイトル'
+        description: '説明'
+        id: 'プロジェクトID'
+        final_keywords: 'キーワード'
+        website: 'プロジェクトのウェブサイト'
+        start_day: 'プロジェクト開始日'
+        end_day: 'プロジェクト終了日'
+        foaf_fundedby_vivo_grant: '研究費助成元'
+        foaf_fundedby_foaf_agent: '研究費助成番号'
+        activity_type: '研究活動の種別'
+    dmp_people:
+        heading: 'メンバー'
+        name: '氏名'
+        data_manager: '研究データ管理者'
+        email_hdr: 'メールアドレス'
+        project_role: 'Project Role'
+        orcid_hdr: 'ORCID'
+    dmp_data_collection:
+        heading: '研究データの収集・作成方法'
+    dmp_ethics:
+        heading: '研究倫理'
+    dmp_data_record:
+        heading: '研究データセット'
