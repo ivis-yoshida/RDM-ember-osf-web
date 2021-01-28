@@ -3,16 +3,32 @@ import OsfModel from './osf-model';
 
 const { attr } = DS;
 
+export interface IdentiferModel {
+    identifier: string;
+    type: string;
+}
 export interface MemberModel {
+    contact_id: IdentiferModel;
     mbox: string;
     name: string;
     role: string;
-    orcid: string;
+}
+
+export interface FundingModel{
+    funder_name: string;
+    grand_id: IdentiferModel;
 }
 
 export interface ProjectModel {
     title: string;
     description: string;
+    project_id: string;
+    keywords: string;
+    website: string;
+    start: Date;
+    end: Date;
+    funding: FundingModel;
+    type: string;
 }
 
 export interface DMPModel {
