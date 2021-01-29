@@ -53,22 +53,13 @@ export default class GuidNode_niirdccore extends Controller {
         this.toast.error(message);
     }
 
-    @computed('config.title')
-    get title() {
+    @computed('config.project')
+    get project() {
         if (!this.config || !this.config.get('isFulfilled')) {
             return '';
         }
         const config = this.config.content as DMPStatusModel;
-        return config.dmp.project.title;
-    }
-
-    @computed('config.description')
-    get description() {
-        if (!this.config || !this.config.get('isFulfilled')) {
-            return '';
-        }
-        const config = this.config.content as DMPStatusModel;
-        return config.dmp.project.description;
+        return config.dmp.project;
     }
 
     @computed('config.contributors')

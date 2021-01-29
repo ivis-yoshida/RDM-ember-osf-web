@@ -30,50 +30,55 @@
 					</div>
 				</div>
 			</div>
+			{{#if this.loading}}
+				<LoadingIndicator  @dark={{true}} />
+			{{else}}
 			<div class="panel-body">
-				<table class="table" local-class="projectSummaryTable">
-					<tr>
-						<th>{{t 'niirdccore.dmp_project.title'}}</th>
-						<td>{{this.title}}</td>
-					</tr>
-					<tr>
-						<th>{{t 'niirdccore.dmp_project.description'}}</th>
-						<td>{{this.description}}</td>
-					</tr>
-					<tr>
-						<th>{{t 'niirdccore.dmp_project.id'}}</th>
-						<td>{{this.projectID}}</td>
-					</tr>
-					<tr>
-						<th>{{t 'niirdccore.dmp_project.final_keywords'}}</th>
-						<td>{{this.keyword}}</td>
-					</tr>
-					<tr>
-						<th>{{t 'niirdccore.dmp_project.website'}}</th>
-						<td>{{this.projectWebSite}}</td>
-					</tr>
-					<tr>
-						<th>{{t 'niirdccore.dmp_project.start_day'}}</th>
-						<td>{{this.projectStartDay}}</td>
-					</tr>
-					<tr>
-						<th>{{t 'niirdccore.dmp_project.end_day'}}</th>
-						<td>{{this.projectEndDay}}</td>
-					</tr>
-					<tr>
-						<th>{{t 'niirdccore.dmp_project.foaf_fundedby_vivo_grant'}}</th>
-						<td>{{this.researchFundingSource}}</td>
-					</tr>
-					<tr>
-						<th>{{t 'niirdccore.dmp_project.foaf_fundedby_foaf_agent'}}</th>
-						<td>{{this.researchGrantNumber}}</td>
-					</tr>
-					<tr>
-						<th>{{t 'niirdccore.dmp_project.activity_type'}}</th>
-						<td>{{this.researchActivityType}}</td>
-					</tr>
-				</table>
-			</div>  
+
+					<table class="table" local-class="projectSummaryTable">
+						<tr>
+							<th>{{t 'niirdccore.dmp_project.title'}}</th>
+							<td>{{this.project.title}}</td>
+						</tr>
+						<tr>
+							<th>{{t 'niirdccore.dmp_project.description'}}</th>
+							<td>{{this.project.description}}</td>
+						</tr>
+						<tr>
+							<th>{{t 'niirdccore.dmp_project.id'}}</th>
+							<td>{{this.project.project_id}}</td>
+						</tr>
+						<tr>
+							<th>{{t 'niirdccore.dmp_project.final_keywords'}}</th>
+							<td>{{this.project.keywords}}</td>
+						</tr>
+						<tr>
+							<th>{{t 'niirdccore.dmp_project.website'}}</th>
+							<td>{{this.project.website}}</td>
+						</tr>
+						<tr>
+							<th>{{t 'niirdccore.dmp_project.start_day'}}</th>
+							<td>{{this.project.start}}</td>
+						</tr>
+						<tr>
+							<th>{{t 'niirdccore.dmp_project.end_day'}}</th>
+							<td>{{this.project.end}}</td>
+						</tr>
+						<tr>
+							<th>{{t 'niirdccore.dmp_project.foaf_fundedby_vivo_grant'}}</th>
+							<td>{{this.project.funding.funder_name}}</td>
+						</tr>
+						<tr>
+							<th>{{t 'niirdccore.dmp_project.foaf_fundedby_foaf_agent'}}</th>
+							<td>{{this.project.funding.grand_id.identifier}}</td>
+						</tr>
+						<tr>
+							<th>{{t 'niirdccore.dmp_project.activity_type'}}</th>
+							<td>{{this.project.type}}</td>
+						</tr>
+					</table>
+				</div>
+			{{/if}}
 		</div>
 		<!-- end projectSummary -->
 		<!-- Begin member -->
@@ -87,47 +92,59 @@
 				</div>
 			</div>
 
-			<div class="panel-body">
-				<table class="table" local-class="peopleTable">
-					<thead>
-						<tr>
-							<th>{{t 'niirdccore.dmp_people.name'}}</th>
-							<th>{{t 'niirdccore.dmp_people.email_hdr'}}</th>
-							<th>{{t 'niirdccore.dmp_people.project_role'}}</th>
-							<th>{{t 'niirdccore.dmp_people.orcid_hdr'}}</th>
-						</tr>
-					</thead>
-					<tbody>
-						{{#each this.contributors as | item | }}
-						<tr>
-							<td>{{item.name}}</td>
-							<td>{{item.mbox}}</td>
-							<td>{{item.role}}</td>
-							<td>{{item.orcid}}</td>
-						</tr>
-						{{/each}}
-					</tbody>
-				</table>
-				<h5 local-class="peopleTableHeadding">{{t 'niirdccore.dmp_people.data_manager'}}</h5>
-				<table class="table" local-class="peopleTable">
-					<thead>
-						<tr>
-							<th>{{t 'niirdccore.dmp_people.name'}}</th>
-							<th>{{t 'niirdccore.dmp_people.email_hdr'}}</th>
-							<th>{{t 'niirdccore.dmp_people.project_role'}}</th>
-							<th>{{t 'niirdccore.dmp_people.orcid_hdr'}}</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td>{{this.contact.name}}</td>
-							<td>{{this.contact.mbox}}</td>
-							<td>{{this.contact.role}}</td>
-							<td>{{this.contact.orcid}}</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
+			{{#if this.loading}}
+				<LoadingIndicator @dark={{true}} />
+			{{else}}
+				<div class="panel-body">
+					<table class="table" local-class="peopleTable">
+						<thead>
+							<tr>
+								<th>{{t 'niirdccore.dmp_people.name'}}</th>
+								<th>{{t 'niirdccore.dmp_people.email_hdr'}}</th>
+								<th>{{t 'niirdccore.dmp_people.project_role'}}</th>
+								<th>{{t 'niirdccore.dmp_people.orcid_hdr'}}</th>
+							</tr>
+						</thead>
+						<tbody>
+							{{#each this.contributors as | item | }}
+							<tr>
+								<td>{{item.name}}</td>
+								<td>{{item.mbox}}</td>
+								<td>{{item.role}}</td>
+								<td>
+									{{#if (eq item.contact_id.type "orcid")}}
+										{{item.contact_id.identifier}}
+									{{/if}}
+								</td>
+							</tr>
+							{{/each}}
+						</tbody>
+					</table>
+					<h5 local-class="peopleTableHeadding">{{t 'niirdccore.dmp_people.data_manager'}}</h5>
+					<table class="table" local-class="peopleTable">
+						<thead>
+							<tr>
+								<th>{{t 'niirdccore.dmp_people.name'}}</th>
+								<th>{{t 'niirdccore.dmp_people.email_hdr'}}</th>
+								<th>{{t 'niirdccore.dmp_people.project_role'}}</th>
+								<th>{{t 'niirdccore.dmp_people.orcid_hdr'}}</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>{{this.contact.name}}</td>
+								<td>{{this.contact.mbox}}</td>
+								<td>{{this.contact.role}}</td>
+								<td>
+									{{#if (eq this.contact.contact_id.type "orcid")}}
+										{{this.contact.contact_id.identifier}}
+									{{/if}}
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			{{/if}}
 		</div>
 		<!-- end member -->
 	</div>
