@@ -1,22 +1,27 @@
 {{! using unsafeTitle here to avoid double encoding because the title helper does its own }}
 {{title (t 'niirdccore.page_title' nodeTitle=this.model.taskInstance.value.unsafeTitle)}}
 <div class='container' local-class='DMPView'>
-
-    <!-- Begin left column -->
+	<!-- Begin left column -->
 	<div class="col-sm-3 col-xs-12">
 		<!-- Begin sidebar -->
 		<div class="panel panel-default" local-class="affix">
 			<ul class="side-menu nav nav-stacked nav-pills">
-				<li><a href="#projectSummaryAnchor">{{t 'niirdccore.dmp_project.heading'}}</a></li>
-				<li><a href="#peopleAnchor">{{t 'niirdccore.dmp_people.heading'}}</a></li>
-				<li><a href="#dataCollectMethodAnchor">{{t 'niirdccore.dmp_data_collection.heading'}}</a></li>
-				<li><a href="#ethicsAnchor">{{t 'niirdccore.dmp_ethics.heading'}}</a></li>
-				<li><a href="#dataSetAnchor">{{t 'niirdccore.dmp_data_record.heading'}}</a></li>
+				<li id="side-menu"><a href="#projectSummaryAnchor">{{t 'niirdccore.dmp_project.heading'}}</a></li>
+				<li id="side-menu"><a href="#peopleAnchor">{{t 'niirdccore.dmp_people.heading'}}</a></li>
+				<li id="side-menu"><a href="#dataSetAnchor">{{t 'niirdccore.dmp_data_record.heading'}}</a>
+					<ul class="side-menu-child nav nav-stacked nav-pills">
+						{{#each this.datasets as | item | }}
+						<li id='side-menu-child' local-class='concreteDataset'>
+							<a href='#{{item.dataset_id.identifier}}'>{{item.title}}</a>
+						</li>
+						{{/each}}
+					</ul>
+				</li>
 			</ul>
 		</div>
 		<!-- End sidebar -->
 	</div>
-    <!-- End left column -->
+	<!-- End left column -->
 
 	<!-- Begin right column -->
 	<div class="col-sm-9">
@@ -31,56 +36,56 @@
 				</div>
 			</div>
 			{{#if this.loading}}
-				<LoadingIndicator  @dark={{true}} />
+			<LoadingIndicator @dark={{true}} />
 			{{else}}
 			<div class="panel-body">
 
-					<table class="table" local-class="projectSummaryTable">
-						<tr>
-							<th>{{t 'niirdccore.dmp_project.title'}}</th>
-							<td>{{this.project.title}}</td>
-						</tr>
-						<tr>
-							<th>{{t 'niirdccore.dmp_project.description'}}</th>
-							<td>{{this.project.description}}</td>
-						</tr>
-						<tr>
-							<th>{{t 'niirdccore.dmp_project.id'}}</th>
-							<td>{{this.project.project_id}}</td>
-						</tr>
-						<tr>
-							<th>{{t 'niirdccore.dmp_project.final_keywords'}}</th>
-							<td>{{this.project.keywords}}</td>
-						</tr>
-						<tr>
-							<th>{{t 'niirdccore.dmp_project.website'}}</th>
-							<td>{{this.project.website}}</td>
-						</tr>
-						<tr>
-							<th>{{t 'niirdccore.dmp_project.start_day'}}</th>
-							<td>{{this.project.start}}</td>
-						</tr>
-						<tr>
-							<th>{{t 'niirdccore.dmp_project.end_day'}}</th>
-							<td>{{this.project.end}}</td>
-						</tr>
-						<tr>
-							<th>{{t 'niirdccore.dmp_project.foaf_fundedby_vivo_grant'}}</th>
-							<td>{{this.project.funding.funder_name}}</td>
-						</tr>
-						<tr>
-							<th>{{t 'niirdccore.dmp_project.foaf_fundedby_foaf_agent'}}</th>
-							<td>{{this.project.funding.grand_id.identifier}}</td>
-						</tr>
-						<tr>
-							<th>{{t 'niirdccore.dmp_project.activity_type'}}</th>
-							<td>{{this.project.type}}</td>
-						</tr>
-					</table>
-				</div>
+				<table class="table" local-class="summaryTable">
+					<tr>
+						<th>{{t 'niirdccore.dmp_project.title'}}</th>
+						<td>{{this.project.title}}</td>
+					</tr>
+					<tr>
+						<th>{{t 'niirdccore.dmp_project.description'}}</th>
+						<td>{{this.project.description}}</td>
+					</tr>
+					<tr>
+						<th>{{t 'niirdccore.dmp_project.id'}}</th>
+						<td>{{this.project.project_id}}</td>
+					</tr>
+					<tr>
+						<th>{{t 'niirdccore.dmp_project.final_keywords'}}</th>
+						<td>{{this.project.keywords}}</td>
+					</tr>
+					<tr>
+						<th>{{t 'niirdccore.dmp_project.website'}}</th>
+						<td>{{this.project.website}}</td>
+					</tr>
+					<tr>
+						<th>{{t 'niirdccore.dmp_project.start_day'}}</th>
+						<td>{{this.project.start}}</td>
+					</tr>
+					<tr>
+						<th>{{t 'niirdccore.dmp_project.end_day'}}</th>
+						<td>{{this.project.end}}</td>
+					</tr>
+					<tr>
+						<th>{{t 'niirdccore.dmp_project.foaf_fundedby_vivo_grant'}}</th>
+						<td>{{this.project.funding.funder_name}}</td>
+					</tr>
+					<tr>
+						<th>{{t 'niirdccore.dmp_project.foaf_fundedby_foaf_agent'}}</th>
+						<td>{{this.project.funding.grand_id.identifier}}</td>
+					</tr>
+					<tr>
+						<th>{{t 'niirdccore.dmp_project.activity_type'}}</th>
+						<td>{{this.project.type}}</td>
+					</tr>
+				</table>
+			</div>
 			{{/if}}
 		</div>
-		<!-- end projectSummary -->
+		<!-- End projectSummary -->
 		<!-- Begin member -->
 		<div class="panel panel-default">
 			<span id="peopleAnchor" local-class="anchor" class="tableAnchor"></span>
@@ -93,92 +98,479 @@
 			</div>
 
 			{{#if this.loading}}
-				<LoadingIndicator @dark={{true}} />
+			<LoadingIndicator @dark={{true}} />
 			{{else}}
-				<div class="panel-body">
-					<table class="table" local-class="peopleTable">
-						<thead>
-							<tr>
-								<th>{{t 'niirdccore.dmp_people.name'}}</th>
-								<th>{{t 'niirdccore.dmp_people.email_hdr'}}</th>
-								<th>{{t 'niirdccore.dmp_people.project_role'}}</th>
-								<th>{{t 'niirdccore.dmp_people.orcid_hdr'}}</th>
-							</tr>
-						</thead>
-						<tbody>
-							{{#each this.contributors as | item | }}
-							<tr>
-								<td>{{item.name}}</td>
-								<td>{{item.mbox}}</td>
-								<td>{{item.role}}</td>
-								<td>
-									{{#if (eq item.contact_id.type "orcid")}}
-										{{item.contact_id.identifier}}
-									{{/if}}
-								</td>
-							</tr>
-							{{/each}}
-						</tbody>
-					</table>
-					<h5 local-class="peopleTableHeadding">{{t 'niirdccore.dmp_people.data_manager'}}</h5>
-					<table class="table" local-class="peopleTable">
-						<thead>
-							<tr>
-								<th>{{t 'niirdccore.dmp_people.name'}}</th>
-								<th>{{t 'niirdccore.dmp_people.email_hdr'}}</th>
-								<th>{{t 'niirdccore.dmp_people.project_role'}}</th>
-								<th>{{t 'niirdccore.dmp_people.orcid_hdr'}}</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr>
-								<td>{{this.contact.name}}</td>
-								<td>{{this.contact.mbox}}</td>
-								<td>{{this.contact.role}}</td>
-								<td>
-									{{#if (eq this.contact.contact_id.type "orcid")}}
-										{{this.contact.contact_id.identifier}}
-									{{/if}}
-								</td>
-							</tr>
-						</tbody>
-					</table>
-				</div>
+			<div class="panel-body">
+				<table class="table" local-class="peopleTable">
+					<thead>
+						<tr>
+							<th local-class='peopleTblHeader'>{{t 'niirdccore.dmp_people.name'}}</th>
+							<th local-class='peopleTblHeader'>{{t 'niirdccore.dmp_people.email_hdr'}}</th>
+							<th local-class='peopleTblHeader'>{{t 'niirdccore.dmp_people.project_role'}}</th>
+							<th local-class='peopleTblHeader'>{{t 'niirdccore.dmp_people.orcid_hdr'}}</th>
+						</tr>
+					</thead>
+					<tbody>
+						{{#each this.contributors as | item | }}
+						<tr>
+							<td>{{item.name}}</td>
+							<td>{{item.mbox}}</td>
+							<td>{{item.role}}</td>
+							<td>
+								{{#if (eq item.contact_id.type "orcid")}}
+								{{item.contact_id.identifier}}
+								{{/if}}
+							</td>
+						</tr>
+						{{/each}}
+					</tbody>
+				</table>
+				<h5 local-class="peopleTableHeadding">{{t 'niirdccore.dmp_people.data_manager'}}</h5>
+				<table class="table" local-class="peopleTable">
+					<thead>
+						<tr>
+							<th>{{t 'niirdccore.dmp_people.name'}}</th>
+							<th>{{t 'niirdccore.dmp_people.email_hdr'}}</th>
+							<th>{{t 'niirdccore.dmp_people.project_role'}}</th>
+							<th>{{t 'niirdccore.dmp_people.orcid_hdr'}}</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>{{this.contact.name}}</td>
+							<td>{{this.contact.mbox}}</td>
+							<td>{{this.contact.role}}</td>
+							<td>
+								{{#if (eq this.contact.contact_id.type "orcid")}}
+								{{this.contact.contact_id.identifier}}
+								{{/if}}
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
 			{{/if}}
 		</div>
-		<!-- end member -->
+		<!-- End member -->
+		<!-- Begin dataSet -->
+		<div class="panel panel-default">
+			<span id="dataSetAnchor" local-class="anchor" class="tableAnchor"></span>
+			<div class="panel-heading clearfix">
+				<div class="row">
+					<div class="col-md-12">
+						<h3 class="panel-title">{{t 'niirdccore.dmp_data_record.heading'}}</h3>
+					</div>
+				</div>
+			</div>
+			{{#if this.loading}}
+			<LoadingIndicator @dark={{true}} />
+			{{else}}
+			<div class="panel-body">
+				<OsfButton data-test-new-dataset-button @type='primary' @onClick={{action this.openEditDialog true}} local-class="dataSetNew">
+					{{t 'niirdccore.dmp_data_record.create_new_dataset_button'}}
+				</OsfButton>
+
+				{{#each this.datasets as | item | }}
+				<table id={{item.dataset_id.identifier}} class="table" local-class="dataSetTitleTable">
+					<tr>
+						<td class="tableAnchor">{{item.title}}</td>
+						<td>
+							<OsfButton data-test-new-dataset-button @type='primary' @onClick={{action this.openEditDialog false item}}>
+								{{t 'niirdccore.dmp_data_record.edit_dataset_button'}}
+							</OsfButton>
+						</td>
+					</tr>
+				</table>
+
+				<table class="table" local-class="summaryTable">
+					<tr>
+						<th>{{t 'niirdccore.dmp_data_record.description'}}</th>
+						<td>{{item.description}}</td>
+					</tr>
+					<tr>
+						<th>{{t 'niirdccore.dmp_data_record.type'}}</th>
+						<td>{{item.type}}</td>
+					</tr>
+					<tr>
+						<th>{{t 'niirdccore.dmp_data_record.byte_size'}}</th>
+						<td>{{item.distribution.byte_size}}</td>
+					</tr>
+					<tr>
+						<th>{{t 'niirdccore.dmp_data_record.access_policy'}}</th>
+						<td>{{item.access_policy}}</td>
+					</tr>
+					<tr>
+						<th>{{t 'niirdccore.dmp_data_record.data_access'}}</th>
+						<td>{{item.data_access}}</td>
+					</tr>
+					<tr>
+						<th>{{t 'niirdccore.dmp_data_record.issued'}}</th>
+						<td>{{item.issued}}</td>
+					</tr>
+					<tr>
+						<th>{{t 'niirdccore.dmp_data_record.host'}}</th>
+						<td>{{item.distribution.host.title}}</td>
+					</tr>
+					<tr>
+						<th>{{t 'niirdccore.dmp_data_record.access_url'}}</th>
+						<td>{{item.distribution.access_url}}</td>
+					</tr>
+					<tr>
+						<th>{{t 'niirdccore.dmp_data_record.creator_name'}}</th>
+						<td>{{item.creator.name}}</td>
+					</tr>
+					<tr>
+						<th>{{t 'niirdccore.dmp_data_record.manager_name'}}</th>
+						<td>{{item.contact.name}}</td>
+					</tr>
+				</table>
+				{{/each}}
+			</div>
+			{{/if}}
+		</div>
+		<!-- End dataSet -->
 	</div>
 	<!-- End right column -->
 </div>
 
+<!-- Begin editing-dataset dialog -->
+<BsModal data-test-dataset-edit-modal local-class='datasetEditingForm' @open={{this.showDatasetEditDialog}} @onHidden={{action (mut this.showDatasetEditDialog) false}} as |modal|>
+	<modal.body local-class='datasetEditingBody'>
+		<h4>{{t 'niirdccore.dmp_data_record.editing.heading'}}</h4>
+
+		<!-- データ種別 -->
+		<label for='data_type'>{{t 'niirdccore.dmp_data_record.editing.data_type'}}<br>
+			<select id='data_type' onchange={{action this.setDatasetType value='target.value' }}>
+				<option disabled selected>---</option>
+				<option value={{t 'niirdccore.dmp_data_record.editing.type_selection.dataset' }}>
+					{{t 'niirdccore.dmp_data_record.editing.type_selection.dataset'}}
+				</option>
+				<option value={{t 'niirdccore.dmp_data_record.editing.type_selection.image' }}>
+					{{t 'niirdccore.dmp_data_record.editing.type_selection.image'}}
+				</option>
+				<option value={{t 'niirdccore.dmp_data_record.editing.type_selection.other' }}>
+					{{t 'niirdccore.dmp_data_record.editing.type_selection.other'}}
+				</option>
+				<option value={{t 'niirdccore.dmp_data_record.editing.type_selection.software' }}>
+					{{t 'niirdccore.dmp_data_record.editing.type_selection.software'}}
+				</option>
+				<option value={{t 'niirdccore.dmp_data_record.editing.type_selection.workflow' }}>
+					{{t 'niirdccore.dmp_data_record.editing.type_selection.workflow'}}
+				</option>
+				<option value={{t 'niirdccore.dmp_data_record.editing.type_selection.cartographic-material' }}>
+					{{t 'niirdccore.dmp_data_record.editing.type_selection.cartographic-material'}}
+				</option>
+				<option value={{t 'niirdccore.dmp_data_record.editing.type_selection.sound' }}>
+					{{t 'niirdccore.dmp_data_record.editing.type_selection.sound'}}
+				</option>
+				<option value={{t 'niirdccore.dmp_data_record.editing.type_selection.text' }}>
+					{{t 'niirdccore.dmp_data_record.editing.type_selection.text'}}
+				</option>
+			</select>
+		</label><br>
+
+		<!-- タイトル -->
+		<label for="title">{{t 'niirdccore.dmp_data_record.editing.title'}}<br>
+			<div>
+				{{
+				input name='title' value=this.datasetTitle
+				type='text' local-class='editingForm'
+				}}
+			</div>
+		</label><br>
+
+		<!-- 説明 -->
+		<label for='description'>{{t 'niirdccore.dmp_data_record.editing.description'}}<br>
+			<div>
+				<Textarea
+					@id='description' @value={{this.datasetDescription}}
+					placeholder={{t 'niirdccore.dmp_data_record.editing.optional'}}
+					local-class='editingForm'
+				>
+				</Textarea>
+			</div>
+		</label><br>
+
+		<!-- 概略データ量 -->
+		<label for='data_amount'>{{t 'niirdccore.dmp_data_record.editing.data_amount'}}<br>
+			<select id='data_amount' onchange={{action this.setDatasetAmount value='target.value' }}>
+				<option disabled selected>---</option>
+				<option value={{t 'niirdccore.dmp_data_record.editing.amount_selection.opt1' }}>
+					{{t 'niirdccore.dmp_data_record.editing.amount_selection.opt1'}}
+				</option>
+				<option value={{t 'niirdccore.dmp_data_record.editing.amount_selection.opt2' }}>
+					{{t 'niirdccore.dmp_data_record.editing.amount_selection.opt2'}}
+				</option>
+				<option value={{t 'niirdccore.dmp_data_record.editing.amount_selection.opt3' }}>
+					{{t 'niirdccore.dmp_data_record.editing.amount_selection.opt3'}}
+				</option>
+				<option value={{t 'niirdccore.dmp_data_record.editing.amount_selection.opt4' }}>
+					{{t 'niirdccore.dmp_data_record.editing.amount_selection.opt4'}}
+				</option>
+			</select>
+		</label><br>
+
+		<!-- データの提供方針 -->
+		<label for='data_offer_policy'>{{t 'niirdccore.dmp_data_record.editing.data_offer_policy'}}<br>
+			<div>
+				<Textarea
+					@id='data_offer_policy' @value={{this.datasetAccessPolicy}}
+					placeholder={{t 'niirdccore.dmp_data_record.editing.optional'}}
+					local-class='editingForm'
+				>
+				</Textarea>
+			</div>
+		</label><br>
+
+		<!-- データのアクセス権 -->
+		<label for='access_policy'>{{t 'niirdccore.dmp_data_record.editing.access_policy'}}<br>
+			<select id='access_policy' onchange={{action this.setDatasetDataAccess value='target.value' }}>
+				<option disabled selected>---</option>
+				<option value={{t 'niirdccore.dmp_data_record.editing.access_policy_selection.opt1' }}>
+					{{t 'niirdccore.dmp_data_record.editing.access_policy_selection.opt1'}}
+				</option>
+				<option value={{t 'niirdccore.dmp_data_record.editing.access_policy_selection.opt2' }}>
+					{{t 'niirdccore.dmp_data_record.editing.access_policy_selection.opt2'}}
+				</option>
+				<option value={{t 'niirdccore.dmp_data_record.editing.access_policy_selection.opt3' }}>
+					{{t 'niirdccore.dmp_data_record.editing.access_policy_selection.opt3'}}
+				</option>
+				<option value={{t 'niirdccore.dmp_data_record.editing.access_policy_selection.opt4' }}>
+					{{t 'niirdccore.dmp_data_record.editing.access_policy_selection.opt4'}}
+				</option>
+			</select>
+		</label><br>
+
+		<!-- データ公開予定日 -->
+		<label for='release_date'>{{t 'niirdccore.dmp_data_record.editing.scheduled_release_date'}}<br>
+			{{
+			input name='release_date' value=this.datasetIssued
+			type='date'
+			}}
+		</label><br>
+		<p id='dateErrorMsg' local-class='dateErrorMsg'>{{t 'niirdccore.dmp_data_record.editing.dateErrorMsg'}}</p>
+
+		<!-- リポジトリ -->
+		<label for='repository'>{{t 'niirdccore.dmp_data_record.editing.repository'}}<br>
+			<p>{{t 'niirdccore.dmp_data_record.editing.pleaseRepository'}}</p>
+
+			<label id='repository' for='repository_name' local-class='repository'>{{t 'niirdccore.dmp_data_record.editing.name'}}<br>
+				{{
+				input name='repository_name' value=this.datasetRepositoryName
+				type='text'
+				}}
+			</label><br>
+
+			<label id='repository' for='repository_url' local-class='repository'>{{t 'niirdccore.dmp_data_record.editing.repository_url'}}<br>
+				{{
+				input name='repository_url' value=this.datasetRepositoryUrl
+				type='text'
+				}}
+			</label><br>
+		</label><br>
+
+		<!-- データ作成者 -->
+		<label for='author'>{{t 'niirdccore.dmp_data_record.editing.author'}}<br>
+			<p>{{t 'niirdccore.dmp_data_record.editing.pleaseAuthor'}}</p>
+			<select id='author' local-class='personForm' onchange={{action this.setDatasetCreatorName value='target.value' }}>
+				<option disabled selected>---</option>
+				<option value={{t 'niirdccore.dmp_data_record.editing.author_opt1' }}>
+					{{t 'niirdccore.dmp_data_record.editing.author_opt1'}}
+				</option>
+			</select>
+			<br>
+			<label for='manualAuthor' local-class='manualInput'>{{t 'niirdccore.dmp_data_record.editing.manualInput'}}</label>
+			<input type="checkbox" id='manualAuthor' local-class='hiddenBox' />
+			<div local-class='hiddenBlock'>
+				<label for='manualAuthorName manualAuthorId'>
+					{{t 'niirdccore.dmp_data_record.editing.name'}}
+					{{
+					input name='manualAuthorName' local-class='personForm'
+					value=this.datasetCreatorName type='text'
+					}}
+					<br>
+					{{t 'niirdccore.dmp_data_record.editing.id'}}
+					<select id='manualAuthorId' local-class='hiddenChoiceForm' onchange={{action this.setDatasetCreatorMbox value='target.value' }}>
+						<option disabled selected>---</option>
+						<option value={{t 'niirdccore.dmp_data_record.editing.id_selection.opt1' }}>
+							{{t 'niirdccore.dmp_data_record.editing.id_selection.opt1'}}
+						</option>
+						<option value={{t 'niirdccore.dmp_data_record.editing.id_selection.opt2' }}>
+							{{t 'niirdccore.dmp_data_record.editing.id_selection.opt2'}}
+						</option>
+					</select>
+				</label>
+			</div>
+		</label><br>
+
+		<!-- データ管理者 -->
+		<label for='manager'>{{t 'niirdccore.dmp_data_record.editing.manager'}}<br>
+			<p>{{t 'niirdccore.dmp_data_record.editing.pleaseManager'}}</p>
+			<select id='manager' local-class='personForm' onchange={{action this.setDatasetManagerName value='target.value' }}>
+				<option disabled selected>---</option>
+				<option value={{t 'niirdccore.dmp_data_record.editing.manager_opt1' }}>
+					{{t 'niirdccore.dmp_data_record.editing.manager_opt1'}}
+				</option>
+			</select>
+			<br>
+			<label for='manualManager' local-class='manualInput'>{{t 'niirdccore.dmp_data_record.editing.manualInput'}}</label>
+			<input type="checkbox" id='manualManager' local-class='hiddenBox' />
+			<div local-class='hiddenBlock'>
+				<label for='manualManagerName manualManagerId'>
+					{{t 'niirdccore.dmp_data_record.editing.name'}}
+					{{
+					input name='manualManagerName' local-class='personForm'
+					value=this.datasetManagerName type='text'
+					}}
+					<br>
+					{{t 'niirdccore.dmp_data_record.editing.id'}}
+					<select id='manualManagerId' local-class='hiddenChoiceForm' onchange={{action this.setDatasetManagerMbox value='target.value' }}>
+						<option disabled selected>---</option>
+						<option value={{t 'niirdccore.dmp_data_record.editing.id_selection.opt1' }}>
+							{{t 'niirdccore.dmp_data_record.editing.id_selection.opt1'}}
+						</option>
+						<option value={{t 'niirdccore.dmp_data_record.editing.id_selection.opt2' }}>
+							{{t 'niirdccore.dmp_data_record.editing.id_selection.opt2'}}
+						</option>
+					</select>
+				</label>
+			</div>
+		</label><br>
+
+		<p local-class='editingFooter'>
+					<OsfButton @onClick={{action this.closeDialogs}}>{{t 'niirdccore.dmp_data_record.editing.cancel'}}</OsfButton>
+					<OsfButton @onClick={{action this.openConfirmDialog}} @type='success' id='editingSubmit' local-class='editingSubmit'>{{t 'niirdccore.dmp_data_record.editing.submit_confirm'}}</OsfButton>
+		</p>
+	</modal.body>
+</BsModal>
+<!-- End editing-dataset dialog -->
+
+<!-- Start confirm dataset dialog -->
+<BsModal data-test-dataset-confirm-modal local-class='datasetConfirmForm' @open={{this.showDatasetConfirmDialog}} @onHidden={{action (mut this.showDatasetConfirmDialog) false}} as |modal|>
+	<modal.header>
+		<h4>
+            {{t 'niirdccore.dmp_data_record.editing.heading'}}
+        </h4>
+	</modal.header>
+	<modal.body local-class='datasetConfirmBody'>
+		<!-- タイトル -->
+		<p local-class='confirmTitle'>{{this.datasetTitle}}</p>
+		<table>
+			<tr>
+				<!-- 説明 -->
+				<td local-class='confirmKey'>
+					{{t 'niirdccore.dmp_data_record.description'}}
+				</td>
+				<td>{{this.datasetDescription}}</td>
+			</tr>
+			<tr>
+				<!-- データ種別 -->
+				<td local-class='confirmKey'>
+					{{t 'niirdccore.dmp_data_record.editing.data_type'}}
+				</td>
+				<td>{{this.datasetType}}</td>
+			</tr>
+			<tr>
+				<!-- 概略データ量 -->
+				<td local-class='confirmKey'>
+					{{t 'niirdccore.dmp_data_record.editing.data_amount'}}
+				</td>
+				<td>{{this.datasetAmount}}</td>
+			</tr>
+			<tr>
+				<!-- データの提供方針 -->
+				<td local-class='confirmKey'>
+					{{t 'niirdccore.dmp_data_record.editing.data_offer_policy'}}
+				</td>
+				<td>{{this.datasetAccessPolicy}}</td>
+			</tr>
+			<tr>
+				<!-- データのアクセス権 -->
+				<td local-class='confirmKey'>
+					{{t 'niirdccore.dmp_data_record.editing.access_policy'}}
+				</td>
+				<td>{{this.datasetDataAccess}}</td>
+			</tr>
+			<tr>
+				<!-- データ公開予定日 -->
+				<td local-class='confirmKey'>
+					{{t 'niirdccore.dmp_data_record.editing.scheduled_release_date'}}
+				</td>
+				<td>{{this.datasetIssued}}</td>
+			</tr>
+			<tr>
+				<!-- リポジトリ -->
+				<td local-class='confirmKey'>
+					{{t 'niirdccore.dmp_data_record.editing.repository'}}
+				</td>
+				<td>{{this.datasetRepositoryName}}</td>
+			</tr>
+			<tr>
+				<!-- アクセスURL -->
+				<td local-class='confirmKey'>
+					{{t 'niirdccore.dmp_data_record.access_url'}}
+				</td>
+				<td>{{this.datasetRepositoryUrl}}</td>
+			</tr>
+			<tr>
+				<!-- データ作成者 -->
+				<td local-class='confirmKey'>
+					{{t 'niirdccore.dmp_data_record.editing.author'}}
+				</td>
+				<td>{{this.datasetCreatorName}}</td>
+			</tr>
+			<tr>
+				<!-- データ管理者 -->
+				<td local-class='confirmKey'>
+					{{t 'niirdccore.dmp_data_record.editing.manager'}}
+				</td>
+				<td>{{this.datasetManagerName}}</td>
+			</tr>
+		</table>
+		<p local-class='confirmation'>{{t 'niirdccore.dmp_data_record.confirmation'}}</p>
+	</modal.body>
+	<modal.footer local-class='confirmFooter'>
+		<BsButton @onClick={{action this.openEditDialog this.datasetIsNew this.datasetEditing }}>
+			{{t 'general.back'}}
+		</BsButton>
+		<BsButton @onClick={{action this.save}} @type='success' local-class='confirmOk'>
+			{{t 'general.ok'}}
+		</BsButton>
+	</modal.footer>
+</BsModal>
+<!-- End confirm dataset dialog -->
+
 <script>
 	// Activate the menu depending on the position of the content
-	$(function(){
-		var timeoutId;
-		var elementTop = new Array;
-		var current = -1;
-
-		// Store the anchor position in the elementTop array
-		$(".tableAnchor").each(function(i){
-			elementTop[i] = $(this).offset().top;
-		});
+	$(function () {
+		let timeoutId;
+		let elementTop = new Array;
+		let current = -1;
+		let set = 0; // top position
+		//let set = 10;
 
 		// Set the initial display
 		changeBackColor(0);
 
 		// Scroll event
-		$(window).scroll(function(){
+		$(window).scroll(function () {
+
+			// Store the anchor position in the elementTop array
+			$('.tableAnchor').each(function (i) {
+				elementTop[i] = $(this).offset().top;
+				//$("#offset").append(elementTop[i]+"<br />")
+			});
 
 			// Skip if Timeout
-			if(timeoutId) return;
+			if (timeoutId) return;
 
 			// Perform every 500ms (To improve performance)
-			timeoutId = setTimeout(function(){
+			timeoutId = setTimeout(function () {
 				timeoutId = 0;
 
-				var currentPosition = $(window).scrollTop();
-				for (var i = elementTop.length - 1 ; i >= 0; i--) {
-					if (currentPosition > elementTop[i]) {
+				let currentPosition = $(window).scrollTop();
+				for (let i = elementTop.length - 1; i >= 0; i--) {
+					if (currentPosition > elementTop[i] - set) {
 						changeBackColor(i);
 						break;
 					}
@@ -188,12 +580,23 @@
 
 		// Side menu background color setting
 		function changeBackColor(secNum) {
-			if(secNum != current) {
+			if (secNum != current) {
 				current = secNum;
-				secNum2 = secNum + 1; // For HTML order
-				$('.side-menu li').removeClass('active');
-				$('.side-menu li:nth-child(' + secNum2 + ')').addClass('active');
+				let secNum2 = secNum + 1; // For HTML order
+				if (secNum2 <= 5) {
+					$('ul #side-menu-child').removeClass('active');
+					$('ul #side-menu').removeClass('active');
+					$('#side-menu:nth-child(' + secNum2 + ')').addClass('active');
+				} else {
+					let secNum3 = secNum2 - 5;
+
+					$('ul #side-menu').removeClass('active');
+					$('ul #side-menu-child').removeClass('active');
+					$('#side-menu-child:nth-child(' + secNum3 + ')').addClass('active');
+				}
+
 			}
 		}
 	});
+
 </script>
