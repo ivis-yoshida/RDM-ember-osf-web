@@ -19,6 +19,7 @@ import { guidDetail } from './views/guid';
 import { identifierCreate } from './views/identifier';
 import { summaryMetrics } from './views/institution';
 import { iqbrimsStatus } from './views/iqbrims-status';
+import { myscreenConfig } from './views/myscreen-config';
 import { createNode } from './views/node';
 import { osfNestedResource, osfResource, osfToManyRelationship } from './views/osf-resource';
 import { getProviderSubjects } from './views/provider-subjects';
@@ -253,6 +254,7 @@ export default function(this: Server) {
     this.namespace = '/api/v1';
 
     this.get('/project/:id/iqbrims/status', iqbrimsStatus);
+    this.get('/project/:id/myscreen/config', myscreenConfig);
 
     this.urlPrefix = apiUrl;
     this.namespace = apiNamespace;

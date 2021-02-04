@@ -54,7 +54,7 @@ export default class NodeNavbar extends Component {
     }
 
     @computed('node.addons.[]')
-    get niirdccoreEnabled(): Promise<boolean> | null {
+    get myscreenEnabled(): Promise<boolean> | null {
         if (!this.node) {
             return null;
         }
@@ -64,8 +64,8 @@ export default class NodeNavbar extends Component {
             if (!addons) {
                 return false;
             }
-            const niirdccore = addons.filter(addon => addon.id === 'niirdccore');
-            return niirdccore.length > 0;
+            const myscreen = addons.filter(addon => addon.id === 'myscreen');
+            return myscreen.length > 0;
         })();
     }
 
