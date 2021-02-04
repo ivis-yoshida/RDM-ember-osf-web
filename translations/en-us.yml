@@ -1777,12 +1777,12 @@ niirdccore:
         title: 'Title'
         description: 'Description'
         type: 'Type of the data'
-        byte_size: 'The expected size of the data'
-        access_policy: 'Access policy'
-        data_access: 'Access rights'
+        byteSize: 'The expected size of the data'
+        accessPolicy: 'Access policy'
+        dataAccess: 'Access rights'
         issued: 'Scheduled date of data issued'
         host: 'Repository'
-        access_url: 'Access URL'
+        accessUrl: 'Access URL'
         creator_name: 'Data Creator'
         manager_name: 'Data Manager'
         editing:
@@ -1806,8 +1806,8 @@ niirdccore:
                 opt3: '10GB to less than 100GB'
                 opt4: '100GB and more'
             data_offer_policy: 'Access policy'
-            access_policy: 'Access rights'
-            access_policy_selection:
+            accessPolicy: 'Access rights'
+            accessPolicy_selection:
                 opt1: 'Open'
                 opt2: 'Sharing'
                 opt3: 'Closed'
