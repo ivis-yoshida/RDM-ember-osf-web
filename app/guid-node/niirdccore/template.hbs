@@ -2,7 +2,7 @@
 {{title (t 'niirdccore.page_title' nodeTitle=this.model.taskInstance.value.unsafeTitle)}}
 <div class='container' local-class='DMPView'>
 
-    <!-- Begin left column -->
+	<!-- Begin left column -->
 	<div class="col-sm-3 col-xs-12">
 		<!-- Begin sidebar -->
 		<div class="panel panel-default" local-class="affix">
@@ -16,7 +16,7 @@
 		</div>
 		<!-- End sidebar -->
 	</div>
-    <!-- End left column -->
+	<!-- End left column -->
 
 	<!-- Begin right column -->
 	<div class="col-sm-9">
@@ -35,49 +35,49 @@
 			{{else}}
 			<div class="panel-body">
 
-					<table class="table" local-class="projectSummaryTable">
-						<tr>
-							<th>{{t 'niirdccore.dmp_project.title'}}</th>
-							<td>{{this.project.title}}</td>
-						</tr>
-						<tr>
-							<th>{{t 'niirdccore.dmp_project.description'}}</th>
-							<td>{{this.project.description}}</td>
-						</tr>
-						<tr>
-							<th>{{t 'niirdccore.dmp_project.id'}}</th>
-							<td>{{this.project.project_id}}</td>
-						</tr>
-						<tr>
-							<th>{{t 'niirdccore.dmp_project.final_keywords'}}</th>
-							<td>{{this.project.keywords}}</td>
-						</tr>
-						<tr>
-							<th>{{t 'niirdccore.dmp_project.website'}}</th>
-							<td>{{this.project.website}}</td>
-						</tr>
-						<tr>
-							<th>{{t 'niirdccore.dmp_project.start_day'}}</th>
-							<td>{{this.project.start}}</td>
-						</tr>
-						<tr>
-							<th>{{t 'niirdccore.dmp_project.end_day'}}</th>
-							<td>{{this.project.end}}</td>
-						</tr>
-						<tr>
-							<th>{{t 'niirdccore.dmp_project.foaf_fundedby_vivo_grant'}}</th>
-							<td>{{this.project.funding.funder_name}}</td>
-						</tr>
-						<tr>
-							<th>{{t 'niirdccore.dmp_project.foaf_fundedby_foaf_agent'}}</th>
-							<td>{{this.project.funding.grand_id.identifier}}</td>
-						</tr>
-						<tr>
-							<th>{{t 'niirdccore.dmp_project.activity_type'}}</th>
-							<td>{{this.project.type}}</td>
-						</tr>
-					</table>
-				</div>
+				<table class="table" local-class="projectSummaryTable">
+					<tr>
+						<th>{{t 'niirdccore.dmp_project.title'}}</th>
+						<td>{{this.project.title}}</td>
+					</tr>
+					<tr>
+						<th>{{t 'niirdccore.dmp_project.description'}}</th>
+						<td>{{this.project.description}}</td>
+					</tr>
+					<tr>
+						<th>{{t 'niirdccore.dmp_project.id'}}</th>
+						<td>{{this.project.project_id}}</td>
+					</tr>
+					<tr>
+						<th>{{t 'niirdccore.dmp_project.final_keywords'}}</th>
+						<td>{{this.project.keywords}}</td>
+					</tr>
+					<tr>
+						<th>{{t 'niirdccore.dmp_project.website'}}</th>
+						<td>{{this.project.website}}</td>
+					</tr>
+					<tr>
+						<th>{{t 'niirdccore.dmp_project.start_day'}}</th>
+						<td>{{this.project.start}}</td>
+					</tr>
+					<tr>
+						<th>{{t 'niirdccore.dmp_project.end_day'}}</th>
+						<td>{{this.project.end}}</td>
+					</tr>
+					<tr>
+						<th>{{t 'niirdccore.dmp_project.foaf_fundedby_vivo_grant'}}</th>
+						<td>{{this.project.funding.funder_name}}</td>
+					</tr>
+					<tr>
+						<th>{{t 'niirdccore.dmp_project.foaf_fundedby_foaf_agent'}}</th>
+						<td>{{this.project.funding.grand_id.identifier}}</td>
+					</tr>
+					<tr>
+						<th>{{t 'niirdccore.dmp_project.activity_type'}}</th>
+						<td>{{this.project.type}}</td>
+					</tr>
+				</table>
+			</div>
 			{{/if}}
 		</div>
 		<!-- end projectSummary -->
@@ -95,60 +95,177 @@
 			{{#if this.loading}}
 				<LoadingIndicator @dark={{true}} />
 			{{else}}
-				<div class="panel-body">
-					<table class="table" local-class="peopleTable">
-						<thead>
-							<tr>
-								<th>{{t 'niirdccore.dmp_people.name'}}</th>
-								<th>{{t 'niirdccore.dmp_people.email_hdr'}}</th>
-								<th>{{t 'niirdccore.dmp_people.project_role'}}</th>
-								<th>{{t 'niirdccore.dmp_people.orcid_hdr'}}</th>
-							</tr>
-						</thead>
-						<tbody>
-							{{#each this.contributors as | item | }}
-							<tr>
-								<td>{{item.name}}</td>
-								<td>{{item.mbox}}</td>
-								<td>{{item.role}}</td>
-								<td>
-									{{#if (eq item.contact_id.type "orcid")}}
-										{{item.contact_id.identifier}}
-									{{/if}}
-								</td>
-							</tr>
-							{{/each}}
-						</tbody>
-					</table>
-					<h5 local-class="peopleTableHeadding">{{t 'niirdccore.dmp_people.data_manager'}}</h5>
-					<table class="table" local-class="peopleTable">
-						<thead>
-							<tr>
-								<th>{{t 'niirdccore.dmp_people.name'}}</th>
-								<th>{{t 'niirdccore.dmp_people.email_hdr'}}</th>
-								<th>{{t 'niirdccore.dmp_people.project_role'}}</th>
-								<th>{{t 'niirdccore.dmp_people.orcid_hdr'}}</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr>
-								<td>{{this.contact.name}}</td>
-								<td>{{this.contact.mbox}}</td>
-								<td>{{this.contact.role}}</td>
-								<td>
-									{{#if (eq this.contact.contact_id.type "orcid")}}
-										{{this.contact.contact_id.identifier}}
-									{{/if}}
-								</td>
-							</tr>
-						</tbody>
-					</table>
-				</div>
+			<div class="panel-body">
+				<table class="table" local-class="peopleTable">
+					<thead>
+						<tr>
+							<th>{{t 'niirdccore.dmp_people.name'}}</th>
+							<th>{{t 'niirdccore.dmp_people.email_hdr'}}</th>
+							<th>{{t 'niirdccore.dmp_people.project_role'}}</th>
+							<th>{{t 'niirdccore.dmp_people.orcid_hdr'}}</th>
+						</tr>
+					</thead>
+					<tbody>
+						{{#each this.contributors as | item | }}
+						<tr>
+							<td>{{item.name}}</td>
+							<td>{{item.mbox}}</td>
+							<td>{{item.role}}</td>
+							<td>
+								{{#if (eq item.contact_id.type "orcid")}}
+								{{item.contact_id.identifier}}
+								{{/if}}
+							</td>
+						</tr>
+						{{/each}}
+					</tbody>
+				</table>
+				<h5 local-class="peopleTableHeadding">{{t 'niirdccore.dmp_people.data_manager'}}</h5>
+				<table class="table" local-class="peopleTable">
+					<thead>
+						<tr>
+							<th>{{t 'niirdccore.dmp_people.name'}}</th>
+							<th>{{t 'niirdccore.dmp_people.email_hdr'}}</th>
+							<th>{{t 'niirdccore.dmp_people.project_role'}}</th>
+							<th>{{t 'niirdccore.dmp_people.orcid_hdr'}}</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>{{this.contact.name}}</td>
+							<td>{{this.contact.mbox}}</td>
+							<td>{{this.contact.role}}</td>
+							<td>
+								{{#if (eq this.contact.contact_id.type "orcid")}}
+								{{this.contact.contact_id.identifier}}
+								{{/if}}
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
 			{{/if}}
 		</div>
 		<!-- end member -->
 	</div>
 	<!-- End right column -->
+
+	<!-- Begin editing-dataset dialog -->
+	<BsModal local-class='datasetEditingForm'>
+		<modal.body local-class='datasetEditingBody'>
+			<h4>{{t 'niirdccore.dmp_data_record.editing.heading'}}</h4>
+
+			<!-- データ種別 -->
+			<label for='data_type'>{{t 'niirdccore.dmp_data_record.editing.data_type'}}<br>
+				<select id='data_type'>
+					<option value='1'>{{t 'niirdccore.dmp_data_record.editing.data_type_opt1'}}</option>
+				</select>
+			</label><br>
+
+			<!-- タイトル -->
+			<label for="title">{{t 'niirdccore.dmp_data_record.editing.title'}}<br>
+				<Input @id="title" @type='text' @value='' local-class='editingForm' />
+			</label><br>
+
+			<!-- 説明 -->
+			<label for='description'>{{t 'niirdccore.dmp_data_record.editing.description'}}<br>
+				<Textarea @id='description' placeholder="任意" local-class='editingForm'></Textarea>
+			</label><br>
+
+			<!-- 概略データ量 -->
+			<label for='data_amount'>{{t 'niirdccore.dmp_data_record.editing.data_amount'}}<br>
+				<select id='data_amount'>
+					<option value='1'>{{t 'niirdccore.dmp_data_record.editing.data_amount_opt1'}}</option>
+				</select>
+			</label><br>
+
+			<!-- データの提供方針 -->
+			<label for='data_offer_policy'>{{t 'niirdccore.dmp_data_record.editing.data_offer_policy'}}<br>
+				<Textarea @id='data_offer_policy' placeholder="任意" local-class='editingForm'></Textarea>
+			</label><br>
+
+			<!-- データのアクセス権 -->
+			<label for='access_policy'>{{t 'niirdccore.dmp_data_record.editing.access_policy'}}<br>
+				<select id='access_policy'>
+					<option value='1'>{{t 'niirdccore.dmp_data_record.editing.access_policy_opt1'}}</option>
+				</select>
+			</label><br>
+
+			<!-- データ公開予定日 -->
+			<label>{{t 'niirdccore.dmp_data_record.editing.scheduled_release_date'}}<br></label>
+			<label for='scheduled_release_date scheduled_release_month scheduled_release_year' local-class='releaseSchedule'>
+				<select id='scheduled_release_date'>
+					<option value='1'>{{t 'niirdccore.dmp_data_record.editing.release_date_opt1'}}</option>
+				</select>
+				<select id='scheduled_release_month'>
+					<option value='1'>{{t 'niirdccore.dmp_data_record.editing.release_month_opt1'}}</option>
+				</select>
+				<Input @id="scheduled_release_year" @type='text' placeholder='年' local-class='releaseDate' />
+			</label><br>
+
+			<!-- リポジトリ -->
+			<label for='repository'>{{t 'niirdccore.dmp_data_record.editing.repository'}}<br>
+				<p>{{t 'niirdccore.dmp_data_record.editing.pleaseRepository'}}</p>
+
+				<label id='repository' for='repository_name' local-class='repository'>{{t 'niirdccore.dmp_data_record.editing.name'}}<br>
+					<Input @id="repository_name" @type='text' @value='' local-class='editingForm repository' />
+				</label><br>
+
+				<label id='repository' for='repository_url' local-class='repository'>{{t 'niirdccore.dmp_data_record.editing.repository_url'}}<br>
+					<Input @id="repository_url" @type='text' @value='' local-class='editingForm repository' />
+				</label><br>
+			</label><br>
+
+			<!-- データ作成者 -->
+			<label for='author'>{{t 'niirdccore.dmp_data_record.editing.author'}}<br>
+				<p>{{t 'niirdccore.dmp_data_record.editing.pleaseAuthor'}}</p>
+				<select id='author' local-class='personForm'>
+					<option value='1'>{{t 'niirdccore.dmp_data_record.editing.author_opt1'}}</option>
+				</select>
+				<br>
+				<label for='manualAuthor' local-class='manualInput'>{{t 'niirdccore.dmp_data_record.editing.manualInput'}}</label>
+				<input type="checkbox" id='manualAuthor' local-class='hiddenBox' />
+				<div local-class='hiddenBlock'>
+					<label for='manualAuthorName manualAuthorId'>
+						{{t 'niirdccore.dmp_data_record.editing.name'}}
+						<Input @id="manualAuthorName" @type='text' @value='' local-class='personForm' />
+						<br>
+						{{t 'niirdccore.dmp_data_record.editing.id'}}
+						<select id='manualAuthorId' local-class='hiddenChoiceForm'>
+							<option value='1'>{{t 'niirdccore.dmp_data_record.editing.id_opt1'}}</option>
+						</select>
+					</label>
+				</div>
+			</label><br>
+
+			<!-- データ管理者 -->
+			<label for='manager'>{{t 'niirdccore.dmp_data_record.editing.manager'}}<br>
+				<p>{{t 'niirdccore.dmp_data_record.editing.pleaseManager'}}</p>
+				<select id='manager' local-class='personForm'>
+					<option value='1'>{{t 'niirdccore.dmp_data_record.editing.manager_opt1'}}</option>
+				</select>
+				<label for='manualManager' local-class='manualInput'>{{t 'niirdccore.dmp_data_record.editing.manualInput'}}</label>
+				<input type="checkbox" id='manualManager' local-class='hiddenBox' />
+				<div local-class='hiddenBlock'>
+					<label for='manualManagerName manualManagerId'>
+						{{t 'niirdccore.dmp_data_record.editing.name'}}
+						<Input @id="manualManagerName" @type='text' @value='' local-class='personForm' />
+						<br>
+						{{t 'niirdccore.dmp_data_record.editing.id'}}
+						<select id='manualManagerId' local-class='hiddenChoiceForm'>
+							<option value='1'>{{t 'niirdccore.dmp_data_record.editing.id_opt1'}}</option>
+						</select>
+					</label>
+				</div>
+			</label><br>
+
+			<p local-class='editingFooter'>
+				<OsfButton>{{t 'niirdccore.dmp_data_record.editing.cancel'}}</OsfButton>
+				<OsfButton local-class='editingSubmit'>{{t 'niirdccore.dmp_data_record.editing.submit_confirm'}}</OsfButton>
+			</p>
+		</modal.body>
+	</BsModal>
+	<!-- End editing-dataset dialog -->
 </div>
 
 <script>

@@ -55,3 +55,100 @@
 .peopleTableHeadding {
     font-weight: bold;
 }
+
+.datasetEditingForm {
+    overflow-y: initial !important;
+
+    .datasetEditingBody {
+        max-height: 100%;
+        margin-bottom: 5%;
+        overflow-y: auto;
+    }
+
+    h4 {
+        margin-top: 3%;
+        margin-left: 1%;
+    }
+
+    label {
+        margin-left: 3%;
+    }
+
+    p {
+        font-size: 80%;
+        color: rgb(145, 145, 145);
+    }
+
+    .manualInput {
+        font-size: 80%;
+        color: rgb(95, 85, 250);
+        cursor: pointer;
+    }
+
+    .choiceForm {
+        width: 50%;
+        margin-left: 5%;
+    }
+
+    .editingForm {
+        width: 230%;
+        margin-left: 5%;
+    }
+
+    .personForm {
+        width: 70%;
+        margin-left: 5%;
+    }
+
+    .hiddenBlock {
+        height: 0;
+        padding: 0;
+        overflow: hidden;
+        opacity: 0;
+        transition: 0.8s;
+    }
+
+    input:checked ~ div {
+        opacity: 1;
+        border: solid #b5b5b5;
+        width: 200%;
+        height: auto;
+        padding: 3%;
+    }
+
+    .hiddenChoiceForm {
+        width: 50%;
+        margin-left: 11%;
+    }
+
+    .releaseSchedule {
+        display: flex;
+        margin-left: 3%;
+        padding: 1%;
+    }
+
+    .releaseDate {
+        width: 25%;
+        height: 5%;
+    }
+
+    .repository {
+        width: 150%;
+        margin-left: 7%;
+    }
+
+    .editingSubmit {
+        color: rgb(255, 255, 255);
+        background-color: rgb(95, 85, 250);
+    }
+
+    .editingFooter {
+        margin-left: 70%;
+        margin-bottom: 5%;
+    }
+
+    .hiddenBox {
+        display: none;
+        opacity: 0;
+    }
+}
