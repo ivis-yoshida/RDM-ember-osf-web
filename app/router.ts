@@ -142,7 +142,6 @@ Router.map(function() {
         this.mount('analytics-page', { as: 'analytics' });
         this.route('forks');
         this.route('iqbrims');
-        this.route('myscreen');
         this.route('niirdccore');
         this.route('registrations');
         this.route('drafts', { path: '/drafts/:draftId' }, function() {

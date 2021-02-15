@@ -83,6 +83,8 @@ general:
     component: component
     hosted_on_the_osf: 'Hosted on GakuNin RDM'
     please_confirm: 'Please confirm'
+    proj_admin: 'Project Administrator'
+    quota_notice: 'NII Storage Quota Notice'
     required: Required
     options: Options
     optional: Optional
@@ -540,7 +542,7 @@ node_navbar:
     toggle: 'Toggle navigation'
     project_nav: 'Project Navigation'
     iqbrims: 'IQB-RIMS'
-    myscreen: 'My Screen'
+    niirdccore: 'NII RDC Core'
     wiki: Wiki
     analytics: Analytics
     registrations: Registrations
@@ -1799,12 +1801,3 @@ niirdccore:
             author_opt1: 'John Due'
             manager_opt1: 'John Due'
             id_opt1: 'ORCID'
-myscreen:
-    page_title: '{nodeTitle} My Screen'
-    header: 'My Screen'
-    loading: 'Loading My Screen config...'
-    param1: 'Param 1'
-    save_button: 'Save'
-    failed_to_submit: 'Failed to save'
-    placeholders:
-        param1: 'anything'

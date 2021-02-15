@@ -9,7 +9,6 @@ import { OsfLinkRouterStub } from '../../helpers/osf-link-router-stub';
 enum NavCondition {
     HasParent,
     IQBRIMSEnabled,
-    MyScreenEnabled,
     IsRegistration = 'isRegistration',
     IsPublic = 'public',
     UserCanRead = 'userHasReadPermission',
@@ -23,7 +22,6 @@ enum NavLink {
     ThisNode,
     Files = 'files',
     IQBRIMS = 'iqbrims',
-    MyScreen = 'myscreen',
     Wiki = 'wiki',
     Analytics = 'analytics',
     Registrations = 'registrations',
@@ -55,7 +53,7 @@ export class FakeNode {
         for (const condition of conditions) {
             if (condition === NavCondition.HasParent) {
                 this.parentId = faker.random.uuid();
-            } else if (condition !== NavCondition.IQBRIMSEnabled && condition !== NavCondition.MyScreenEnabled) {
+            } else if (condition !== NavCondition.IQBRIMSEnabled) {
                 this[condition] = true;
             }
         }
@@ -284,17 +282,6 @@ module('Integration | Component | node-navbar', () => {
                     NavLink.Registrations,
                 ],
             },
-            {
-                conditions: [
-                    NavCondition.MyScreenEnabled,
-                ],
-                links: [
-                    NavLink.ThisNode,
-                    NavLink.Files,
-                    NavLink.MyScreen,
-                    NavLink.Registrations,
-                ],
-            },
         ];
 
         testCases.forEach((testCase, i) => {
@@ -303,16 +290,12 @@ module('Integration | Component | node-navbar', () => {
 
                 const node = new FakeNode(testCase.conditions);
                 this.set('node', node);
-                const iqbrimsEnabled = testCase.conditions.filter(c => c === NavCondition.IQBRIMSEnabled);
+                const iqbrimsEnabled = testCase.conditions.filter((c) => c === NavCondition.IQBRIMSEnabled);
                 this.set('iqbrimsEnabled', iqbrimsEnabled.length > 0);
-                const myscreenEnabled = testCase.conditions.filter(c => c === NavCondition.MyScreenEnabled);
-                this.set('myscreenEnabled', myscreenEnabled.length > 0);
 
                 await render(hbs`
                 {{node-navbar
-                    node=this.node iqbrimsEnabled=this.iqbrimsEnabled
-                    myscreenEnabled=this.myscreenEnabled
-                    renderInPlace=true
+                    node=this.node iqbrimsEnabled=this.iqbrimsEnabled renderInPlace=true
                 }}`);
 
                 assert.dom('[data-test-node-navbar-link]').exists({ count: testCase.links.length });
