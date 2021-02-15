@@ -1,17 +1,21 @@
 {{! using unsafeTitle here to avoid double encoding because the title helper does its own }}
 {{title (t 'niirdccore.page_title' nodeTitle=this.model.taskInstance.value.unsafeTitle)}}
 <div class='container' local-class='DMPView'>
-
     <!-- Begin left column -->
 	<div class="col-sm-3 col-xs-12">
 		<!-- Begin sidebar -->
 		<div class="panel panel-default" local-class="affix">
 			<ul class="side-menu nav nav-stacked nav-pills">
-				<li><a href="#projectSummaryAnchor">{{t 'niirdccore.dmp_project.heading'}}</a></li>
-				<li><a href="#peopleAnchor">{{t 'niirdccore.dmp_people.heading'}}</a></li>
-				<li><a href="#dataCollectMethodAnchor">{{t 'niirdccore.dmp_data_collection.heading'}}</a></li>
-				<li><a href="#ethicsAnchor">{{t 'niirdccore.dmp_ethics.heading'}}</a></li>
-				<li><a href="#dataSetAnchor">{{t 'niirdccore.dmp_data_record.heading'}}</a></li>
+				<li id="side-menu" ><a href="#projectSummaryAnchor">{{t 'niirdccore.dmp_project.heading'}}</a></li>
+				<li id="side-menu" ><a href="#peopleAnchor">{{t 'niirdccore.dmp_people.heading'}}</a></li>
+				<li id="side-menu" ><a href="#dataCollectMethodAnchor">{{t 'niirdccore.dmp_data_collection.heading'}}</a></li>
+				<li id="side-menu" ><a href="#ethicsAnchor">{{t 'niirdccore.dmp_ethics.heading'}}</a></li>
+				<li id="side-menu" ><a href="#dataSetAnchor">{{t 'niirdccore.dmp_data_record.heading'}}</a></li>
+				<ul class="side-menu-child nav nav-stacked nav-pills">
+					{{#each this.datasets as | item | }}
+						<li><a href={{item.dataset_id.identifier}}>{{item.title}}</a></li>
+					{{/each}}
+				</ul>
 			</ul>
 		</div>
 		<!-- End sidebar -->
@@ -33,9 +37,9 @@
 			{{#if this.loading}}
 				<LoadingIndicator  @dark={{true}} />
 			{{else}}
-			<div class="panel-body">
+				<div class="panel-body">
 
-					<table class="table" local-class="projectSummaryTable">
+					<table class="table" local-class="summaryTable">
 						<tr>
 							<th>{{t 'niirdccore.dmp_project.title'}}</th>
 							<td>{{this.project.title}}</td>
@@ -80,7 +84,7 @@
 				</div>
 			{{/if}}
 		</div>
-		<!-- end projectSummary -->
+		<!-- End projectSummary -->
 		<!-- Begin member -->
 		<div class="panel panel-default">
 			<span id="peopleAnchor" local-class="anchor" class="tableAnchor"></span>
@@ -146,10 +150,181 @@
 				</div>
 			{{/if}}
 		</div>
-		<!-- end member -->
+		<!-- End member -->
+		<div class="panel panel-default">
+			<span id="dataCollectMethodAnchor" local-class="anchor" class="tableAnchor"></span>
+			<div class="panel-heading clearfix">
+				<div class="row">
+					<div class="col-md-12">
+						<h3 class="panel-title">{{t 'niirdccore.dmp_data_collection.heading'}}</h3>
+					</div>
+				</div>
+			</div>
+			<div class="panel-body"></div>
+		</div>
+		<div class="panel panel-default">
+			<span id="ethicsAnchor" local-class="anchor" class="tableAnchor"></span>
+			<div class="panel-heading clearfix">
+				<div class="row">
+					<div class="col-md-12">
+						<h3 class="panel-title">{{t 'niirdccore.dmp_ethics.heading'}}</h3>
+					</div>
+				</div>
+			</div>
+			<div class="panel-body"></div>
+		</div>
+		<!-- Begin dataSet -->
+		<div class="panel panel-default">
+			<span id="dataSetAnchor" local-class="anchor" class="tableAnchor"></span>
+			<div class="panel-heading clearfix">
+				<div class="row">
+					<div class="col-md-12">
+						<h3 class="panel-title">{{t 'niirdccore.dmp_data_record.heading'}}</h3>
+					</div>
+				</div>
+			</div>
+			{{#if this.loading}}
+				<LoadingIndicator  @dark={{true}} />
+			{{else}}
+				<div class="panel-body">
+					<OsfButton data-test-new-dataset-button
+						@type='primary'
+						@onClick={{action this.openEditDialog}}
+						local-class="dataSetNew"
+					>
+						{{t 'niirdccore.dmp_data_record.create_new_dataset_button'}}
+					</OsfButton>
+
+					{{#each this.datasets as | item | }}
+						<table id={{item.dataset_id.identifier}} class="table" local-class="dataSetTitleTable">
+							<tr>
+								<td class="tableAnchor">{{item.title}}</td>
+								<td>
+									<OsfButton data-test-new-dataset-button
+										@type='primary'
+										@onClick={{action this.openEditDialog item}}
+									>
+										{{t 'niirdccore.dmp_data_record.edit_dataset_button'}}
+									</OsfButton>
+								</td>
+							</tr>
+						</table>
+						
+						<table class="table" local-class="summaryTable">
+
+							<tr>
+								<th>{{t 'niirdccore.dmp_data_record.description'}}</th>
+								<td>{{item.description}}</td>
+							</tr>
+							<tr>
+								<th>{{t 'niirdccore.dmp_data_record.type'}}</th>
+								<td>{{item.type}}</td>
+							</tr>
+							<tr>
+								<th>{{t 'niirdccore.dmp_data_record.byte_size'}}</th>
+								<td>{{item.distribution.byte_size}}</td>
+							</tr>
+							<tr>
+								<th>{{t 'niirdccore.dmp_data_record.access_policy'}}</th>
+								<td>{{item.access_policy}}</td>
+							</tr>
+							<tr>
+								<th>{{t 'niirdccore.dmp_data_record.data_access'}}</th>
+								<td>{{item.data_access}}</td>
+							</tr>
+							<tr>
+								<th>{{t 'niirdccore.dmp_data_record.issued'}}</th>
+								<td>{{item.issued}}</td>
+							</tr>
+							<tr>
+								<th>{{t 'niirdccore.dmp_data_record.host'}}</th>
+								<td>{{item.distribution.host.title}}</td>
+							</tr>
+							<tr>
+								<th>{{t 'niirdccore.dmp_data_record.access_url'}}</th>
+								<td>{{item.distribution.access_url}}</td>
+							</tr>
+							<tr>
+								<th>{{t 'niirdccore.dmp_data_record.creator_name'}}</th>
+								<td>{{item.creator.name}}</td>
+							</tr>
+							<tr>
+								<th>{{t 'niirdccore.dmp_data_record.manager_name'}}</th>
+								<td>{{item.contact.name}}</td>
+							</tr>
+						</table>
+					{{/each}}
+				</div>
+			{{/if}}
+		</div>
+		<!-- End dataSet -->
 	</div>
 	<!-- End right column -->
 </div>
+
+<!-- start edit dataset dialog -->
+<BsModal
+    data-test-dataset-edit-modal
+    @open={{this.showDatasetEditDialog}}
+    @onHidden={{action (mut this.showDatasetEditDialog) false}}
+    as |modal|
+>
+    <modal.header>
+        <h4>{{t 'niirdccore.dmp_data_editor.heading'}}</h4>
+    </modal.header>
+    <modal.body>
+		{{t 'niirdccore.dmp_data_editor.title'}}
+		{{input type="text" value=this.datasetTitle}}<br/>
+		{{'アクセス権'}}
+		{{input type="text" value=this.datasetDataAccess}}<br/>
+		<OsfButton
+			@type='primary'
+			@onClick={{action this.save}}>
+			{{t 'general.save'}}
+		</OsfButton>
+    </modal.body>
+    <modal.footer>
+        <BsButton
+            @onClick={{action this.closeDialogs}}>
+            {{t 'general.cancel'}}
+        </BsButton>
+		<BsButton
+			@onClick={{action this.openConfirmDialog}}
+			@type='success'>
+			{{t 'general.ok'}}
+		</BsButton>
+    </modal.footer>
+</BsModal>
+<!-- End edit dataset dialog -->
+
+<!-- Start confirm dataset dialog -->
+<BsModal
+    data-test-dataset-confirm-modal
+    @open={{this.showDatasetConfirmDialog}}
+    @onHidden={{action (mut this.showDatasetConfirmDialog) false}}
+    as |modal|
+>
+    <modal.header>
+        <h4>
+            {{t 'niirdccore.dmp_data_editor.heading'}}
+        </h4>
+    </modal.header>
+    <modal.body>
+		
+    </modal.body>
+    <modal.footer>
+        <BsButton
+            @onClick={{action this.openEditDialog }}>
+            {{t 'general.back'}}
+        </BsButton>
+		<BsButton
+			@onClick={{action this.closeDialogs}}
+			@type='success'>
+			{{t 'general.ok'}}
+		</BsButton>
+    </modal.footer>
+</BsModal>
+<!-- End confirm dataset dialog -->
 
 <script>
 	// Activate the menu depending on the position of the content
@@ -157,17 +332,19 @@
 		var timeoutId;
 		var elementTop = new Array;
 		var current = -1;
-
-		// Store the anchor position in the elementTop array
-		$(".tableAnchor").each(function(i){
-			elementTop[i] = $(this).offset().top;
-		});
+		var set = 34; // top position
 
 		// Set the initial display
 		changeBackColor(0);
 
 		// Scroll event
 		$(window).scroll(function(){
+
+			// Store the anchor position in the elementTop array
+			$('.tableAnchor').each(function(i){
+				elementTop[i] = $(this).offset().top;
+				//$("#offset").append(elementTop[i]+"<br />")
+			});
 
 			// Skip if Timeout
 			if(timeoutId) return;
@@ -178,7 +355,7 @@
 
 				var currentPosition = $(window).scrollTop();
 				for (var i = elementTop.length - 1 ; i >= 0; i--) {
-					if (currentPosition > elementTop[i]) {
+					if (currentPosition > elementTop[i] - set ) {
 						changeBackColor(i);
 						break;
 					}
@@ -191,8 +368,8 @@
 			if(secNum != current) {
 				current = secNum;
 				secNum2 = secNum + 1; // For HTML order
-				$('.side-menu li').removeClass('active');
-				$('.side-menu li:nth-child(' + secNum2 + ')').addClass('active');
+				$('#side-menu li').removeClass('active');
+				$('#side-menu li:nth-child(' + secNum2 + ')').addClass('active');
 			}
 		}
 	});
