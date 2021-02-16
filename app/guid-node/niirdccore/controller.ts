@@ -112,8 +112,11 @@ export default class GuidNode_niirdccore extends Controller {
             // データセット新規作成の場合
             this.datasetTmp = this.store.createRecord('dmp-dataset', {dmp: this.configCache});
         }
-        this.datasetTmp.title = this.datasetTitle;
-        this.datasetTmp.data_access = this.datasetDataAccess;
+        // this.datasetTmp.title = this.datasetTitle;
+        // this.datasetTmp.data_access = this.datasetDataAccess;
+
+        set(this.datasetTmp, 'title', this.datasetTitle);
+        set(this.datasetTmp, 'data_access', this.datasetDataAccess);
 
         await this.datasetTmp.save()
         .then(() => {
