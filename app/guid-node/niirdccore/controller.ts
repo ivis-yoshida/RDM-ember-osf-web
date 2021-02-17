@@ -13,6 +13,9 @@ import Node from 'ember-osf-web/models/node';
 import Analytics from 'ember-osf-web/services/analytics';
 import StatusMessages from 'ember-osf-web/services/status-messages';
 
+// Edit-dataset databind
+// import MemberModel from '../../app/models/dmp-status';
+
 export default class GuidNode_niirdccore extends Controller {
     @service toast!: Toast;
     @service intl!: Intl;
@@ -30,7 +33,7 @@ export default class GuidNode_niirdccore extends Controller {
     configCache?: DS.PromiseObject<DMPModel>;
     datasetTmp!: DMPDatasetModel;
     datasetEditing!: DMPDatasetModel;
-    
+
     @computed('config.isFulfilled')
     get loading(): boolean {
         return !this.config || !this.config.get('isFulfilled');
@@ -46,7 +49,7 @@ export default class GuidNode_niirdccore extends Controller {
     }
 
     @computed('config.contributors')
-    get contributors(){
+    get contributors() {
         if (!this.config || !this.config.get('isFulfilled')) {
             return undefined;
         }
@@ -80,7 +83,7 @@ export default class GuidNode_niirdccore extends Controller {
         if (!this.node) {
             return undefined;
         }
-        this.configCache = this.store.findRecord('dmp-status', this.node.id, {include: 'dmp-dataset'});
+        this.configCache = this.store.findRecord('dmp-status', this.node.id, { include: 'dmp-dataset' });
         return this.configCache!;
     }
 
@@ -88,29 +91,82 @@ export default class GuidNode_niirdccore extends Controller {
     get datasetTitle() {
         return this.datasetEditing.title;
     }
-    
     set datasetTitle(value: string) {
         set(this.datasetEditing, 'title', value);
+    }
+
+    @computed('datasetEditing.type')
+    get datasetType() {
+        return this.datasetEditing.type;
+    }
+    set datasetType(value: string) {
+        set(this.datasetEditing, 'type', value);
+    }
+
+    @computed('datasetEditing.description')
+    get datasetDescription() {
+        if (typeof this.datasetEditing.description === 'string') {
+            return this.datasetEditing.description;
+        } else {
+            return ''
+        }
+    }
+    set datasetDescription(value: string | undefined) {
+        set(this.datasetEditing, 'description', value);
+    }
+
+    @computed('datasetEditing.access_policy')
+    get datasetAccessPolicy() {
+        if (typeof this.datasetEditing.access_policy === 'string') {
+            return this.datasetEditing.access_policy
+        } else {
+            return ''
+        }
+    }
+    set datasetAccessPolicy(value: string | undefined) {
+        set(this.datasetEditing, 'access_policy', value);
     }
 
     @computed('datasetEditing.data_access')
     get datasetDataAccess() {
         return this.datasetEditing.data_access;
     }
-    
     set datasetDataAccess(value: string) {
         set(this.datasetEditing, 'data_access', value);
     }
 
+    // scheduled release date
+    @computed('datasetEditing.issued')
+    get datasetIssued() {
+        return this.datasetEditing.issued;
+    }
+    set datasetIssued(value: Date | undefined) {
+        set(this.datasetEditing, 'issued', value);
+    }
+
+    @computed('datasetEditing.creator')
+    get datasetCreator() {
+        return this.datasetEditing.creator;
+    }
+    set datasetCreator(value) {
+        set(this.datasetEditing, 'creator', value);
+    }
+
+    // @computed('datasetEditing.contact')
+    // ...
+
+    // @computed('datasetEditing.distribution')
+    // ...
+
     @action
-    async save(this: GuidNode_niirdccore){
+    async save(this: GuidNode_niirdccore) {
         if (!this.node || !this.config) {
             throw new EmberError('Illegal config');
         }
 
-        if(!this.datasetTmp) {
+        if (!this.datasetTmp) {
             // データセット新規作成の場合
-            this.datasetTmp = this.store.createRecord('dmp-dataset', {dmp: this.configCache});
+            this.datasetTmp = this.store.createRecord('dmp-dataset', { dmp: this.configCache });
         }
         // this.datasetTmp.title = this.datasetTitle;
         // this.datasetTmp.data_access = this.datasetDataAccess;
@@ -119,12 +175,12 @@ export default class GuidNode_niirdccore extends Controller {
         set(this.datasetTmp, 'data_access', this.datasetDataAccess);
 
         await this.datasetTmp.save()
-        .then(() => {
-            this.set('isPageDirty', false);
-        })
-        .catch(() => {
-            this.saveError(this.datasetTmp);
-        });
+            .then(() => {
+                this.set('isPageDirty', false);
+            })
+            .catch(() => {
+                this.saveError(this.datasetTmp);
+            });
 
         return;
     }
@@ -144,16 +200,16 @@ export default class GuidNode_niirdccore extends Controller {
         this.set('showDatasetEditDialog', true);
         this.set('showDatasetConfirmDialog', false);
 
-        if(!target_dataset || target_dataset == undefined) {
+        if (!target_dataset || target_dataset == undefined) {
             // 新規作成
             this.datasetEditing = Object.create(DMPDatasetModel);
         }
-        else{
+        else {
             // 編集
             // 選択されたレコード
             this.datasetTmp = target_dataset;
             // 編集用レコード
-            this.set('datasetEditing', Object.assign({}, target_dataset)); 
+            this.set('datasetEditing', Object.assign({}, target_dataset));
         }
     }
 
