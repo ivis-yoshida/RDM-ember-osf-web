@@ -262,7 +262,9 @@
 		<!-- データ種別 -->
 		<label for='data_type'>{{t 'niirdccore.dmp_data_record.editing.data_type'}}<br>
 			<select id='data_type'>
+				{{#select value=this.datasetType}}
 				<option value='1'>{{t 'niirdccore.dmp_data_record.editing.data_type_opt1'}}</option>
+				{{/select}}
 			</select>
 		</label><br>
 
@@ -313,13 +315,17 @@
 		<!-- データ公開予定日 -->
 		<label>{{t 'niirdccore.dmp_data_record.editing.scheduled_release_date'}}<br></label>
 		<label for='scheduled_release_date scheduled_release_month scheduled_release_year' local-class='releaseSchedule'>
-			<select id='scheduled_release_date'>
+			{{!-- <select id='scheduled_release_date'>
 				<option value='1'>{{t 'niirdccore.dmp_data_record.editing.release_date_opt1'}}</option>
 			</select>
 			<select id='scheduled_release_month'>
 				<option value='1'>{{t 'niirdccore.dmp_data_record.editing.release_month_opt1'}}</option>
 			</select>
-			<Input @id="scheduled_release_year" @type='text' placeholder='年' local-class='releaseDate' />
+			<Input @id="scheduled_release_year" @type='text' placeholder='年' local-class='releaseDate' /> --}}
+			{{
+			input value=this.datasetIssued
+			type='date'
+			}}
 		</label><br>
 
 		<!-- リポジトリ -->
@@ -400,7 +406,8 @@
 		<!-- タイトル -->
 		<div>
 			{{this.datasetTitle}}<br>
-			{{this.datasetDescription}}
+			{{this.datasetDescription}}<br>
+			{{this.datasetType}}
 		</div>
 	</modal.body>
 	<modal.footer>
@@ -460,5 +467,15 @@
 				$('#side-menu li:nth-child(' + secNum2 + ')').addClass('active');
 			}
 		}
+	});
+
+	Handlebars.registerHelper('select', function (value, options) {
+		return options.fn()
+			.split('\n')
+			.map(function (v) {
+				var t = 'value="' + value + '"';
+				return RegExp(t).test(v) ? v.replace(t, t + ' selected="selected"') : v;
+			})
+			.join('\n');
 	});
 </script>

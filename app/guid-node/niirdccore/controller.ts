@@ -13,9 +13,6 @@ import Node from 'ember-osf-web/models/node';
 import Analytics from 'ember-osf-web/services/analytics';
 import StatusMessages from 'ember-osf-web/services/status-messages';
 
-// Edit-dataset databind
-// import MemberModel from '../../app/models/dmp-status';
-
 export default class GuidNode_niirdccore extends Controller {
     @service toast!: Toast;
     @service intl!: Intl;
@@ -152,9 +149,11 @@ export default class GuidNode_niirdccore extends Controller {
         set(this.datasetEditing, 'creator', value);
     }
 
+    // maybe manager
     // @computed('datasetEditing.contact')
     // ...
 
+    // maybe Repository
     // @computed('datasetEditing.distribution')
     // ...
 
