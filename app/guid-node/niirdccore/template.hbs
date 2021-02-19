@@ -187,7 +187,7 @@
 			<LoadingIndicator @dark={{true}} />
 			{{else}}
 			<div class="panel-body">
-				<OsfButton data-test-new-dataset-button @type='primary' @onClick={{action this.openEditDialog}} local-class="dataSetNew">
+				<OsfButton data-test-new-dataset-button @type='primary' @onClick={{action this.openEditDialog true}} local-class="dataSetNew">
 					{{t 'niirdccore.dmp_data_record.create_new_dataset_button'}}
 				</OsfButton>
 
@@ -196,7 +196,7 @@
 					<tr>
 						<td class="tableAnchor">{{item.title}}</td>
 						<td>
-							<OsfButton data-test-new-dataset-button @type='primary' @onClick={{action this.openEditDialog item}}>
+							<OsfButton data-test-new-dataset-button @type='primary' @onClick={{action this.openEditDialog false item}}>
 								{{t 'niirdccore.dmp_data_record.edit_dataset_button'}}
 							</OsfButton>
 						</td>
@@ -421,10 +421,10 @@
 		</div>
 	</modal.body>
 	<modal.footer>
-		<BsButton @onClick={{action this.openEditDialog }}>
+		<BsButton @onClick={{action this.openEditDialog this.datasetIsNew this.datasetEditing }}>
 			{{t 'general.back'}}
 		</BsButton>
-		<BsButton @onClick={{action this.closeDialogs}} @type='success'>
+		<BsButton @onClick={{action this.save}} @type='success'>
 			{{t 'general.ok'}}
 		</BsButton>
 	</modal.footer>

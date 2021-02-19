@@ -1,13 +1,13 @@
 import DS from 'ember-data';
 import OsfModel from './osf-model';
-import DMPDatasetModel from './dmp-dataset';
 
-const { attr, hasMany } = DS;
+const { attr } = DS;
 
 export interface IdentifierModel {
     identifier: string;
     type: string;
 }
+
 export interface MemberModel {
     contact_id: IdentifierModel;
     mbox: string;
@@ -40,7 +40,7 @@ export interface HostModel{
 export interface LicenseModel{
     name: string;
     license_ref: string;
-    start_date: Date;
+    start_date: string;
 }
 
 export interface DistributionModel{
@@ -51,13 +51,26 @@ export interface DistributionModel{
     license: LicenseModel;
 }
 
+export class DMPDatasetModel extends OsfModel {
+    @attr() dataset_id!: IdentifierModel;
+    @attr('string') title!: string;
+    @attr('string') description!: string;
+    @attr('string') type!: string;
+    @attr('string') access_policy!: string;
+    @attr('string') data_access!: string;
+    @attr('date') issued!: Date;
+    @attr() creator!: MemberModel;
+    @attr() contact!: MemberModel;
+    @attr() distribution!: DistributionModel;
+}
+
 export default class DMPModel extends OsfModel {
     @attr() dmp_id!: IdentifierModel; 
     @attr() project!: ProjectModel;
     @attr() contact!: MemberModel;
-    @attr() contributors!: MemberModel;
-    @hasMany('dmp-dataset')
-    dataset?: DS.PromiseManyArray<DMPDatasetModel>;
+    @attr() contributors!: MemberModel[];
+    @attr() dataset!: DMPDatasetModel[];
+    @attr() dataset_is_new!: boolean;
 }
 
 declare module 'ember-data/types/registries/model' {
