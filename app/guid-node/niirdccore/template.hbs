@@ -261,11 +261,16 @@
 
 		<!-- データ種別 -->
 		<label for='data_type'>{{t 'niirdccore.dmp_data_record.editing.data_type'}}<br>
-			<select id='data_type'>
-				{{#select value=this.datasetType}}
-				<option value='1'>{{t 'niirdccore.dmp_data_record.editing.data_type_opt1'}}</option>
-				{{/select}}
+			<select id='data_type' onchange={{action this.setDatasetType value='target.value' }}>
+				<option disabled selected>---</option>
+				<option value={{t 'niirdccore.dmp_data_record.editing.data_type_opt1' }}>
+					{{t 'niirdccore.dmp_data_record.editing.data_type_opt1'}}
+				</option>
 			</select>
+			{{!-- {{
+			view Ember.Select contentBinding='dataType'
+			name='data_type'
+			}} --}}
 		</label><br>
 
 		<!-- タイトル -->
@@ -290,8 +295,11 @@
 
 		<!-- 概略データ量 -->
 		<label for='data_amount'>{{t 'niirdccore.dmp_data_record.editing.data_amount'}}<br>
-			<select id='data_amount'>
-				<option value='1'>{{t 'niirdccore.dmp_data_record.editing.data_amount_opt1'}}</option>
+			<select id='data_amount' onchange={{action this.setDatasetAmount value='target.value' }}>
+				<option disabled selected>---</option>
+				<option value={{t 'niirdccore.dmp_data_record.editing.data_amount_opt1' }}>
+					{{t 'niirdccore.dmp_data_record.editing.data_amount_opt1'}}
+				</option>
 			</select>
 		</label><br>
 
@@ -299,7 +307,7 @@
 		<label for='data_offer_policy'>{{t 'niirdccore.dmp_data_record.editing.data_offer_policy'}}<br>
 			<div>
 				{{
-				textarea name='data_offer_policy' value=this.datasetTitle
+				textarea name='data_offer_policy' value=this.datasetAccessPolicy
 				placeholder='任意' local-class='editingForm'
 				}}
 			</div>
@@ -407,7 +415,9 @@
 		<div>
 			{{this.datasetTitle}}<br>
 			{{this.datasetDescription}}<br>
-			{{this.datasetType}}
+			{{this.datasetType}}<br>
+			{{this.datasetAmount}}<br>
+			{{this.datasetIssued}}
 		</div>
 	</modal.body>
 	<modal.footer>
@@ -469,13 +479,4 @@
 		}
 	});
 
-	Handlebars.registerHelper('select', function (value, options) {
-		return options.fn()
-			.split('\n')
-			.map(function (v) {
-				var t = 'value="' + value + '"';
-				return RegExp(t).test(v) ? v.replace(t, t + ' selected="selected"') : v;
-			})
-			.join('\n');
-	});
 </script>

@@ -13,6 +13,8 @@ import Node from 'ember-osf-web/models/node';
 import Analytics from 'ember-osf-web/services/analytics';
 import StatusMessages from 'ember-osf-web/services/status-messages';
 
+// import DistributionModel from 'ember-osf-web/models/dmp-dataset';
+
 export default class GuidNode_niirdccore extends Controller {
     @service toast!: Toast;
     @service intl!: Intl;
@@ -84,6 +86,7 @@ export default class GuidNode_niirdccore extends Controller {
         return this.configCache!;
     }
 
+    // タイトル
     @computed('datasetEditing.title')
     get datasetTitle() {
         return this.datasetEditing.title;
@@ -92,14 +95,17 @@ export default class GuidNode_niirdccore extends Controller {
         set(this.datasetEditing, 'title', value);
     }
 
+    // データ種別
     @computed('datasetEditing.type')
     get datasetType() {
         return this.datasetEditing.type;
     }
-    set datasetType(value: string) {
+    @action
+    setDatasetType(value: string) {
         set(this.datasetEditing, 'type', value);
     }
 
+    // 説明
     @computed('datasetEditing.description')
     get datasetDescription() {
         if (typeof this.datasetEditing.description === 'string') {
@@ -112,12 +118,50 @@ export default class GuidNode_niirdccore extends Controller {
         set(this.datasetEditing, 'description', value);
     }
 
+    // 概略データ量
+    // @computed('datasetEditing.distribution.byte_size')
+    // get datasetAmount() {
+    //     if (typeof this.datasetEditing.distribution?.byte_size === 'string') {
+    //         return this.datasetEditing.distribution?.byte_size;
+    //     } else {
+    //         return '';
+    //     }
+    // }
+    // setDatasetAmount(value: string) {
+    //     if (this.datasetEditing.isDistributionModel(this.datasetEditing.distribution)) {
+    //         set(this.datasetEditing.distribution, 'byte_size', value);
+    //     } else {
+    //         // create DistributionModel instance
+    //         const newDistribution: any = {} as DistributionModel;
+    //         newDistribution.byte_size = value;
+
+    //         // set new DistributionModel to datasetEditing.distribution
+    //         set(this.datasetEditing, 'distribution', newDistribution);
+    //         this.set('isPageDirty', true);
+    //     }
+    // }
+    @computed('datasetEditing.distribution.byte_size')
+    get datasetAmount() {
+        if (this.datasetEditing == undefined) {
+            return '';
+        }
+        return this.datasetEditing.distribution.byte_size;
+    }
+    @action
+    setDatasetAmount(value: string) {
+        if (this.datasetEditing == undefined) {
+            return;
+        }
+        set(this.datasetEditing.distribution, 'byte_size', value);
+        this.set('isPageDirty', true);
+    }
+
     @computed('datasetEditing.access_policy')
     get datasetAccessPolicy() {
         if (typeof this.datasetEditing.access_policy === 'string') {
-            return this.datasetEditing.access_policy
+            return this.datasetEditing.access_policy;
         } else {
-            return ''
+            return '';
         }
     }
     set datasetAccessPolicy(value: string | undefined) {
@@ -149,13 +193,30 @@ export default class GuidNode_niirdccore extends Controller {
         set(this.datasetEditing, 'creator', value);
     }
 
-    // maybe manager
+    // manager
     // @computed('datasetEditing.contact')
-    // ...
+    // get datasetManager() {
+    //     return this.datasetEditing.contact;
+    // }
+    // set datasetManager(value) {
 
-    // maybe Repository
+    //     set(this.datasetEditing, 'contact', value);
+    // }
+
+    // Repository name
     // @computed('datasetEditing.distribution')
-    // ...
+    // get datasetRepository() {
+    //     if (typeof this.datasetEditing.distribution != 'undefined') {
+    //         return this.datasetEditing.distribution.title;
+    //     } else {
+    //         return '';
+    //     }
+    // }
+    // set datasetRepository(value) {
+    //     if (typeof value != 'undefined') {
+    //         set(this.datasetEditing, 'distribution', value);
+    //     }
+    // }
 
     @action
     async save(this: GuidNode_niirdccore) {
