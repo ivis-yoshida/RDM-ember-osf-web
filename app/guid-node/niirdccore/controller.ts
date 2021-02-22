@@ -7,13 +7,10 @@ import DS from 'ember-data';
 import Intl from 'ember-intl/services/intl';
 import Toast from 'ember-toastr/services/toast';
 
-import DMPDatasetModel from 'ember-osf-web/models/dmp-dataset';
-import DMPModel from 'ember-osf-web/models/dmp-status';
+import DMPModel, { DMPDatasetModel } from 'ember-osf-web/models/dmp-status';
 import Node from 'ember-osf-web/models/node';
 import Analytics from 'ember-osf-web/services/analytics';
 import StatusMessages from 'ember-osf-web/services/status-messages';
-
-// import DistributionModel from 'ember-osf-web/models/dmp-dataset';
 
 export default class GuidNode_niirdccore extends Controller {
     @service toast!: Toast;
@@ -24,18 +21,30 @@ export default class GuidNode_niirdccore extends Controller {
     @reads('model.taskInstance.value')
     node?: Node;
 
-    isPageDirty = false;
+    isPageDirty: boolean  = false;
     modalOpen: boolean = false;
     showDatasetConfirmDialog: boolean = false;
     showDatasetEditDialog: boolean = false;
 
     configCache?: DS.PromiseObject<DMPModel>;
-    datasetTmp!: DMPDatasetModel;
     datasetEditing!: DMPDatasetModel;
+    datasetIsNew: boolean = false;
 
     @computed('config.isFulfilled')
     get loading(): boolean {
         return !this.config || !this.config.get('isFulfilled');
+    }
+
+    @computed('node')
+    get config(): DS.PromiseObject<DMPModel> | undefined {
+        if (this.configCache) {
+            return this.configCache;
+        }
+        if (!this.node) {
+            return undefined;
+        }
+        this.configCache = this.store.findRecord('dmp-status', this.node.id);
+        return this.configCache!;
     }
 
     @computed('config.project')
@@ -74,18 +83,6 @@ export default class GuidNode_niirdccore extends Controller {
         return config.dataset;
     }
 
-    @computed('node')
-    get config(): DS.PromiseObject<DMPModel> | undefined {
-        if (this.configCache) {
-            return this.configCache;
-        }
-        if (!this.node) {
-            return undefined;
-        }
-        this.configCache = this.store.findRecord('dmp-status', this.node.id, { include: 'dmp-dataset' });
-        return this.configCache!;
-    }
-
     // タイトル
     @computed('datasetEditing.title')
     get datasetTitle() {
@@ -115,6 +112,9 @@ export default class GuidNode_niirdccore extends Controller {
         }
     }
     set datasetDescription(value: string | undefined) {
+        if(this.datasetEditing == undefined || value == undefined){
+            return;
+        }
         set(this.datasetEditing, 'description', value);
     }
 
@@ -165,6 +165,9 @@ export default class GuidNode_niirdccore extends Controller {
         }
     }
     set datasetAccessPolicy(value: string | undefined) {
+        if(this.datasetEditing == undefined || value == undefined){
+            return;
+        }
         set(this.datasetEditing, 'access_policy', value);
     }
 
@@ -181,7 +184,10 @@ export default class GuidNode_niirdccore extends Controller {
     get datasetIssued() {
         return this.datasetEditing.issued;
     }
-    set datasetIssued(value: Date | undefined) {
+    set datasetIssued(value: string | undefined) {
+        if(this.datasetEditing == undefined || value == undefined){
+            return;
+        }
         set(this.datasetEditing, 'issued', value);
     }
 
@@ -219,57 +225,53 @@ export default class GuidNode_niirdccore extends Controller {
     // }
 
     @action
-    async save(this: GuidNode_niirdccore) {
+    save(this: GuidNode_niirdccore){
         if (!this.node || !this.config) {
             throw new EmberError('Illegal config');
         }
 
-        if (!this.datasetTmp) {
-            // データセット新規作成の場合
-            this.datasetTmp = this.store.createRecord('dmp-dataset', { dmp: this.configCache });
-        }
-        // this.datasetTmp.title = this.datasetTitle;
-        // this.datasetTmp.data_access = this.datasetDataAccess;
+        const config = this.config.content as DMPModel;
+        config.setProperties(
+                {
+                    dataset: this.datasetEditing, 
+                    dataset_is_new: this.datasetIsNew,
+                }
+            );
 
-        set(this.datasetTmp, 'title', this.datasetTitle);
-        set(this.datasetTmp, 'data_access', this.datasetDataAccess);
-
-        await this.datasetTmp.save()
+        config.save()
             .then(() => {
                 this.set('isPageDirty', false);
             })
             .catch(() => {
-                this.saveError(this.datasetTmp);
+                this.saveError(config);
             });
 
-        return;
+        this.closeDialogs();
     }
 
-    saveError(dataset: DMPDatasetModel) {
-        dataset?.rollbackAttributes();
+    saveError(config: DMPModel) {
+        config.rollbackAttributes();
         const message = 'failed to save';
         this.toast.error(message);
     }
 
     @action
-    openEditDialog(target_dataset?: DMPDatasetModel) {
+    openEditDialog(isNew: boolean, target_dataset: DMPDatasetModel) {
         if (!this.node || !this.config) {
             return;
         }
 
         this.set('showDatasetEditDialog', true);
         this.set('showDatasetConfirmDialog', false);
+        this.set('datasetIsNew', isNew);
 
-        if (!target_dataset || target_dataset == undefined) {
-            // 新規作成
-            this.datasetEditing = Object.create(DMPDatasetModel);
+        if(!target_dataset) {
+            // 新規作成ボタン押下時
+            this.set('datasetEditing', Object.create(DMPDatasetModel));
         }
-        else {
-            // 編集
-            // 選択されたレコード
-            this.datasetTmp = target_dataset;
-            // 編集用レコード
-            this.set('datasetEditing', Object.assign({}, target_dataset));
+        else{
+            // 編集ボタン押下時・確認画面の戻るボタン押下時
+            this.set('datasetEditing', JSON.parse(JSON.stringify(target_dataset))); 
         }
     }
 
@@ -283,7 +285,7 @@ export default class GuidNode_niirdccore extends Controller {
     closeDialogs() {
         this.set('showDatasetEditDialog', false);
         this.set('showDatasetConfirmDialog', false);
-        this.set('datasetTmp', null);
+        this.set('datasetEditing', null);
     }
 }
 
