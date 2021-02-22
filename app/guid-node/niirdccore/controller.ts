@@ -140,21 +140,21 @@ export default class GuidNode_niirdccore extends Controller {
     //         this.set('isPageDirty', true);
     //     }
     // }
-    @computed('datasetEditing.distribution.byte_size')
-    get datasetAmount() {
-        if (this.datasetEditing == undefined) {
-            return '';
-        }
-        return this.datasetEditing.distribution.byte_size;
-    }
-    @action
-    setDatasetAmount(value: string) {
-        if (this.datasetEditing == undefined) {
-            return;
-        }
-        set(this.datasetEditing.distribution, 'byte_size', value);
-        this.set('isPageDirty', true);
-    }
+    // @computed('datasetEditing.distribution.byte_size')
+    // get datasetAmount() {
+    //     if (this.datasetEditing == undefined) {
+    //         return '';
+    //     }
+    //     return this.datasetEditing.distribution.byte_size;
+    // }
+    // @action
+    // setDatasetAmount(value: string) {
+    //     if (this.datasetEditing == undefined) {
+    //         return;
+    //     }
+    //     set(this.datasetEditing.distribution, 'byte_size', value);
+    //     this.set('isPageDirty', true);
+    // }
 
     @computed('datasetEditing.access_policy')
     get datasetAccessPolicy() {

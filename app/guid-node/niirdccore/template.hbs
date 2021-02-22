@@ -295,12 +295,12 @@
 
 		<!-- 概略データ量 -->
 		<label for='data_amount'>{{t 'niirdccore.dmp_data_record.editing.data_amount'}}<br>
-			<select id='data_amount' onchange={{action this.setDatasetAmount value='target.value' }}>
+			{{!-- <select id='data_amount' onchange={{action this.setDatasetAmount value='target.value' }}>
 				<option disabled selected>---</option>
 				<option value={{t 'niirdccore.dmp_data_record.editing.data_amount_opt1' }}>
 					{{t 'niirdccore.dmp_data_record.editing.data_amount_opt1'}}
 				</option>
-			</select>
+			</select> --}}
 		</label><br>
 
 		<!-- データの提供方針 -->
@@ -416,7 +416,6 @@
 			{{this.datasetTitle}}<br>
 			{{this.datasetDescription}}<br>
 			{{this.datasetType}}<br>
-			{{this.datasetAmount}}<br>
 			{{this.datasetIssued}}
 		</div>
 	</modal.body>
