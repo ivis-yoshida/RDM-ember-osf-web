@@ -184,7 +184,7 @@ export default class GuidNode_niirdccore extends Controller {
     get datasetIssued() {
         return this.datasetEditing.issued;
     }
-    set datasetIssued(value: Date | undefined) {
+    set datasetIssued(value: string | undefined) {
         if(this.datasetEditing == undefined || value == undefined){
             return;
         }

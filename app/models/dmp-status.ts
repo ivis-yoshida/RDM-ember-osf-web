@@ -58,7 +58,7 @@ export class DMPDatasetModel extends OsfModel {
     @attr('string') type!: string;
     @attr('string') access_policy!: string;
     @attr('string') data_access!: string;
-    @attr('date') issued!: Date;
+    @attr('string') issued!: string;
     @attr() creator!: MemberModel;
     @attr() contact!: MemberModel;
     @attr() distribution!: DistributionModel;
@@ -70,7 +70,7 @@ export default class DMPModel extends OsfModel {
     @attr() contact!: MemberModel;
     @attr() contributors!: MemberModel[];
     @attr() dataset!: DMPDatasetModel[];
-    @attr() dataset_is_new!: boolean;
+    @attr('boolean') dataset_is_new!: boolean;
 }
 
 declare module 'ember-data/types/registries/model' {
