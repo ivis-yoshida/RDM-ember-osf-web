@@ -7,7 +7,7 @@ import DS from 'ember-data';
 import Intl from 'ember-intl/services/intl';
 import Toast from 'ember-toastr/services/toast';
 
-import DMPModel, { DMPDatasetModel, DistributionModel, MemberModel } from 'ember-osf-web/models/dmp-status';
+import DMPModel, { DMPDatasetModel, DistributionModel, HostModel, LicenseModel, IdentifierModel, MemberModel } from 'ember-osf-web/models/dmp-status';
 import Node from 'ember-osf-web/models/node';
 import Analytics from 'ember-osf-web/services/analytics';
 import StatusMessages from 'ember-osf-web/services/status-messages';
@@ -25,10 +25,10 @@ export default class GuidNode_niirdccore extends Controller {
     modalOpen: boolean = false;
     showDatasetConfirmDialog: boolean = false;
     showDatasetEditDialog: boolean = false;
+    datasetIsNew?: boolean;
 
     configCache?: DS.PromiseObject<DMPModel>;
     datasetEditing!: DMPDatasetModel;
-    datasetIsNew: boolean = false;
 
     @computed('config.isFulfilled')
     get loading(): boolean {
@@ -312,9 +312,8 @@ export default class GuidNode_niirdccore extends Controller {
         this.set('isPageDirty', true);
     }
 
-
     @action
-    save(this: GuidNode_niirdccore) {
+    async save(this: GuidNode_niirdccore) {
         if (!this.node || !this.config) {
             throw new EmberError('Illegal config');
         }
@@ -322,12 +321,11 @@ export default class GuidNode_niirdccore extends Controller {
         const config = this.config.content as DMPModel;
         config.setProperties(
             {
-                dataset: this.datasetEditing,
-                dataset_is_new: this.datasetIsNew,
+                dataset: [this.datasetEditing],
             }
         );
 
-        config.save()
+        await config.save()
             .then(() => {
                 this.set('isPageDirty', false);
             })
@@ -354,13 +352,14 @@ export default class GuidNode_niirdccore extends Controller {
         this.set('showDatasetConfirmDialog', false);
         this.set('datasetIsNew', isNew);
 
-        if (!target_dataset) {
+        if (isNew) {
             // 新規作成ボタン押下時
-            this.set('datasetEditing', Object.create(DMPDatasetModel));
+            this.createNewDataset();
         }
         else {
             // 編集ボタン押下時・確認画面の戻るボタン押下時
             this.set('datasetEditing', JSON.parse(JSON.stringify(target_dataset)));
+            set(this.datasetEditing, 'dataset_is_new', false);
         }
     }
 
@@ -374,7 +373,58 @@ export default class GuidNode_niirdccore extends Controller {
     closeDialogs() {
         this.set('showDatasetEditDialog', false);
         this.set('showDatasetConfirmDialog', false);
-        this.set('datasetEditing', null);
+        this.set('datasetEditing', {});
+    }
+
+    createNewDataset() {
+        this.set('datasetEditing', {} as DMPDatasetModel);
+
+        // dataset_id
+        let dataset_id = {} as IdentifierModel;
+        dataset_id.identifier = '';
+        dataset_id.type = '';
+
+        // creator
+        let creator = {} as MemberModel;
+        creator.mbox = '';
+        creator.name = '';
+        creator.role = '';
+        creator.contact_id = {} as IdentifierModel;
+        creator.contact_id.identifier = '';
+        creator.contact_id.type = '';
+
+        // contact
+        let contact = {} as MemberModel;
+        contact.mbox = '';
+        contact.name = '';
+        contact.role = '';
+        contact.contact_id = {} as IdentifierModel;
+        contact.contact_id.identifier = '';
+        contact.contact_id.type = '';
+
+        // distribution
+        let distribution = {} as DistributionModel;
+        distribution.title = '';
+        distribution.access_url = '';
+        distribution.byte_size = '';
+        distribution.host = {} as HostModel;
+        distribution.host.title = '';
+        distribution.host.url = '';
+        distribution.license = {} as LicenseModel;
+        distribution.license.name = '';
+        distribution.license.license_ref = '';
+        distribution.license.start_date = '';
+
+        set(this.datasetEditing, 'title', '');
+        set(this.datasetEditing, 'description', '');
+        set(this.datasetEditing, 'type', '');
+        set(this.datasetEditing, 'access_policy', '');
+        set(this.datasetEditing, 'issued', '');
+        set(this.datasetEditing, 'dataset_id', dataset_id);
+        set(this.datasetEditing, 'creator', creator);
+        set(this.datasetEditing, 'contact', contact);
+        set(this.datasetEditing, 'distribution', distribution);
+        set(this.datasetEditing, 'dataset_is_new', true);
     }
 }
 

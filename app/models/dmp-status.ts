@@ -51,7 +51,7 @@ export interface DistributionModel{
     license: LicenseModel;
 }
 
-export class DMPDatasetModel extends OsfModel {
+export class DMPDatasetModel {
     @attr() dataset_id!: IdentifierModel;
     @attr('string') title!: string;
     @attr('string') description!: string;
@@ -62,6 +62,7 @@ export class DMPDatasetModel extends OsfModel {
     @attr() creator!: MemberModel;
     @attr() contact!: MemberModel;
     @attr() distribution!: DistributionModel;
+    @attr('boolean') dataset_is_new!: boolean;
 }
 
 export default class DMPModel extends OsfModel {
@@ -70,7 +71,6 @@ export default class DMPModel extends OsfModel {
     @attr() contact!: MemberModel;
     @attr() contributors!: MemberModel[];
     @attr() dataset!: DMPDatasetModel[];
-    @attr('boolean') dataset_is_new!: boolean;
 }
 
 declare module 'ember-data/types/registries/model' {
