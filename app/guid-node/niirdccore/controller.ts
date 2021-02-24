@@ -7,7 +7,7 @@ import DS from 'ember-data';
 import Intl from 'ember-intl/services/intl';
 import Toast from 'ember-toastr/services/toast';
 
-import DMPModel, { DMPDatasetModel } from 'ember-osf-web/models/dmp-status';
+import DMPModel, { DMPDatasetModel, DistributionModel, MemberModel } from 'ember-osf-web/models/dmp-status';
 import Node from 'ember-osf-web/models/node';
 import Analytics from 'ember-osf-web/services/analytics';
 import StatusMessages from 'ember-osf-web/services/status-messages';
@@ -21,7 +21,7 @@ export default class GuidNode_niirdccore extends Controller {
     @reads('model.taskInstance.value')
     node?: Node;
 
-    isPageDirty: boolean  = false;
+    isPageDirty: boolean = false;
     modalOpen: boolean = false;
     showDatasetConfirmDialog: boolean = false;
     showDatasetEditDialog: boolean = false;
@@ -112,49 +112,31 @@ export default class GuidNode_niirdccore extends Controller {
         }
     }
     set datasetDescription(value: string | undefined) {
-        if(this.datasetEditing == undefined || value == undefined){
+        if (this.datasetEditing == undefined || value == undefined) {
             return;
         }
         set(this.datasetEditing, 'description', value);
     }
 
     // 概略データ量
-    // @computed('datasetEditing.distribution.byte_size')
-    // get datasetAmount() {
-    //     if (typeof this.datasetEditing.distribution?.byte_size === 'string') {
-    //         return this.datasetEditing.distribution?.byte_size;
-    //     } else {
-    //         return '';
-    //     }
-    // }
-    // setDatasetAmount(value: string) {
-    //     if (this.datasetEditing.isDistributionModel(this.datasetEditing.distribution)) {
-    //         set(this.datasetEditing.distribution, 'byte_size', value);
-    //     } else {
-    //         // create DistributionModel instance
-    //         const newDistribution: any = {} as DistributionModel;
-    //         newDistribution.byte_size = value;
-
-    //         // set new DistributionModel to datasetEditing.distribution
-    //         set(this.datasetEditing, 'distribution', newDistribution);
-    //         this.set('isPageDirty', true);
-    //     }
-    // }
-    // @computed('datasetEditing.distribution.byte_size')
-    // get datasetAmount() {
-    //     if (this.datasetEditing == undefined) {
-    //         return '';
-    //     }
-    //     return this.datasetEditing.distribution.byte_size;
-    // }
-    // @action
-    // setDatasetAmount(value: string) {
-    //     if (this.datasetEditing == undefined) {
-    //         return;
-    //     }
-    //     set(this.datasetEditing.distribution, 'byte_size', value);
-    //     this.set('isPageDirty', true);
-    // }
+    @computed('datasetEditing.distribution.byte_size')
+    get datasetAmount() {
+        if (this.datasetEditing == undefined) {
+            return '';
+        }
+        return this.datasetEditing.distribution.byte_size;
+    }
+    @action
+    setDatasetAmount(value: string) {
+        if (typeof this.datasetEditing.distribution === 'undefined') {
+            let tmp = {} as DistributionModel
+            tmp.byte_size = value
+            set(this.datasetEditing, 'distribution', tmp)
+        } else {
+            set(this.datasetEditing.distribution, 'byte_size', value);
+        }
+        this.set('isPageDirty', true);
+    }
 
     @computed('datasetEditing.access_policy')
     get datasetAccessPolicy() {
@@ -165,7 +147,7 @@ export default class GuidNode_niirdccore extends Controller {
         }
     }
     set datasetAccessPolicy(value: string | undefined) {
-        if(this.datasetEditing == undefined || value == undefined){
+        if (this.datasetEditing == undefined || value == undefined) {
             return;
         }
         set(this.datasetEditing, 'access_policy', value);
@@ -175,7 +157,8 @@ export default class GuidNode_niirdccore extends Controller {
     get datasetDataAccess() {
         return this.datasetEditing.data_access;
     }
-    set datasetDataAccess(value: string) {
+    @action
+    setDatasetDataAccess(value: string) {
         set(this.datasetEditing, 'data_access', value);
     }
 
@@ -185,58 +168,164 @@ export default class GuidNode_niirdccore extends Controller {
         return this.datasetEditing.issued;
     }
     set datasetIssued(value: string | undefined) {
-        if(this.datasetEditing == undefined || value == undefined){
+        if (this.datasetEditing == undefined || value == undefined) {
             return;
         }
         set(this.datasetEditing, 'issued', value);
     }
 
-    @computed('datasetEditing.creator')
-    get datasetCreator() {
-        return this.datasetEditing.creator;
-    }
-    set datasetCreator(value) {
-        set(this.datasetEditing, 'creator', value);
-    }
-
-    // manager
-    // @computed('datasetEditing.contact')
-    // get datasetManager() {
-    //     return this.datasetEditing.contact;
-    // }
-    // set datasetManager(value) {
-
-    //     set(this.datasetEditing, 'contact', value);
-    // }
-
     // Repository name
-    // @computed('datasetEditing.distribution')
-    // get datasetRepository() {
-    //     if (typeof this.datasetEditing.distribution != 'undefined') {
-    //         return this.datasetEditing.distribution.title;
-    //     } else {
-    //         return '';
-    //     }
-    // }
-    // set datasetRepository(value) {
-    //     if (typeof value != 'undefined') {
-    //         set(this.datasetEditing, 'distribution', value);
-    //     }
-    // }
+    @computed('datasetEditing.distribution')
+    get datasetRepositoryName() {
+        if (typeof this.datasetEditing.distribution === 'undefined') {
+            return '';
+        }
+        return this.datasetEditing.distribution.title;
+    }
+    set datasetRepositoryName(value: string) {
+        if (typeof this.datasetEditing.distribution === 'undefined') {
+            let tmp = {} as DistributionModel
+            tmp.title = value
+            set(this.datasetEditing, 'distribution', tmp)
+        } else {
+            set(this.datasetEditing.distribution, 'title', value);
+        }
+        this.set('isPageDirty', true);
+    }
+
+    // Repository URL
+    @computed('datasetEditing.distribution')
+    get datasetRepositoryUrl() {
+        if (typeof this.datasetEditing.distribution === 'undefined') {
+            return '';
+        }
+        return this.datasetEditing.distribution.access_url;
+    }
+    set datasetRepositoryUrl(value: string) {
+        if (typeof this.datasetEditing.distribution === 'undefined') {
+            let tmp = {} as DistributionModel
+            tmp.access_url = value
+            set(this.datasetEditing, 'distribution', tmp)
+        } else {
+            set(this.datasetEditing.distribution, 'access_url', value);
+        }
+        this.set('isPageDirty', true);
+    }
+
+    // creator's name
+    @computed('datasetEditing.creator.name')
+    get datasetCreatorName() {
+        if (typeof this.datasetEditing.creator === 'undefined') {
+            return '';
+        }
+        return this.datasetEditing.creator.name;
+    }
+    @action
+    setDatasetCreatorName(value: string) {
+        if (typeof this.datasetEditing.creator === 'undefined') {
+            let tmp = {} as MemberModel
+            tmp.name = value
+            set(this.datasetEditing, 'creator', tmp)
+        } else {
+            set(this.datasetEditing.creator, 'name', value);
+        }
+        this.set('isPageDirty', true);
+    }
+    // for manual setting
+    set datasetCreatorName(value: string) {
+        if (typeof this.datasetEditing.creator === 'undefined') {
+            let tmp = {} as MemberModel
+            tmp.name = value
+            set(this.datasetEditing, 'creator', tmp)
+        } else {
+            set(this.datasetEditing.creator, 'name', value);
+        }
+        this.set('isPageDirty', true);
+    }
+
+    @computed('datasetEditing.creator.mbox')
+    get datasetCreatorMbox() {
+        if (typeof this.datasetEditing.creator === 'undefined') {
+            return '';
+        }
+        return this.datasetEditing.creator.mbox;
+    }
+    @action
+    setDatasetCreatorMbox(value: string) {
+        if (typeof this.datasetEditing.creator === 'undefined') {
+            let tmp = {} as MemberModel
+            tmp.mbox = value
+            set(this.datasetEditing, 'creator', tmp)
+        } else {
+            set(this.datasetEditing.creator, 'mbox', value);
+        }
+        this.set('isPageDirty', true);
+    }
+
+    // manager's name
+    @computed('datasetEditing.contact.name')
+    get datasetManagerName() {
+        if (typeof this.datasetEditing.contact === 'undefined') {
+            return '';
+        }
+        return this.datasetEditing.contact.name;
+    }
+    @action
+    setDatasetManagerName(value: string) {
+        if (typeof this.datasetEditing.contact === 'undefined') {
+            let tmp = {} as MemberModel
+            tmp.name = value
+            set(this.datasetEditing, 'contact', tmp)
+        } else {
+            set(this.datasetEditing.contact, 'name', value);
+        }
+        this.set('isPageDirty', true);
+    }
+    // for manual setting
+    set datasetManagerName(value: string) {
+        if (typeof this.datasetEditing.contact === 'undefined') {
+            let tmp = {} as MemberModel
+            tmp.name = value
+            set(this.datasetEditing, 'contact', tmp)
+        } else {
+            set(this.datasetEditing.contact, 'name', value);
+        }
+        this.set('isPageDirty', true);
+    }
+
+    @computed('datasetEditing.contact.mbox')
+    get datasetManagerMbox() {
+        if (typeof this.datasetEditing.contact === 'undefined') {
+            return '';
+        }
+        return this.datasetEditing.contact.mbox;
+    }
+    @action
+    setDatasetManagerMbox(value: string) {
+        if (typeof this.datasetEditing.contact === 'undefined') {
+            let tmp = {} as MemberModel
+            tmp.mbox = value
+            set(this.datasetEditing, 'contact', tmp)
+        } else {
+            set(this.datasetEditing.contact, 'mbox', value);
+        }
+        this.set('isPageDirty', true);
+    }
+
 
     @action
-    save(this: GuidNode_niirdccore){
+    save(this: GuidNode_niirdccore) {
         if (!this.node || !this.config) {
             throw new EmberError('Illegal config');
         }
 
         const config = this.config.content as DMPModel;
         config.setProperties(
-                {
-                    dataset: this.datasetEditing, 
-                    dataset_is_new: this.datasetIsNew,
-                }
-            );
+            {
+                dataset: this.datasetEditing,
+                dataset_is_new: this.datasetIsNew,
+            }
+        );
 
         config.save()
             .then(() => {
@@ -265,13 +354,13 @@ export default class GuidNode_niirdccore extends Controller {
         this.set('showDatasetConfirmDialog', false);
         this.set('datasetIsNew', isNew);
 
-        if(!target_dataset) {
+        if (!target_dataset) {
             // 新規作成ボタン押下時
             this.set('datasetEditing', Object.create(DMPDatasetModel));
         }
-        else{
+        else {
             // 編集ボタン押下時・確認画面の戻るボタン押下時
-            this.set('datasetEditing', JSON.parse(JSON.stringify(target_dataset))); 
+            this.set('datasetEditing', JSON.parse(JSON.stringify(target_dataset)));
         }
     }
 

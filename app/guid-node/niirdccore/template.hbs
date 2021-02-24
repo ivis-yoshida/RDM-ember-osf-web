@@ -267,10 +267,6 @@
 					{{t 'niirdccore.dmp_data_record.editing.data_type_opt1'}}
 				</option>
 			</select>
-			{{!-- {{
-			view Ember.Select contentBinding='dataType'
-			name='data_type'
-			}} --}}
 		</label><br>
 
 		<!-- タイトル -->
@@ -295,12 +291,12 @@
 
 		<!-- 概略データ量 -->
 		<label for='data_amount'>{{t 'niirdccore.dmp_data_record.editing.data_amount'}}<br>
-			{{!-- <select id='data_amount' onchange={{action this.setDatasetAmount value='target.value' }}>
+			<select id='data_amount' onchange={{action this.setDatasetAmount value='target.value' }}>
 				<option disabled selected>---</option>
 				<option value={{t 'niirdccore.dmp_data_record.editing.data_amount_opt1' }}>
 					{{t 'niirdccore.dmp_data_record.editing.data_amount_opt1'}}
 				</option>
-			</select> --}}
+			</select>
 		</label><br>
 
 		<!-- データの提供方針 -->
@@ -315,23 +311,18 @@
 
 		<!-- データのアクセス権 -->
 		<label for='access_policy'>{{t 'niirdccore.dmp_data_record.editing.access_policy'}}<br>
-			<select id='access_policy'>
-				<option value='1'>{{t 'niirdccore.dmp_data_record.editing.access_policy_opt1'}}</option>
+			<select id='access_policy' onchange={{action this.setDatasetDataAccess value='target.value' }}>
+				<option disabled selected>---</option>
+				<option value={{t 'niirdccore.dmp_data_record.editing.access_policy_opt1' }}>
+					{{t 'niirdccore.dmp_data_record.editing.access_policy_opt1'}}
+				</option>
 			</select>
 		</label><br>
 
 		<!-- データ公開予定日 -->
-		<label>{{t 'niirdccore.dmp_data_record.editing.scheduled_release_date'}}<br></label>
-		<label for='scheduled_release_date scheduled_release_month scheduled_release_year' local-class='releaseSchedule'>
-			{{!-- <select id='scheduled_release_date'>
-				<option value='1'>{{t 'niirdccore.dmp_data_record.editing.release_date_opt1'}}</option>
-			</select>
-			<select id='scheduled_release_month'>
-				<option value='1'>{{t 'niirdccore.dmp_data_record.editing.release_month_opt1'}}</option>
-			</select>
-			<Input @id="scheduled_release_year" @type='text' placeholder='年' local-class='releaseDate' /> --}}
+		<label for='release_date'>{{t 'niirdccore.dmp_data_record.editing.scheduled_release_date'}}<br>
 			{{
-			input value=this.datasetIssued
+			input name='release_date' value=this.datasetIssued
 			type='date'
 			}}
 		</label><br>
@@ -341,19 +332,28 @@
 			<p>{{t 'niirdccore.dmp_data_record.editing.pleaseRepository'}}</p>
 
 			<label id='repository' for='repository_name' local-class='repository'>{{t 'niirdccore.dmp_data_record.editing.name'}}<br>
-				<Input @id="repository_name" @type='text' @value='' local-class='editingForm repository' />
+				{{
+				input name='repository_name' value=this.datasetRepositoryName
+				type='text'
+				}}
 			</label><br>
 
 			<label id='repository' for='repository_url' local-class='repository'>{{t 'niirdccore.dmp_data_record.editing.repository_url'}}<br>
-				<Input @id="repository_url" @type='text' @value='' local-class='editingForm repository' />
+				{{
+				input name='repository_url' value=this.datasetRepositoryUrl
+				type='text'
+				}}
 			</label><br>
 		</label><br>
 
 		<!-- データ作成者 -->
 		<label for='author'>{{t 'niirdccore.dmp_data_record.editing.author'}}<br>
 			<p>{{t 'niirdccore.dmp_data_record.editing.pleaseAuthor'}}</p>
-			<select id='author' local-class='personForm'>
-				<option value='1'>{{t 'niirdccore.dmp_data_record.editing.author_opt1'}}</option>
+			<select id='author' local-class='personForm' onchange={{action this.setDatasetCreatorName value='target.value' }}>
+				<option disabled selected>---</option>
+				<option value={{t 'niirdccore.dmp_data_record.editing.author_opt1' }}>
+					{{t 'niirdccore.dmp_data_record.editing.author_opt1'}}
+				</option>
 			</select>
 			<br>
 			<label for='manualAuthor' local-class='manualInput'>{{t 'niirdccore.dmp_data_record.editing.manualInput'}}</label>
@@ -361,11 +361,17 @@
 			<div local-class='hiddenBlock'>
 				<label for='manualAuthorName manualAuthorId'>
 					{{t 'niirdccore.dmp_data_record.editing.name'}}
-					<Input @id="manualAuthorName" @type='text' @value='' local-class='personForm' />
+					{{
+					input name='manualAuthorName' local-class='personForm'
+					value=this.datasetCreatorName type='text'
+					}}
 					<br>
 					{{t 'niirdccore.dmp_data_record.editing.id'}}
-					<select id='manualAuthorId' local-class='hiddenChoiceForm'>
-						<option value='1'>{{t 'niirdccore.dmp_data_record.editing.id_opt1'}}</option>
+					<select id='manualAuthorId' local-class='hiddenChoiceForm' onchange={{action this.setDatasetCreatorMbox value='target.value' }}>
+						<option disabled selected>---</option>
+						<option value={{t 'niirdccore.dmp_data_record.editing.id_opt1' }}>
+							{{t 'niirdccore.dmp_data_record.editing.id_opt1'}}
+						</option>
 					</select>
 				</label>
 			</div>
@@ -374,19 +380,29 @@
 		<!-- データ管理者 -->
 		<label for='manager'>{{t 'niirdccore.dmp_data_record.editing.manager'}}<br>
 			<p>{{t 'niirdccore.dmp_data_record.editing.pleaseManager'}}</p>
-			<select id='manager' local-class='personForm'>
-				<option value='1'>{{t 'niirdccore.dmp_data_record.editing.manager_opt1'}}</option>
+			<select id='manager' local-class='personForm' onchange={{action this.setDatasetManagerName value='target.value' }}>
+				<option disabled selected>---</option>
+				<option value={{t 'niirdccore.dmp_data_record.editing.manager_opt1' }}>
+					{{t 'niirdccore.dmp_data_record.editing.manager_opt1'}}
+				</option>
 			</select>
+			<br>
 			<label for='manualManager' local-class='manualInput'>{{t 'niirdccore.dmp_data_record.editing.manualInput'}}</label>
 			<input type="checkbox" id='manualManager' local-class='hiddenBox' />
 			<div local-class='hiddenBlock'>
 				<label for='manualManagerName manualManagerId'>
 					{{t 'niirdccore.dmp_data_record.editing.name'}}
-					<Input @id="manualManagerName" @type='text' @value='' local-class='personForm' />
+					{{
+					input name='manualManagerName' local-class='personForm'
+					value=this.datasetManagerName type='text'
+					}}
 					<br>
 					{{t 'niirdccore.dmp_data_record.editing.id'}}
-					<select id='manualManagerId' local-class='hiddenChoiceForm'>
-						<option value='1'>{{t 'niirdccore.dmp_data_record.editing.id_opt1'}}</option>
+					<select id='manualManagerId' local-class='hiddenChoiceForm' onchange={{action this.setDatasetManagerMbox value='target.value' }}>
+						<option disabled selected>---</option>
+						<option value={{t 'niirdccore.dmp_data_record.editing.id_opt1' }}>
+							{{t 'niirdccore.dmp_data_record.editing.id_opt1'}}
+						</option>
 					</select>
 				</label>
 			</div>
@@ -404,26 +420,94 @@
 <!-- End editing-dataset dialog -->
 
 <!-- Start confirm dataset dialog -->
-<BsModal data-test-dataset-confirm-modal @open={{this.showDatasetConfirmDialog}} @onHidden={{action (mut this.showDatasetConfirmDialog) false}} as |modal|>
+<BsModal data-test-dataset-confirm-modal local-class='datasetConfirmForm' @open={{this.showDatasetConfirmDialog}} @onHidden={{action (mut this.showDatasetConfirmDialog) false}} as |modal|>
 	<modal.header>
 		<h4>
             {{t 'niirdccore.dmp_data_editor.heading'}}
         </h4>
 	</modal.header>
-	<modal.body>
+	<modal.body local-class='datasetConfirmBody'>
 		<!-- タイトル -->
-		<div>
-			{{this.datasetTitle}}<br>
-			{{this.datasetDescription}}<br>
-			{{this.datasetType}}<br>
-			{{this.datasetIssued}}
-		</div>
+		<p local-class='confirmTitle'>{{this.datasetTitle}}</p>
+		<table>
+			<tr>
+				<!-- 説明 -->
+				<td local-class='confirmKey'>
+					{{t 'niirdccore.dmp_data_editor.description'}}
+				</td>
+				<td>{{this.datasetDescription}}</td>
+			</tr>
+			<tr>
+				<!-- データ種別 -->
+				<td local-class='confirmKey'>
+					{{t 'niirdccore.dmp_data_record.editing.data_type'}}
+				</td>
+				<td>{{this.datasetType}}</td>
+			</tr>
+			<tr>
+				<!-- 概略データ量 -->
+				<td local-class='confirmKey'>
+					{{t 'niirdccore.dmp_data_record.editing.data_amount'}}
+				</td>
+				<td>{{this.datasetAmount}}</td>
+			</tr>
+			<tr>
+				<!-- データの提供方針 -->
+				<td local-class='confirmKey'>
+					{{t 'niirdccore.dmp_data_record.editing.data_offer_policy'}}
+				</td>
+				<td>{{this.datasetAccessPolicy}}</td>
+			</tr>
+			<tr>
+				<!-- データのアクセス権 -->
+				<td local-class='confirmKey'>
+					{{t 'niirdccore.dmp_data_record.editing.access_policy'}}
+				</td>
+				<td>{{this.datasetDataAccess}}</td>
+			</tr>
+			<tr>
+				<!-- データ公開予定日 -->
+				<td local-class='confirmKey'>
+					{{t 'niirdccore.dmp_data_record.editing.scheduled_release_date'}}
+				</td>
+				<td>{{this.datasetIssued}}</td>
+			</tr>
+			<tr>
+				<!-- リポジトリ -->
+				<td local-class='confirmKey'>
+					{{t 'niirdccore.dmp_data_record.editing.repository'}}
+				</td>
+				<td>{{this.datasetRepositoryName}}</td>
+			</tr>
+			<tr>
+				<!-- アクセスURL -->
+				<td local-class='confirmKey'>
+					{{t 'niirdccore.dmp_data_editor.access_url'}}
+				</td>
+				<td>{{this.datasetRepositoryUrl}}</td>
+			</tr>
+			<tr>
+				<!-- データ作成者 -->
+				<td local-class='confirmKey'>
+					{{t 'niirdccore.dmp_data_record.editing.author'}}
+				</td>
+				<td>{{this.datasetCreatorName}}</td>
+			</tr>
+			<tr>
+				<!-- データ管理者 -->
+				<td local-class='confirmKey'>
+					{{t 'niirdccore.dmp_data_record.editing.manager'}}
+				</td>
+				<td>{{this.datasetManagerName}}</td>
+			</tr>
+		</table>
+		<p local-class='confirmation'>{{t 'niirdccore.dmp_data_record.confirmation'}}</p>
 	</modal.body>
-	<modal.footer>
+	<modal.footer local-class='confirmFooter'>
 		<BsButton @onClick={{action this.openEditDialog this.datasetIsNew this.datasetEditing }}>
 			{{t 'general.back'}}
 		</BsButton>
-		<BsButton @onClick={{action this.save}} @type='success'>
+		<BsButton @onClick={{action this.save}} @type='success' local-class='confirmOk'>
 			{{t 'general.ok'}}
 		</BsButton>
 	</modal.footer>

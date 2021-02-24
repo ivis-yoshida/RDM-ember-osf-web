@@ -91,7 +91,7 @@
     }
 
     .editingForm {
-        width: 230%;
+        width: 130%;
         margin-left: 5%;
     }
 
@@ -139,7 +139,7 @@
 
     .editingSubmit {
         color: rgb(255, 255, 255);
-        background-color: rgb(95, 85, 250);
+        background-color: #337ab7;
     }
 
     .editingFooter {
@@ -150,6 +150,47 @@
     .hiddenBox {
         display: none;
         opacity: 0;
+    }
+}
+
+.datasetConfirmForm {
+    overflow-y: initial !important;
+
+    .datasetConfirmBody {
+        max-height: 100%;
+        margin-bottom: 5%;
+        overflow-y: auto;
+    }
+
+    td {
+        height: 8%;
+        border-top: 2px solid;
+        border-bottom: 2px solid;
+        font-size: 14px;
+        padding: 2%;
+    }
+
+    .confirmTitle {
+        font-size: 22px;
+    }
+
+    .confirmKey {
+        background-color: rgba(151, 151, 151, 0.3);
+        width: 25%;
+    }
+
+    .confirmation {
+        color: #337ab7;
+        margin-top: 2%;
+    }
+
+    .confirmFooter {
+        margin-top: -8%;
+    }
+
+    .confirmOk {
+        color: rgb(255, 255, 255);
+        background-color: #337ab7;
     }
 }
 
