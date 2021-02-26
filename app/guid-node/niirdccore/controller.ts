@@ -25,7 +25,6 @@ export default class GuidNode_niirdccore extends Controller {
     modalOpen: boolean = false;
     showDatasetConfirmDialog: boolean = false;
     showDatasetEditDialog: boolean = false;
-    datasetIsNew?: boolean;
 
     configCache?: DS.PromiseObject<DMPModel>;
     datasetEditing!: DMPDatasetModel;
@@ -350,7 +349,6 @@ export default class GuidNode_niirdccore extends Controller {
 
         this.set('showDatasetEditDialog', true);
         this.set('showDatasetConfirmDialog', false);
-        this.set('datasetIsNew', isNew);
 
         if (isNew) {
             // 新規作成ボタン押下時
