@@ -1,6 +1,6 @@
 import { action, computed } from '@ember/object';
-import { inject as service } from '@ember/service';
 import Route from '@ember/routing/route';
+import { inject as service } from '@ember/service';
 import ConfirmationMixin from 'ember-onbeforeunload/mixins/confirmation';
 
 import Node from 'ember-osf-web/models/node';
@@ -30,7 +30,7 @@ export default class GuidNodeIQBRIMSRoute extends Route.extend(ConfirmationMixin
     @service analytics!: Analytics;
     @service ready!: Ready;
 
-    model(this: GuidNodeIQBRIMSRoute) {
+    model() {
         return this.modelFor('guid-node');
     }
 

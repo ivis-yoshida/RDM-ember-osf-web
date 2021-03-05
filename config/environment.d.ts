@@ -191,7 +191,7 @@ declare const config: {
     dsconfig: {
         settingFile: string;
         wayfScript: string;
-    }; 
+    };
     'ember-a11y-testing'?: {
         componentOptions: {
             turnAuditOff: boolean,

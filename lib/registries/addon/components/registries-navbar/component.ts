@@ -4,12 +4,12 @@ import { and } from '@ember/object/computed';
 import { inject as service } from '@ember/service';
 import Media from 'ember-responsive';
 
+import emberConfig from 'ember-get-config';
 import { layout, requiredAction } from 'ember-osf-web/decorators/component';
 import defaultTo from 'ember-osf-web/utils/default-to';
 import { AuthBase } from 'osf-components/components/osf-navbar/auth-dropdown/component';
 import { OSF_SERVICES } from 'osf-components/components/osf-navbar/component';
 import config from 'registries/config/environment';
-import emberConfig from 'ember-get-config';
 
 import template from './template';
 

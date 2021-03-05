@@ -26,12 +26,13 @@ export default class DashboardItem extends Component {
         return this.node ? moment(this.node.dateModified).format('YYYY-MM-DD h:mm A') : undefined;
     }
 
-    @computed('node.quotaThreshold', 'node.quotaRate')
+    @computed('node.{quotaThreshold,quotaRate}')
     get quotaNotice() {
         if (this.node) {
             if (this.node.quotaRate > 1) {
                 return htmlSafe('<b>Warning</b><div>Surpassed max quota</div>');
-            } else if (this.node.quotaRate > this.node.quotaThreshold) {
+            }
+            if (this.node.quotaRate > this.node.quotaThreshold) {
                 const threshold = Math.round(this.node.quotaThreshold * 100);
                 return htmlSafe(`<b>Alert</b><div>Used more than ${threshold}%</div>`);
             }
@@ -41,10 +42,10 @@ export default class DashboardItem extends Component {
 
     @computed('node.creator')
     get administrator(): string | undefined {
-        return this.node ?
-            this.node.creator.get('familyName') ||
-            this.node.creator.get('givenName') ||
-            this.node.creator.get('fullName')
+        return this.node
+            ? this.node.creator.get('familyName')
+            || this.node.creator.get('givenName')
+            || this.node.creator.get('fullName')
             : undefined;
     }
 }

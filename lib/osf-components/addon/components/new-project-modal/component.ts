@@ -55,7 +55,7 @@ export default class NewProjectModal extends Component {
     institutions: Institution[] = [];
     regions: Region[] = [];
     running: boolean = false;
-    create_error: boolean = false;
+    createError: boolean = false;
 
     makeProjectAffiliate: boolean = projectAffiliate;
 
@@ -118,36 +118,36 @@ export default class NewProjectModal extends Component {
             return;
         }
         try {
-        const node = this.store.createRecord('node', {
-            category: 'project',
-            description,
-            public: isPublic !== undefined ? isPublic : false,
-            title,
-        });
+            const node = this.store.createRecord('node', {
+                category: 'project',
+                description,
+                public: isPublic !== undefined ? isPublic : false,
+                title,
+            });
 
-        if (templateFrom) {
-            node.set('templateFrom', templateFrom.id);
-        }
-        if (institutions.length) {
-            node.set('affiliatedInstitutions', institutions.slice());
-        }
-        if (storageRegion) {
-            node.set('region', storageRegion);
-        }
+            if (templateFrom) {
+                node.set('templateFrom', templateFrom.id);
+            }
+            if (institutions.length) {
+                node.set('affiliatedInstitutions', institutions.slice());
+            }
+            if (storageRegion) {
+                node.set('region', storageRegion);
+            }
 
-        try {
-            yield node.save();
-        } catch (e) {
-            const errorMessage = this.intl.t('new_project.could_not_create_project');
-            captureException(e, { errorMessage });
-            this.toast.error(getApiErrorMessage(e), errorMessage);
-        }
+            try {
+                yield node.save();
+            } catch (e) {
+                const errorMessage = this.intl.t('new_project.could_not_create_project');
+                captureException(e, { errorMessage });
+                this.toast.error(getApiErrorMessage(e), errorMessage);
+            }
 
-        this.afterProjectCreated(node);
+            this.afterProjectCreated(node);
         } catch (error) {
             this.toast.error(this.intl.t('new_project.create_failed_header'));
-            this.set('create_error', true);
-        };
+            this.set('createError', true);
+        }
     });
 
     @action

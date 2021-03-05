@@ -2,7 +2,7 @@ import { helper } from '@ember/component/helper';
 import $ from 'jquery';
 import ENV from '../config/environment';
 
-let {settingFile, wayfScript}  = ENV.dsconfig;
+const { settingFile, wayfScript } = ENV.dsconfig;
 
 /**
  * embeddedDs helper.
@@ -13,25 +13,23 @@ let {settingFile, wayfScript}  = ENV.dsconfig;
  * @param {String} parentId embeddedDS will be drawn to child element of this ID.
  */
 export function embeddedDs(parentId) {
-  let dsTag = $('<div />', {id: 'dsTag'})
-  let setup = $('<script />', {
-      src: settingFile,
-      type: 'application/javascript'
-    }
-  );
-  let script = $('<script />', {
-      src: wayfScript,
-      type: 'application/javascript'
-    }
-  );
+    const dsTag = $('<div />', { id: 'dsTag' });
+    const setup = $('<script />', {
+        src: settingFile,
+        type: 'application/javascript',
+    });
+    const script = $('<script />', {
+        src: wayfScript,
+        type: 'application/javascript',
+    });
 
-  $('#' + parentId).append(dsTag);
-  $('#' + parentId).append(setup);
-  $('#' + parentId).append(script);
+    $(`#${parentId}`).append(dsTag);
+    $(`#${parentId}`).append(setup);
+    $(`#${parentId}`).append(script);
 
-  if (typeof(additionalHtml) != "undefined") {
-    $('#' + parentId).append(additionalHtml);
-  }
+    if (typeof (additionalHtml) !== 'undefined') {
+        $(`#${parentId}`).append(additionalHtml);
+    }
 }
 
 export default helper(embeddedDs);

@@ -1,8 +1,8 @@
+import Controller from '@ember/controller';
+import EmberError from '@ember/error';
 import { action, computed } from '@ember/object';
 import { reads } from '@ember/object/computed';
 import { inject as service } from '@ember/service';
-import Controller from '@ember/controller';
-import EmberError from '@ember/error';
 
 import DS from 'ember-data';
 
@@ -40,14 +40,24 @@ export default class GuidNodeIQBRIMS extends Controller {
     submitted = false;
 
     statusCache?: DS.PromiseObject<IQBRIMSStatusModel>;
-    manuscriptFiles = new IQBRIMSFileBrowser(this, '最終原稿・組図');
-    dataFiles = new IQBRIMSFileBrowser(this, '生データ');
-    checklistFiles = new IQBRIMSFileBrowser(this, 'チェックリスト');
+    manuscriptFiles = IQBRIMSFileBrowser.create();
+    dataFiles = IQBRIMSFileBrowser.create();
+    checklistFiles = IQBRIMSFileBrowser.create();
     newFolderRequest?: object;
     workingFolderName = 'IQB-RIMS Temporary files';
     showPaperConfirmDialog = false;
     showRawConfirmDialog = false;
     showChecklistConfirmDialog = false;
+
+    constructor(...args: any[]) {
+        super(...args);
+        this.manuscriptFiles.owner = this;
+        this.manuscriptFiles.folderName = '最終原稿・組図';
+        this.dataFiles.owner = this;
+        this.dataFiles.folderName = '生データ';
+        this.checklistFiles.owner = this;
+        this.checklistFiles.folderName = 'チェックリスト';
+    }
 
     @computed('manuscriptFiles.loading', 'dataFiles.loading', 'checklistFiles.loading')
     get loadingForDeposit(): boolean {
@@ -911,66 +921,89 @@ export default class GuidNodeIQBRIMS extends Controller {
         return status.isDirty;
     }
 
-    get gdProvider(): FileProviderModel | null | undefined {
+    @computed('node.files.[]')
+    get gdProviderProvider(): FileProviderModel | undefined {
         if (!this.node) {
             return undefined;
         }
-        if (!this.node.files.get('isFulfilled')) {
-            return undefined;
-        }
-        const providers = this.node.files.filter(f => f.name === 'iqbrims');
+        const providers = this.node.get('files').filter(f => f.name === 'iqbrims');
         if (providers.length === 0) {
-            return null;
+            return undefined;
         }
         return providers[0];
     }
 
+    @computed('gdProviderProvider.rootFolder.files.[]')
+    get gdProvider(): File | undefined {
+        const provider = this.get('gdProviderProvider');
+        if (!provider) {
+            return undefined;
+        }
+        const storage = provider.get('rootFolder');
+        if (!storage.isFulfilled && !storage.isRejected) {
+            later(() => {
+                this.notifyPropertyChange('gdProvider');
+            }, 500);
+            return undefined;
+        }
+        return storage;
+    }
+
     @computed('node.files.[]')
-    get defaultStorage(): FileProviderModel | undefined {
+    get defaultStorageProvider(): FileProviderModel | undefined {
         if (!this.node) {
             return undefined;
         }
-        if (!this.node.files.get('isFulfilled')) {
+        const providers = this.node.get('files').filter(f => f.name === 'osfstorage');
+        if (providers.length === 0) {
             return undefined;
         }
-        const providers = this.node.files.filter(f => f.name === 'osfstorage');
         return providers[0];
+    }
+
+    @computed('defaultStorageProvider.rootFolder.files.[]')
+    get defaultStorage(): File | undefined {
+        const provider = this.get('defaultStorageProvider');
+        if (!provider) {
+            return undefined;
+        }
+        const storage = provider.get('rootFolder');
+        if (!storage.isFulfilled && !storage.isRejected) {
+            later(() => {
+                this.notifyPropertyChange('defaultStorage');
+            }, 500);
+            return undefined;
+        }
+        return storage;
     }
 
     @computed('defaultStorage.files.[]')
     get workingDirectory(): File | undefined {
-        const provider = this.defaultStorage;
-        if (!provider) {
+        const defaultStorage = this.get('defaultStorage');
+        if (!defaultStorage) {
             return undefined;
         }
-        return this.findWorkingDirectory(provider);
-    }
-
-    findWorkingDirectory(defaultStorage: FileProviderModel) {
-        if (!defaultStorage.rootFolder.isFulfilled && !defaultStorage.rootFolder.isRejected) {
-            later(() => {
-                this.findWorkingDirectory(defaultStorage);
-            }, 500);
-            return undefined;
-        }
-        const files = defaultStorage.rootFolder.filter(f => f.name === this.workingFolderName);
+        const storageFiles = defaultStorage.get('files');
+        const files = storageFiles.filter(f => f.name === this.workingFolderName);
         if (files.length === 0) {
-            this.createWorkingDirectory(defaultStorage);
+            this.createWorkingDirectory();
             return undefined;
         }
-        this.notifyPropertyChange('workingDirectory');
-        this.notifyPropertyChange('gdProvider');
         this.manuscriptFiles.rejectExtensions = ['.tiff', '.png', '.jpg', '.jpeg'];
         this.dataFiles.acceptExtensions = ['.zip', '.xls', '.xlsx'];
         this.checklistFiles.acceptExtensions = ['.pdf'];
         return files[0];
     }
 
-    createWorkingDirectory(defaultStorage: FileProviderModel) {
+    createWorkingDirectory() {
+        const defaultStorage = this.get('defaultStorageProvider');
+        if (!defaultStorage) {
+            return;
+        }
         if (this.newFolderRequest) {
             return;
         }
-        const newFolderUrl = defaultStorage.links.new_folder;
+        const newFolderUrl = defaultStorage.get('links').new_folder;
         this.newFolderRequest = this.currentUser.authenticatedAJAX({
             url: `${newFolderUrl}&name=${encodeURIComponent(this.workingFolderName)}`,
             type: 'PUT',

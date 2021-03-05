@@ -97,6 +97,7 @@ export default class FileBrowser extends Component {
     isProjectSelectorValid: boolean = false;
     sort: string = '';
     uploadedTasks: MutableArray<() => Promise<void>> = A([]);
+    customBuildUrl: ((files: File[]) => void) | null = null;
 
     dropzoneOptions = {
         createImageThumbnails: false,
@@ -283,6 +284,9 @@ export default class FileBrowser extends Component {
 
     @action
     buildUrl(files: File[]) {
+        if (this.customBuildUrl) {
+            return this.customBuildUrl(files);
+        }
         const { name } = files[0];
         const existingFile = this.items && this.items.findBy('itemName', name);
 

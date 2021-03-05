@@ -94,9 +94,8 @@ export class AuthBase extends Component {
     get globalSupportTarget() {
         if (/^https?:\/\//.test(this.globalSupportURL)) {
             return '_blank';
-        } else {
-            return '_self';
         }
+        return '_self';
     }
 
     @action

@@ -1,12 +1,10 @@
-import EmberObject from '@ember/object';
-
-import { action, computed } from '@ember/object';
 import { A } from '@ember/array';
+import EmberObject, { action, computed } from '@ember/object';
 import { later } from '@ember/runloop';
-import { all, task, timeout } from 'ember-concurrency';
+import { all, timeout } from 'ember-concurrency';
+import { task } from 'ember-concurrency-decorators';
 
 import File from 'ember-osf-web/models/file';
-import FileProviderModel from 'ember-osf-web/models/file-provider';
 import Node from 'ember-osf-web/models/node';
 
 import GuidNodeIQBRIMS from './controller';
@@ -14,8 +12,8 @@ import GuidNodeIQBRIMS from './controller';
 export default class IQBRIMSFileBrowser extends EmberObject {
     static readonly FILES_TXT = '.files.txt';
 
-    folderName: string;
-    owner: GuidNodeIQBRIMS;
+    folderName: string | null = null;
+    owner: GuidNodeIQBRIMS | null = null;
 
     filter: string = this.filter || '';
     sort: string = this.sort || 'name';
@@ -48,20 +46,23 @@ export default class IQBRIMSFileBrowser extends EmberObject {
         return false;
     }
 
+    @task({ restartable: true })
     updateFilter = task(function *(this: IQBRIMSFileBrowser, filter: string) {
         yield timeout(250);
-        this.filter = filter;
-    }).restartable();
+        this.setProperties({ filter });
+    });
 
+    @task
     flash = task(function *(item: File, message: string, type: string = 'success', duration: number = 2000) {
         item.set('flash', { message, type });
         yield timeout(duration);
         item.set('flash', null);
     });
 
+    @task
     addFile = task(function *(this: IQBRIMSFileBrowser, id: string) {
         const allFiles = this.get('allFiles');
-        if (!allFiles) {
+        if (!allFiles || !this.owner) {
             return;
         }
         const duplicate = allFiles.findBy('id', id);
@@ -85,7 +86,11 @@ export default class IQBRIMSFileBrowser extends EmberObject {
         this.get('flash').perform(file, intl.t('file_browser.file_added'));
     });
 
+    @task
     deleteFile = task(function *(this: IQBRIMSFileBrowser, file: File) {
+        if (!this.owner) {
+            return;
+        }
         try {
             yield file.destroyRecord();
             yield this.get('flash').perform(file, this.owner.get('intl').t('file_browser.file_deleted'), 'danger');
@@ -100,13 +105,18 @@ export default class IQBRIMSFileBrowser extends EmberObject {
         }
     });
 
+    @task
     deleteFiles = task(function *(this: IQBRIMSFileBrowser, files: File[]) {
         const deleteFile = this.get('deleteFile');
 
         yield all(files.map(file => deleteFile.perform(file)));
     });
 
+    @task
     moveFile = task(function *(this: IQBRIMSFileBrowser, file: File, node: Node): IterableIterator<any> {
+        if (!this.owner) {
+            return;
+        }
         try {
             yield file.move(node);
             yield this.get('flash').perform(file, this.owner.get('intl').t('file_browser.successfully_moved'));
@@ -121,6 +131,7 @@ export default class IQBRIMSFileBrowser extends EmberObject {
         }
     });
 
+    @task
     renameFile = task(function *(
         this: IQBRIMSFileBrowser,
         file: File,
@@ -128,6 +139,9 @@ export default class IQBRIMSFileBrowser extends EmberObject {
         conflict?: string,
         conflictingFile?: File,
     ) {
+        if (!this.owner) {
+            return;
+        }
         const flash = this.get('flash');
 
         try {
@@ -150,41 +164,32 @@ export default class IQBRIMSFileBrowser extends EmberObject {
         }
     });
 
-    constructor(owner: GuidNodeIQBRIMS, folderName: string) {
-        super();
-        this.owner = owner;
-        this.folderName = folderName;
-    }
-
     @computed('owner.workingDirectory.files.[]')
     get targetDirectory(): File | undefined {
-        if (!this.owner.workingDirectory) {
+        if (!this.owner) {
             return undefined;
         }
-        return this.findTargetDirectory(this.owner.workingDirectory);
-    }
-
-    findTargetDirectory(defaultStorage: File) {
-        if (!defaultStorage.files.isFulfilled && !defaultStorage.files.isRejected) {
-            later(() => {
-                this.findTargetDirectory(defaultStorage);
-            }, 500);
+        const defaultStorage = this.owner.get('workingDirectory');
+        if (!defaultStorage) {
             return undefined;
         }
-        const files = defaultStorage.files.filter(f => f.name === this.folderName);
+        const storageFiles = defaultStorage.get('files');
+        const files = storageFiles.filter(f => f.name === this.folderName);
         if (files.length === 0) {
             this.createTargetDirectory(defaultStorage);
             return undefined;
         }
-        this.notifyPropertyChange('allFiles');
         return files[0];
     }
 
-    createTargetDirectory(defaultStorage: File) {
-        if (this.newFolderRequest) {
+    createTargetDirectory(defaultStorage: File | undefined) {
+        if (!defaultStorage) {
             return;
         }
-        const newFolderUrl = defaultStorage.links.new_folder;
+        if (this.newFolderRequest || !this.owner || !this.folderName) {
+            return;
+        }
+        const newFolderUrl = defaultStorage.get('links').new_folder;
         this.newFolderRequest = this.owner.currentUser.authenticatedAJAX({
             url: `${newFolderUrl}&name=${encodeURIComponent(this.folderName)}`,
             type: 'PUT',
@@ -217,31 +222,20 @@ export default class IQBRIMSFileBrowser extends EmberObject {
         return undefined;
     }
 
-    @computed('owner.gdProvider')
+    @computed('owner.gdProvider.files.[]')
     get gdTargetDirectory(): File | undefined | null {
-        if (this.owner.gdProvider === undefined) {
+        if (!this.owner) {
             return undefined;
         }
-        if (this.owner.gdProvider === null) {
-            this.set('gdLoading', false);
-            return null;
-        }
-        return this.findGDTargetDirectory(this.owner.gdProvider);
-    }
-
-    findGDTargetDirectory(defaultStorage: FileProviderModel) {
-        if (!defaultStorage.rootFolder.isFulfilled && !defaultStorage.rootFolder.isRejected) {
-            later(() => {
-                this.findGDTargetDirectory(defaultStorage);
-                this.notifyPropertyChange('gdTargetDirectory');
-            }, 500);
+        const gdProvider = this.owner.get('gdProvider');
+        if (!gdProvider) {
             return undefined;
         }
-        const files = defaultStorage.rootFolder.filter(f => f.name === this.folderName);
+        const storageFiles = gdProvider.get('files');
+        const files = storageFiles.filter(f => f.name === this.folderName);
         if (files.length === 0) {
             return undefined;
         }
-        this.notifyPropertyChange('gdTargetDirectory');
         return files[0];
     }
 
@@ -297,6 +291,9 @@ export default class IQBRIMSFileBrowser extends EmberObject {
 
     @action
     async openFile(this: IQBRIMSFileBrowser, file: File, show: string) {
+        if (!this.owner) {
+            return;
+        }
         const guid = file.get('guid') || await file.getGuid();
 
         this.owner.transitionToRoute('guid-file', guid, { queryParams: { show } });

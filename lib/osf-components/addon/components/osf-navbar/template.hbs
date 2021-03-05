@@ -21,41 +21,41 @@
                         @href={{this._activeService.href}}
                     >
                         <span class='hidden-xs'> {{t 'general.OSF' title=this.title}} </span>
-                        {{#if useNavDropdown}}
-                        <span class='current-service'><strong>{{this._activeService.name}}</strong></span>
+                        {{#if this.useNavDropdown}}
+                            <span class='current-service'><strong>{{this._activeService.name}}</strong></span>
                         {{/if}}
                     </OsfLink>
                 </div>
 
-                {{#if useNavDropdown}}
-                {{! App list dropdown }}
-                <BsDropdown
-                    data-analytics-scope='Primary dropdown'
-                    class='primary-nav'
-                    @onShow={{action this.onClickPrimaryDropdown}}
-                    as |dd|
-                >
-                    <dd.toggle
-                        data-test-service-dropdown
-                        aria-label={{t 'navbar.other_views'}}
-                        @class={{concat 'btn-link ' (local-class 'PrimaryNav__toggle')}}
+                {{#if this.useNavDropdown}}
+                    {{! App list dropdown }}
+                    <BsDropdown
+                        data-analytics-scope='Primary dropdown'
+                        class='primary-nav'
+                        @onShow={{action this.onClickPrimaryDropdown}}
+                        as |dd|
                     >
-                        {{fa-icon 'caret-down' size='2'}}
-                    </dd.toggle>
-                    <dd.menu class='service-dropdown' as |ddm|>
-                        {{#each this.services as |service|}}
-                            <ddm.item role='menuitem'>
-                                <OsfLink
-                                    data-analytics-name={{service.name}}
-                                    @route={{service.route}}
-                                    @href={{service.href}}
-                                >
-                                    {{t 'general.OSF' title=this.title}}<b>{{service.name}}</b>
-                                </OsfLink>
-                            </ddm.item>
-                        {{/each}}
-                    </dd.menu>
-                </BsDropdown>
+                        <dd.toggle
+                            data-test-service-dropdown
+                            aria-label={{t 'navbar.other_views'}}
+                            @class={{concat 'btn-link ' (local-class 'PrimaryNav__toggle')}}
+                        >
+                            {{fa-icon 'caret-down' size='2'}}
+                        </dd.toggle>
+                        <dd.menu class='service-dropdown' as |ddm|>
+                            {{#each this.services as |service|}}
+                                <ddm.item role='menuitem'>
+                                    <OsfLink
+                                        data-analytics-name={{service.name}}
+                                        @route={{service.route}}
+                                        @href={{service.href}}
+                                    >
+                                        {{t 'general.OSF' title=this.title}}<b>{{service.name}}</b>
+                                    </OsfLink>
+                                </ddm.item>
+                            {{/each}}
+                        </dd.menu>
+                    </BsDropdown>
                 {{/if}}
 
                 {{! Navigation toggle - XS screen }}

@@ -107,7 +107,8 @@ module('Registries | Integration | Component | registries-navbar', hooks => {
         await render(hbs`<RegistriesNavbar />`);
         await percySnapshot(assert);
 
-        assert.equal(visibleText('[data-test-service]'), `${t('general.OSF', { title: pageName })}${t('general.services.registries')}`);
+        assert.equal(visibleText('[data-test-service]'),
+            `${t('general.OSF', { title: pageName })}${t('general.services.registries')}`);
         assert.dom('[data-test-search-bar]').isVisible('Search bar is visible');
         assert.dom('[data-test-search-bar-mobile]').isNotVisible('Mobile search bar is not visible on desktop');
 
@@ -160,7 +161,8 @@ module('Registries | Integration | Component | registries-navbar', hooks => {
         await render(hbs`<RegistriesNavbar />`);
         await percySnapshot(assert);
 
-        assert.equal(visibleText('[data-test-service]'), `${t('general.OSF', { title: pageName })}${t('general.services.registries')}`);
+        assert.equal(visibleText('[data-test-service]'),
+            `${t('general.OSF', { title: pageName })}${t('general.services.registries')}`);
         assert.dom('[data-test-search-bar]').isVisible('Search bar is visible');
         assert.dom('[data-test-search-bar-mobile]').isNotVisible('Mobile search bar is not visible on tablet');
 
@@ -210,7 +212,8 @@ module('Registries | Integration | Component | registries-navbar', hooks => {
         await click('[data-test-gravatar]');
         await percySnapshot(assert);
 
-        assert.equal(visibleText('[data-test-service]'), `${t('general.OSF', { title: pageName })}${t('general.services.registries')}`);
+        assert.equal(visibleText('[data-test-service]'),
+            `${t('general.OSF', { title: pageName })}${t('general.services.registries')}`);
         assert.dom('[data-test-search-bar-mobile]').isVisible('Mobile search bar visible');
 
         assert.dom('a[data-test-help-mobile]').isVisible();
