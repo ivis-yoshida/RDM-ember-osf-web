@@ -12,7 +12,7 @@
 					<ul class="side-menu-child nav nav-stacked nav-pills">
 						{{#each this.datasets as | item | }}
 						<li id='side-menu-child' local-class='concreteDataset'>
-							<a href='#{{item.dataset_id.identifier}}'>{{item.title}}</a>
+							<a href='#{{item.datasetId.identifier}}'>{{item.title}}</a>
 						</li>
 						{{/each}}
 					</ul>
@@ -51,7 +51,7 @@
 					</tr>
 					<tr>
 						<th>{{t 'niirdccore.dmp_project.id'}}</th>
-						<td>{{this.project.project_id}}</td>
+						<td>{{this.project.projectId}}</td>
 					</tr>
 					<tr>
 						<th>{{t 'niirdccore.dmp_project.final_keywords'}}</th>
@@ -71,11 +71,11 @@
 					</tr>
 					<tr>
 						<th>{{t 'niirdccore.dmp_project.foaf_fundedby_vivo_grant'}}</th>
-						<td>{{this.project.funding.funder_name}}</td>
+						<td>{{this.project.funding.funderName}}</td>
 					</tr>
 					<tr>
 						<th>{{t 'niirdccore.dmp_project.foaf_fundedby_foaf_agent'}}</th>
-						<td>{{this.project.funding.grand_id.identifier}}</td>
+						<td>{{this.project.funding.grandId.identifier}}</td>
 					</tr>
 					<tr>
 						<th>{{t 'niirdccore.dmp_project.activity_type'}}</th>
@@ -117,8 +117,8 @@
 							<td>{{item.mbox}}</td>
 							<td>{{item.role}}</td>
 							<td>
-								{{#if (eq item.contact_id.type "orcid")}}
-								{{item.contact_id.identifier}}
+								{{#if (eq item.contactId.type "orcid")}}
+								{{item.contactId.identifier}}
 								{{/if}}
 							</td>
 						</tr>
@@ -141,8 +141,8 @@
 							<td>{{this.contact.mbox}}</td>
 							<td>{{this.contact.role}}</td>
 							<td>
-								{{#if (eq this.contact.contact_id.type "orcid")}}
-								{{this.contact.contact_id.identifier}}
+								{{#if (eq this.contact.contactId.type "orcid")}}
+								{{this.contact.contactId.identifier}}
 								{{/if}}
 							</td>
 						</tr>
@@ -171,7 +171,7 @@
 				</OsfButton>
 
 				{{#each this.datasets as | item | }}
-				<table id={{item.dataset_id.identifier}} class="table" local-class="dataSetTitleTable">
+				<table id={{item.datasetId.identifier}} class="table" local-class="dataSetTitleTable">
 					<tr>
 						<td class="tableAnchor">{{item.title}}</td>
 						<td>
@@ -192,16 +192,16 @@
 						<td>{{item.type}}</td>
 					</tr>
 					<tr>
-						<th>{{t 'niirdccore.dmp_data_record.byte_size'}}</th>
-						<td>{{item.distribution.byte_size}}</td>
+						<th>{{t 'niirdccore.dmp_data_record.byteSize'}}</th>
+						<td>{{item.distribution.byteSize}}</td>
 					</tr>
 					<tr>
-						<th>{{t 'niirdccore.dmp_data_record.access_policy'}}</th>
-						<td>{{item.access_policy}}</td>
+						<th>{{t 'niirdccore.dmp_data_record.accessPolicy'}}</th>
+						<td>{{item.accessPolicy}}</td>
 					</tr>
 					<tr>
-						<th>{{t 'niirdccore.dmp_data_record.data_access'}}</th>
-						<td>{{item.data_access}}</td>
+						<th>{{t 'niirdccore.dmp_data_record.dataAccess'}}</th>
+						<td>{{item.dataAccess}}</td>
 					</tr>
 					<tr>
 						<th>{{t 'niirdccore.dmp_data_record.issued'}}</th>
@@ -212,8 +212,8 @@
 						<td>{{item.distribution.host.title}}</td>
 					</tr>
 					<tr>
-						<th>{{t 'niirdccore.dmp_data_record.access_url'}}</th>
-						<td>{{item.distribution.access_url}}</td>
+						<th>{{t 'niirdccore.dmp_data_record.accessUrl'}}</th>
+						<td>{{item.distribution.accessUrl}}</td>
 					</tr>
 					<tr>
 						<th>{{t 'niirdccore.dmp_data_record.creator_name'}}</th>
@@ -323,20 +323,20 @@
 		</label><br>
 
 		<!-- データのアクセス権 -->
-		<label for='access_policy'>{{t 'niirdccore.dmp_data_record.editing.access_policy'}}<br>
-			<select id='access_policy' onchange={{action this.setDatasetDataAccess value='target.value' }}>
+		<label for='accessPolicy'>{{t 'niirdccore.dmp_data_record.editing.accessPolicy'}}<br>
+			<select id='accessPolicy' onchange={{action this.setDatasetDataAccess value='target.value' }}>
 				<option disabled selected>---</option>
-				<option value={{t 'niirdccore.dmp_data_record.editing.access_policy_selection.opt1' }}>
-					{{t 'niirdccore.dmp_data_record.editing.access_policy_selection.opt1'}}
+				<option value={{t 'niirdccore.dmp_data_record.editing.accessPolicy_selection.opt1' }}>
+					{{t 'niirdccore.dmp_data_record.editing.accessPolicy_selection.opt1'}}
 				</option>
-				<option value={{t 'niirdccore.dmp_data_record.editing.access_policy_selection.opt2' }}>
-					{{t 'niirdccore.dmp_data_record.editing.access_policy_selection.opt2'}}
+				<option value={{t 'niirdccore.dmp_data_record.editing.accessPolicy_selection.opt2' }}>
+					{{t 'niirdccore.dmp_data_record.editing.accessPolicy_selection.opt2'}}
 				</option>
-				<option value={{t 'niirdccore.dmp_data_record.editing.access_policy_selection.opt3' }}>
-					{{t 'niirdccore.dmp_data_record.editing.access_policy_selection.opt3'}}
+				<option value={{t 'niirdccore.dmp_data_record.editing.accessPolicy_selection.opt3' }}>
+					{{t 'niirdccore.dmp_data_record.editing.accessPolicy_selection.opt3'}}
 				</option>
-				<option value={{t 'niirdccore.dmp_data_record.editing.access_policy_selection.opt4' }}>
-					{{t 'niirdccore.dmp_data_record.editing.access_policy_selection.opt4'}}
+				<option value={{t 'niirdccore.dmp_data_record.editing.accessPolicy_selection.opt4' }}>
+					{{t 'niirdccore.dmp_data_record.editing.accessPolicy_selection.opt4'}}
 				</option>
 			</select>
 		</label><br>
@@ -487,7 +487,7 @@
 			<tr>
 				<!-- データのアクセス権 -->
 				<td local-class='confirmKey'>
-					{{t 'niirdccore.dmp_data_record.editing.access_policy'}}
+					{{t 'niirdccore.dmp_data_record.editing.accessPolicy'}}
 				</td>
 				<td>{{this.datasetDataAccess}}</td>
 			</tr>
@@ -508,7 +508,7 @@
 			<tr>
 				<!-- アクセスURL -->
 				<td local-class='confirmKey'>
-					{{t 'niirdccore.dmp_data_record.access_url'}}
+					{{t 'niirdccore.dmp_data_record.accessUrl'}}
 				</td>
 				<td>{{this.datasetRepositoryUrl}}</td>
 			</tr>

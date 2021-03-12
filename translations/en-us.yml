@@ -1777,12 +1777,12 @@ niirdccore:
         title: 'タイトル'
         description: 'データの説明'
         type: 'データ種別'
-        byte_size: '概略データ量'
-        access_policy: 'データの提供方針'
-        data_access: 'データのアクセス権'
+        byteSize: '概略データ量'
+        accessPolicy: 'データの提供方針'
+        dataAccess: 'データのアクセス権'
         issued: 'データ公開予定日'
         host: 'リポジトリ'
-        access_url: 'アクセスURL'
+        accessUrl: 'アクセスURL'
         creator_name: 'データ作成者'
         manager_name: 'データ管理者'
         editing:
@@ -1806,8 +1806,8 @@ niirdccore:
                 opt3: '10GB以上100GB未満'
                 opt4: '100GB以上'
             data_offer_policy: 'データの提供方針'
-            access_policy: 'データのアクセス権'
-            access_policy_selection:
+            accessPolicy: 'データのアクセス権'
+            accessPolicy_selection:
                 opt1: '公開'
                 opt2: '共有'
                 opt3: '非共有・非公開'

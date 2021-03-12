@@ -19,7 +19,7 @@ module('Acceptance | guid-node/niirdccore', hooks => {
         assert.equal(currentRouteName(), 'guid-node.niirdccore', 'We are at guid-node.niirdccore');
         await percySnapshot(assert);
         // assert.dom('[data-test-param1] input').exists()
-            // .hasValue('123');
+        // .hasValue('123');
         // assert.dom('[data-test-save-button]').exists();
     });
 });
