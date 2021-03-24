@@ -118,23 +118,19 @@ export default class GuidNode_niirdccore extends Controller {
     }
 
     // 概略データ量
-    @computed('datasetEditing.distribution.byte_size')
+    @computed('datasetEditing.byte_size')
     get datasetAmount() {
-        if (this.datasetEditing == undefined || this.datasetEditing.distribution == undefined) {
+        if (this.datasetEditing == undefined) {
             return '';
         }
-        return this.datasetEditing.distribution.byte_size;
+        return this.datasetEditing.byte_size;
     }
     @action
     setDatasetAmount(value: string) {
-        if (typeof this.datasetEditing.distribution === 'undefined') {
-            let tmp = {} as DistributionModel
-            tmp.byte_size = value
-            set(this.datasetEditing, 'distribution', tmp)
-        } else {
-            set(this.datasetEditing.distribution, 'byte_size', value);
+        if (this.datasetEditing == undefined || value == undefined) {
+            return;
         }
-        this.set('isPageDirty', true);
+        set(this.datasetEditing, 'byte_size', value);
     }
 
     // データの提供方針
@@ -154,14 +150,14 @@ export default class GuidNode_niirdccore extends Controller {
     }
 
     // データのアクセス権
-    @computed('datasetEditing.data_access')
-    get datasetDataAccess() {
-        return this.datasetEditing.data_access;
-    }
-    @action
-    setDatasetDataAccess(value: string) {
-        set(this.datasetEditing, 'data_access', value);
-    }
+    // @computed('datasetEditing.data_access')
+    // get datasetDataAccess() {
+    //     return this.datasetEditing.data_access;
+    // }
+    // @action
+    // setDatasetDataAccess(value: string) {
+    //     set(this.datasetEditing, 'data_access', value);
+    // }
 
     // データ公開予定日
     @computed('datasetEditing.issued')
@@ -419,7 +415,6 @@ export default class GuidNode_niirdccore extends Controller {
         let distribution = {} as DistributionModel;
         distribution.title = '';
         distribution.access_url = '';
-        distribution.byte_size = '';
         distribution.host = {} as HostModel;
         distribution.host.title = '';
         distribution.host.url = '';
@@ -432,6 +427,7 @@ export default class GuidNode_niirdccore extends Controller {
         set(this.datasetEditing, 'description', '');
         set(this.datasetEditing, 'type', '');
         set(this.datasetEditing, 'access_policy', '');
+        set(this.datasetEditing, 'byte_size', '');
         set(this.datasetEditing, 'issued', '');
         set(this.datasetEditing, 'dataset_id', dataset_id);
         set(this.datasetEditing, 'creator', creator);

@@ -15,7 +15,7 @@ export interface MemberModel {
     role: string;
 }
 
-export interface FundingModel{
+export interface FundingModel {
     funder_name: string;
     grand_id: IdentifierModel;
 }
@@ -32,22 +32,21 @@ export interface ProjectModel {
     type: string;
 }
 
-export interface HostModel{
+export interface HostModel {
     title: string;
     url: string;
 }
 
-export interface LicenseModel{
+export interface LicenseModel {
     name: string;
     license_ref: string;
     start_date: string;
 }
 
-export interface DistributionModel{
+export interface DistributionModel {
     host: HostModel;
     title: string;
     access_url: string;
-    byte_size: string;
     license: LicenseModel;
 }
 
@@ -57,6 +56,7 @@ export class DMPDatasetModel {
     @attr('string') description!: string;
     @attr('string') type!: string;
     @attr('string') access_policy!: string;
+    @attr('string') byte_size!: string;
     @attr('string') data_access!: string;
     @attr('string') issued!: string;
     @attr() creator!: MemberModel;
@@ -66,7 +66,7 @@ export class DMPDatasetModel {
 }
 
 export default class DMPModel extends OsfModel {
-    @attr() dmp_id!: IdentifierModel; 
+    @attr() dmp_id!: IdentifierModel;
     @attr() project!: ProjectModel;
     @attr() contact!: MemberModel;
     @attr() contributors!: MemberModel[];

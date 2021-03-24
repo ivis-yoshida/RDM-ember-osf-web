@@ -193,28 +193,30 @@
 					</tr>
 					<tr>
 						<th>{{t 'niirdccore.dmp_data_record.byte_size'}}</th>
-						<td>{{item.distribution.byte_size}}</td>
+						<td>{{item.byte_size}}</td>
 					</tr>
 					<tr>
 						<th>{{t 'niirdccore.dmp_data_record.access_policy'}}</th>
 						<td>{{item.access_policy}}</td>
 					</tr>
-					<tr>
+					{{!-- <tr>
 						<th>{{t 'niirdccore.dmp_data_record.data_access'}}</th>
 						<td>{{item.data_access}}</td>
-					</tr>
+					</tr> --}}
 					<tr>
 						<th>{{t 'niirdccore.dmp_data_record.issued'}}</th>
 						<td>{{item.issued}}</td>
 					</tr>
+					{{!-- {{#each item.distribution as | repository index | }} --}}
 					<tr>
 						<th>{{t 'niirdccore.dmp_data_record.host'}}</th>
-						<td>{{item.distribution.host.title}}</td>
+						<td>{{item.distribution.0.title}}</td>
 					</tr>
 					<tr>
 						<th>{{t 'niirdccore.dmp_data_record.access_url'}}</th>
-						<td>{{item.distribution.access_url}}</td>
+						<td>{{item.distribution.0.access_url}}</td>
 					</tr>
+					{{!-- {{/each}} --}}
 					<tr>
 						<th>{{t 'niirdccore.dmp_data_record.creator_name'}}</th>
 						<td>{{item.creator.name}}</td>
@@ -282,11 +284,7 @@
 		<!-- 説明 -->
 		<label for='description'>{{t 'niirdccore.dmp_data_record.editing.description'}}<br>
 			<div>
-				<Textarea
-					@id='description' @value={{this.datasetDescription}}
-					placeholder={{t 'niirdccore.dmp_data_record.editing.optional'}}
-					local-class='editingForm'
-				>
+				<Textarea @id='description' @value={{this.datasetDescription}} placeholder={{t 'niirdccore.dmp_data_record.editing.optional' }} local-class='editingForm'>
 				</Textarea>
 			</div>
 		</label><br>
@@ -313,11 +311,7 @@
 		<!-- データの提供方針 -->
 		<label for='data_offer_policy'>{{t 'niirdccore.dmp_data_record.editing.data_offer_policy'}}<br>
 			<div>
-				<Textarea
-					@id='data_offer_policy' @value={{this.datasetAccessPolicy}}
-					placeholder={{t 'niirdccore.dmp_data_record.editing.optional'}}
-					local-class='editingForm'
-				>
+				<Textarea @id='data_offer_policy' @value={{this.datasetAccessPolicy}} placeholder={{t 'niirdccore.dmp_data_record.editing.optional' }} local-class='editingForm'>
 				</Textarea>
 			</div>
 		</label><br>
