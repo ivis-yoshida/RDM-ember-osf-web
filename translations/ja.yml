@@ -1699,6 +1699,9 @@ niirdccore:
             repository: 'リポジトリ'
             name: '名前: '
             id:   'ID: '
+            email: 'Eメール: '
+            idConfirm: 'ID'
+            emailConfirm: 'Eメール'
             id_selection:
                 opt1: 'ORCID'
                 opt2: 'e-Rad研究者番号'
