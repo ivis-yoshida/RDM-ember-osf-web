@@ -117,8 +117,8 @@
 							<td>{{item.mbox}}</td>
 							<td>{{item.role}}</td>
 							<td>
-								{{#if (eq item.contact_id.type "orcid")}}
-								{{item.contact_id.identifier}}
+								{{#if (eq item.contributor_id.type "orcid")}}
+								{{item.contributor_id.identifier}}
 								{{/if}}
 							</td>
 						</tr>
@@ -199,10 +199,10 @@
 						<th>{{t 'niirdccore.dmp_data_record.access_policy'}}</th>
 						<td>{{item.access_policy}}</td>
 					</tr>
-					{{!-- <tr>
+					<tr>
 						<th>{{t 'niirdccore.dmp_data_record.data_access'}}</th>
 						<td>{{item.data_access}}</td>
-					</tr> --}}
+					</tr>
 					<tr>
 						<th>{{t 'niirdccore.dmp_data_record.issued'}}</th>
 						<td>{{item.issued}}</td>
@@ -244,28 +244,28 @@
 		<label for='data_type'>{{t 'niirdccore.dmp_data_record.editing.data_type'}}<br>
 			<select id='data_type' onchange={{action this.setDatasetType value='target.value' }}>
 				<option disabled selected>---</option>
-				<option value={{t 'niirdccore.dmp_data_record.editing.type_selection.dataset' }}>
+				<option value='dataset'>
 					{{t 'niirdccore.dmp_data_record.editing.type_selection.dataset'}}
 				</option>
-				<option value={{t 'niirdccore.dmp_data_record.editing.type_selection.image' }}>
+				<option value='image'>
 					{{t 'niirdccore.dmp_data_record.editing.type_selection.image'}}
 				</option>
-				<option value={{t 'niirdccore.dmp_data_record.editing.type_selection.other' }}>
+				<option value='other'>
 					{{t 'niirdccore.dmp_data_record.editing.type_selection.other'}}
 				</option>
-				<option value={{t 'niirdccore.dmp_data_record.editing.type_selection.software' }}>
+				<option value='software'>
 					{{t 'niirdccore.dmp_data_record.editing.type_selection.software'}}
 				</option>
-				<option value={{t 'niirdccore.dmp_data_record.editing.type_selection.workflow' }}>
+				<option value='workflow'>
 					{{t 'niirdccore.dmp_data_record.editing.type_selection.workflow'}}
 				</option>
-				<option value={{t 'niirdccore.dmp_data_record.editing.type_selection.cartographic-material' }}>
+				<option value='cartographic_material'>
 					{{t 'niirdccore.dmp_data_record.editing.type_selection.cartographic-material'}}
 				</option>
-				<option value={{t 'niirdccore.dmp_data_record.editing.type_selection.sound' }}>
+				<option value='sound'>
 					{{t 'niirdccore.dmp_data_record.editing.type_selection.sound'}}
 				</option>
-				<option value={{t 'niirdccore.dmp_data_record.editing.type_selection.text' }}>
+				<option value='text'>
 					{{t 'niirdccore.dmp_data_record.editing.type_selection.text'}}
 				</option>
 			</select>
@@ -293,16 +293,16 @@
 		<label for='data_amount'>{{t 'niirdccore.dmp_data_record.editing.data_amount'}}<br>
 			<select id='data_amount' onchange={{action this.setDatasetAmount value='target.value' }}>
 				<option disabled selected>---</option>
-				<option value={{t 'niirdccore.dmp_data_record.editing.amount_selection.opt1' }}>
+				<option value='less-than-1GB'>
 					{{t 'niirdccore.dmp_data_record.editing.amount_selection.opt1'}}
 				</option>
-				<option value={{t 'niirdccore.dmp_data_record.editing.amount_selection.opt2' }}>
+				<option value='1GB-to-less-than-10GB'>
 					{{t 'niirdccore.dmp_data_record.editing.amount_selection.opt2'}}
 				</option>
-				<option value={{t 'niirdccore.dmp_data_record.editing.amount_selection.opt3' }}>
+				<option value='10GB-to-less-than-100GB'>
 					{{t 'niirdccore.dmp_data_record.editing.amount_selection.opt3'}}
 				</option>
-				<option value={{t 'niirdccore.dmp_data_record.editing.amount_selection.opt4' }}>
+				<option value='100GB-and-more'>
 					{{t 'niirdccore.dmp_data_record.editing.amount_selection.opt4'}}
 				</option>
 			</select>
@@ -320,16 +320,16 @@
 		<label for='access_policy'>{{t 'niirdccore.dmp_data_record.editing.access_policy'}}<br>
 			<select id='access_policy' onchange={{action this.setDatasetDataAccess value='target.value' }}>
 				<option disabled selected>---</option>
-				<option value={{t 'niirdccore.dmp_data_record.editing.access_policy_selection.opt1' }}>
+				<option value='open'>
 					{{t 'niirdccore.dmp_data_record.editing.access_policy_selection.opt1'}}
 				</option>
-				<option value={{t 'niirdccore.dmp_data_record.editing.access_policy_selection.opt2' }}>
+				<option value='sharing'>
 					{{t 'niirdccore.dmp_data_record.editing.access_policy_selection.opt2'}}
 				</option>
-				<option value={{t 'niirdccore.dmp_data_record.editing.access_policy_selection.opt3' }}>
+				<option value='closed'>
 					{{t 'niirdccore.dmp_data_record.editing.access_policy_selection.opt3'}}
 				</option>
-				<option value={{t 'niirdccore.dmp_data_record.editing.access_policy_selection.opt4' }}>
+				<option value='embergo'>
 					{{t 'niirdccore.dmp_data_record.editing.access_policy_selection.opt4'}}
 				</option>
 			</select>
@@ -366,17 +366,7 @@
 		<!-- データ作成者 -->
 		<label for='author'>{{t 'niirdccore.dmp_data_record.editing.author'}}<br>
 			<p>{{t 'niirdccore.dmp_data_record.editing.pleaseAuthor'}}</p>
-			<select id='author' local-class='personForm' onchange={{action this.setDatasetCreatorName value='target.value' }}>
-				<option disabled selected>---</option>
-				<option value={{t 'niirdccore.dmp_data_record.editing.author_opt1' }}>
-					{{t 'niirdccore.dmp_data_record.editing.author_opt1'}}
-				</option>
-			</select>
-			<br>
-			<label for='manualAuthor' local-class='manualInput'>{{t 'niirdccore.dmp_data_record.editing.manualInput'}}</label>
-			<input type="checkbox" id='manualAuthor' local-class='hiddenBox' />
-			<div local-class='hiddenBlock'>
-				<label for='manualAuthorName manualAuthorId'>
+				<label for='manualAuthorName manualAuthorType manualAuthorId　manualAuthorEmail'>
 					{{t 'niirdccore.dmp_data_record.editing.name'}}
 					{{
 					input name='manualAuthorName' local-class='personForm'
@@ -384,33 +374,32 @@
 					}}
 					<br>
 					{{t 'niirdccore.dmp_data_record.editing.id'}}
-					<select id='manualAuthorId' local-class='hiddenChoiceForm' onchange={{action this.setDatasetCreatorMbox value='target.value' }}>
+					<select id='manualAuthorType' local-class='hiddenChoiceForm' onchange={{action this.setDatasetCreatorType value='target.value' }}>
 						<option disabled selected>---</option>
-						<option value={{t 'niirdccore.dmp_data_record.editing.id_selection.opt1' }}>
+						<option value='orcid'>
 							{{t 'niirdccore.dmp_data_record.editing.id_selection.opt1'}}
 						</option>
-						<option value={{t 'niirdccore.dmp_data_record.editing.id_selection.opt2' }}>
+						<option value='e-rad-researcher-number'>
 							{{t 'niirdccore.dmp_data_record.editing.id_selection.opt2'}}
 						</option>
 					</select>
+					{{
+					input name='manualAuthorId' local-class='personIdForm'
+					value=this.datasetCreatorId type='text'
+					}}
+					<br>
+					{{t 'niirdccore.dmp_data_record.editing.email'}}
+					{{
+					input name='manualAuthorEmail' local-class='personEmailForm'
+					value=this.datasetCreatorEmail type='text'
+					}}
 				</label>
-			</div>
 		</label><br>
 
 		<!-- データ管理者 -->
 		<label for='manager'>{{t 'niirdccore.dmp_data_record.editing.manager'}}<br>
 			<p>{{t 'niirdccore.dmp_data_record.editing.pleaseManager'}}</p>
-			<select id='manager' local-class='personForm' onchange={{action this.setDatasetManagerName value='target.value' }}>
-				<option disabled selected>---</option>
-				<option value={{t 'niirdccore.dmp_data_record.editing.manager_opt1' }}>
-					{{t 'niirdccore.dmp_data_record.editing.manager_opt1'}}
-				</option>
-			</select>
-			<br>
-			<label for='manualManager' local-class='manualInput'>{{t 'niirdccore.dmp_data_record.editing.manualInput'}}</label>
-			<input type="checkbox" id='manualManager' local-class='hiddenBox' />
-			<div local-class='hiddenBlock'>
-				<label for='manualManagerName manualManagerId'>
+				<label for='manualManagerName manualManagerType manualManagerId manualManagerEmail'>
 					{{t 'niirdccore.dmp_data_record.editing.name'}}
 					{{
 					input name='manualManagerName' local-class='personForm'
@@ -418,17 +407,26 @@
 					}}
 					<br>
 					{{t 'niirdccore.dmp_data_record.editing.id'}}
-					<select id='manualManagerId' local-class='hiddenChoiceForm' onchange={{action this.setDatasetManagerMbox value='target.value' }}>
+					<select id='manualManagerType' local-class='hiddenChoiceForm' onchange={{action this.setDatasetManagerType value='target.value' }}>
 						<option disabled selected>---</option>
-						<option value={{t 'niirdccore.dmp_data_record.editing.id_selection.opt1' }}>
+						<option value='orcid'>
 							{{t 'niirdccore.dmp_data_record.editing.id_selection.opt1'}}
 						</option>
-						<option value={{t 'niirdccore.dmp_data_record.editing.id_selection.opt2' }}>
+						<option value='e-rad-researcher-number'>
 							{{t 'niirdccore.dmp_data_record.editing.id_selection.opt2'}}
 						</option>
 					</select>
+					{{
+					input name='manualManagerId' local-class='personIdForm'
+					value=this.datasetManagerId type='text'
+					}}
+					<br>
+					{{t 'niirdccore.dmp_data_record.editing.email'}}
+					{{
+					input name='manualManagerEmail' local-class='personEmailForm'
+					value=this.datasetManagerEmail type='text'
+					}}
 				</label>
-			</div>
 		</label><br>
 
 		<p local-class='editingFooter'>
@@ -478,13 +476,13 @@
 				</td>
 				<td>{{this.datasetAccessPolicy}}</td>
 			</tr>
-			<tr>
+			{{!-- <tr>
 				<!-- データのアクセス権 -->
 				<td local-class='confirmKey'>
 					{{t 'niirdccore.dmp_data_record.editing.access_policy'}}
 				</td>
 				<td>{{this.datasetDataAccess}}</td>
-			</tr>
+			</tr> --}}
 			<tr>
 				<!-- データ公開予定日 -->
 				<td local-class='confirmKey'>
@@ -514,11 +512,39 @@
 				<td>{{this.datasetCreatorName}}</td>
 			</tr>
 			<tr>
+				<!-- データ作成者ID -->
+				<td local-class='confirmMemberKey'>
+					{{t 'niirdccore.dmp_data_record.editing.idConfirm'}}
+				</td>
+				<td>{{this.datasetCreatorId}} 【{{this.datasetCreatorType}}】</td>
+			</tr>
+			<tr>
+				<!-- データ作成者Email -->
+				<td local-class='confirmMemberKey'>
+					{{t 'niirdccore.dmp_data_record.editing.emailConfirm'}}
+				</td>
+				<td>{{this.datasetCreatorEmail}}</td>
+			</tr>
+			<tr>
 				<!-- データ管理者 -->
 				<td local-class='confirmKey'>
 					{{t 'niirdccore.dmp_data_record.editing.manager'}}
 				</td>
 				<td>{{this.datasetManagerName}}</td>
+			</tr>
+			<tr>
+				<!-- データ管理者ID -->
+				<td local-class='confirmMemberKey'>
+					{{t 'niirdccore.dmp_data_record.editing.idConfirm'}}
+				</td>
+				<td>{{this.datasetManagerId}} 【{{this.datasetManagerType}}】</td>
+			</tr>
+			<tr>
+				<!-- データ管理者Email -->
+				<td local-class='confirmMemberKey'>
+					{{t 'niirdccore.dmp_data_record.editing.emailConfirm'}}
+				</td>
+				<td>{{this.datasetManagerEmail}}</td>
 			</tr>
 		</table>
 		<p local-class='confirmation'>{{t 'niirdccore.dmp_data_record.confirmation'}}</p>

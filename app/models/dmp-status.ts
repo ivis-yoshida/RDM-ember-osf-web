@@ -8,6 +8,13 @@ export interface IdentifierModel {
     type: string;
 }
 
+export interface CreatorModel {
+    creator_id: IdentifierModel;
+    mbox: string;
+    name: string;
+    role: string;
+}
+
 export interface MemberModel {
     contact_id: IdentifierModel;
     mbox: string;
@@ -59,9 +66,9 @@ export class DMPDatasetModel {
     @attr('string') byte_size!: string;
     @attr('string') data_access!: string;
     @attr('string') issued!: string;
-    @attr() creator!: MemberModel;
+    @attr() creator!: CreatorModel;
     @attr() contact!: MemberModel;
-    @attr() distribution!: DistributionModel;
+    @attr() distribution!: Array<DistributionModel>;
     @attr('boolean') dataset_is_new!: boolean;
 }
 

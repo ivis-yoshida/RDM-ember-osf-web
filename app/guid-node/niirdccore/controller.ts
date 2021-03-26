@@ -7,7 +7,7 @@ import DS from 'ember-data';
 import Intl from 'ember-intl/services/intl';
 import Toast from 'ember-toastr/services/toast';
 
-import DMPModel, { DMPDatasetModel, DistributionModel, HostModel, LicenseModel, IdentifierModel, MemberModel } from 'ember-osf-web/models/dmp-status';
+import DMPModel, { DMPDatasetModel, DistributionModel, HostModel, LicenseModel, IdentifierModel, CreatorModel, MemberModel } from 'ember-osf-web/models/dmp-status';
 import Node from 'ember-osf-web/models/node';
 import Analytics from 'ember-osf-web/services/analytics';
 import StatusMessages from 'ember-osf-web/services/status-messages';
@@ -150,14 +150,14 @@ export default class GuidNode_niirdccore extends Controller {
     }
 
     // データのアクセス権
-    // @computed('datasetEditing.data_access')
-    // get datasetDataAccess() {
-    //     return this.datasetEditing.data_access;
-    // }
-    // @action
-    // setDatasetDataAccess(value: string) {
-    //     set(this.datasetEditing, 'data_access', value);
-    // }
+    @computed('datasetEditing.data_access')
+    get datasetDataAccess() {
+        return this.datasetEditing.data_access;
+    }
+    @action
+    setDatasetDataAccess(value: string) {
+        set(this.datasetEditing, 'data_access', value);
+    }
 
     // データ公開予定日
     @computed('datasetEditing.issued')
@@ -190,15 +190,17 @@ export default class GuidNode_niirdccore extends Controller {
         if (this.datasetEditing == undefined || this.datasetEditing.distribution == undefined) {
             return '';
         }
-        return this.datasetEditing.distribution.title;
+        return this.datasetEditing.distribution[0].title;
     }
     set datasetRepositoryName(value: string) {
         if (typeof this.datasetEditing.distribution === 'undefined') {
             let tmp = {} as DistributionModel
-            tmp.title = value
-            set(this.datasetEditing, 'distribution', tmp)
+            tmp.access_url = value
+            let distributionArray = {} as Array<DistributionModel>
+            distributionArray.push(tmp)
+            set(this.datasetEditing, 'distribution', distributionArray)
         } else {
-            set(this.datasetEditing.distribution, 'title', value);
+            set(this.datasetEditing.distribution[0], 'title', value);
         }
         this.set('isPageDirty', true);
     }
@@ -209,15 +211,17 @@ export default class GuidNode_niirdccore extends Controller {
         if (this.datasetEditing == undefined || this.datasetEditing.distribution == undefined) {
             return '';
         }
-        return this.datasetEditing.distribution.access_url;
+        return this.datasetEditing.distribution[0].access_url;
     }
     set datasetRepositoryUrl(value: string) {
         if (typeof this.datasetEditing.distribution === 'undefined') {
             let tmp = {} as DistributionModel
             tmp.access_url = value
-            set(this.datasetEditing, 'distribution', tmp)
+            let distributionArray = {} as Array<DistributionModel>
+            distributionArray.push(tmp)
+            set(this.datasetEditing, 'distribution', distributionArray)
         } else {
-            set(this.datasetEditing.distribution, 'access_url', value);
+            set(this.datasetEditing.distribution[0], 'access_url', value);
         }
         this.set('isPageDirty', true);
     }
@@ -233,7 +237,7 @@ export default class GuidNode_niirdccore extends Controller {
     @action
     setDatasetCreatorName(value: string) {
         if (typeof this.datasetEditing.creator === 'undefined') {
-            let tmp = {} as MemberModel
+            let tmp = {} as CreatorModel
             tmp.name = value
             set(this.datasetEditing, 'creator', tmp)
         } else {
@@ -244,7 +248,7 @@ export default class GuidNode_niirdccore extends Controller {
     // for manual setting
     set datasetCreatorName(value: string) {
         if (typeof this.datasetEditing.creator === 'undefined') {
-            let tmp = {} as MemberModel
+            let tmp = {} as CreatorModel
             tmp.name = value
             set(this.datasetEditing, 'creator', tmp)
         } else {
@@ -253,17 +257,56 @@ export default class GuidNode_niirdccore extends Controller {
         this.set('isPageDirty', true);
     }
 
+    // ID type
+    @computed('datasetEditing.creator.creator_id.type')
+    get datasetCreatorType() {
+        if (typeof this.datasetEditing.creator === 'undefined') {
+            return '';
+        }
+        return this.datasetEditing.creator.creator_id.type;
+    }
+    @action
+    setDatasetCreatorType(value: string) {
+        if (typeof this.datasetEditing.creator === 'undefined') {
+            let tmp = {} as CreatorModel
+            tmp.creator_id.type = value
+            set(this.datasetEditing, 'creator', tmp)
+        } else {
+            set(this.datasetEditing.creator.creator_id, 'type', value);
+        }
+        this.set('isPageDirty', true);
+    }
+
+    // ID string
+    @computed('datasetEditing.creator.creator.identifier')
+    get datasetCreatorId() {
+        if (typeof this.datasetEditing.creator === 'undefined') {
+            return '';
+        }
+        return this.datasetEditing.creator.creator_id.identifier;
+    }
+    set datasetCreatorId(value: string) {
+        if (typeof this.datasetEditing.creator === 'undefined') {
+            let tmp = {} as CreatorModel
+            tmp.creator_id.identifier = value
+            set(this.datasetEditing, 'creator', tmp)
+        } else {
+            set(this.datasetEditing.creator.creator_id, 'identifier', value);
+        }
+        this.set('isPageDirty', true);
+    }
+
+    // Creator Email
     @computed('datasetEditing.creator.mbox')
-    get datasetCreatorMbox() {
+    get datasetCreatorEmail() {
         if (typeof this.datasetEditing.creator === 'undefined') {
             return '';
         }
         return this.datasetEditing.creator.mbox;
     }
-    @action
-    setDatasetCreatorMbox(value: string) {
+    set datasetCreatorEmail(value: string) {
         if (typeof this.datasetEditing.creator === 'undefined') {
-            let tmp = {} as MemberModel
+            let tmp = {} as CreatorModel
             tmp.mbox = value
             set(this.datasetEditing, 'creator', tmp)
         } else {
@@ -303,19 +346,56 @@ export default class GuidNode_niirdccore extends Controller {
         this.set('isPageDirty', true);
     }
 
-    @computed('datasetEditing.contact.mbox')
-    get datasetManagerMbox() {
+    @computed('datasetEditing.contact.manager_id.type')
+    get datasetManagerType() {
+        if (typeof this.datasetEditing.contact === 'undefined') {
+            return '';
+        }
+        return this.datasetEditing.contact.contact_id.type;
+    }
+    @action
+    setDatasetManagerType(value: string) {
+        if (typeof this.datasetEditing.contact === 'undefined') {
+            let tmp = {} as MemberModel
+            tmp.contact_id.type = value
+            set(this.datasetEditing, 'contact', tmp)
+        } else {
+            set(this.datasetEditing.contact.contact_id, 'type', value);
+        }
+        this.set('isPageDirty', true);
+    }
+    // ID string
+    @computed('datasetEditing.contact.manager_id.identifier')
+    get datasetManagerId() {
+        if (typeof this.datasetEditing.contact === 'undefined') {
+            return '';
+        }
+        return this.datasetEditing.contact.contact_id.identifier;
+    }
+    set datasetManagerId(value: string) {
+        if (typeof this.datasetEditing.contact === 'undefined') {
+            let tmp = {} as MemberModel
+            tmp.contact_id.identifier = value
+            set(this.datasetEditing, 'contact', tmp)
+        } else {
+            set(this.datasetEditing.contact.contact_id, 'identifier', value);
+        }
+        this.set('isPageDirty', true);
+    }
+
+    // Manager Email
+    @computed('datasetEditing.creator.mbox')
+    get datasetManagerEmail() {
         if (typeof this.datasetEditing.contact === 'undefined') {
             return '';
         }
         return this.datasetEditing.contact.mbox;
     }
-    @action
-    setDatasetManagerMbox(value: string) {
+    set datasetManagerEmail(value: string) {
         if (typeof this.datasetEditing.contact === 'undefined') {
-            let tmp = {} as MemberModel
+            let tmp = {} as CreatorModel
             tmp.mbox = value
-            set(this.datasetEditing, 'contact', tmp)
+            set(this.datasetEditing, 'creator', tmp)
         } else {
             set(this.datasetEditing.contact, 'mbox', value);
         }
@@ -394,13 +474,13 @@ export default class GuidNode_niirdccore extends Controller {
         dataset_id.type = '';
 
         // creator
-        let creator = {} as MemberModel;
+        let creator = {} as CreatorModel;
         creator.mbox = '';
         creator.name = '';
         creator.role = '';
-        creator.contact_id = {} as IdentifierModel;
-        creator.contact_id.identifier = '';
-        creator.contact_id.type = '';
+        creator.creator_id = {} as IdentifierModel;
+        creator.creator_id.identifier = '';
+        creator.creator_id.type = '';
 
         // contact
         let contact = {} as MemberModel;
@@ -423,6 +503,8 @@ export default class GuidNode_niirdccore extends Controller {
         distribution.license.license_ref = '';
         distribution.license.start_date = '';
 
+        let distributionArray: DistributionModel[] = [distribution];
+
         set(this.datasetEditing, 'title', '');
         set(this.datasetEditing, 'description', '');
         set(this.datasetEditing, 'type', '');
@@ -432,7 +514,7 @@ export default class GuidNode_niirdccore extends Controller {
         set(this.datasetEditing, 'dataset_id', dataset_id);
         set(this.datasetEditing, 'creator', creator);
         set(this.datasetEditing, 'contact', contact);
-        set(this.datasetEditing, 'distribution', distribution);
+        set(this.datasetEditing, 'distribution', distributionArray);
         set(this.datasetEditing, 'dataset_is_new', true);
     }
 }
