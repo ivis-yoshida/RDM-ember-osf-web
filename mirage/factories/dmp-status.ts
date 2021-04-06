@@ -1,12 +1,12 @@
 import { Factory } from 'ember-cli-mirage';
 
-import DMPDatasetModel from 'ember-osf-web/models/dmp-status';
+import DMPModel from 'ember-osf-web/models/dmp-status';
 
-export default Factory.extend<DMPDatasetModel>({
+export default Factory.extend<DMPModel>({
 });
 
 declare module 'ember-cli-mirage/types/registries/schema' {
     export default interface MirageSchemaRegistry {
-        dmpStatuses: DMPDatasetModel;
+        dmpStatuses: DMPModel;
     } // eslint-disable-line semi
 }
