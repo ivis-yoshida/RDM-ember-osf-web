@@ -335,8 +335,8 @@ export default class GuidNodeNiirdccore extends Controller {
         const config = this.config.content as DMPModel;
         config.setProperties(
             {
-                dataset: [this.datasetEditing]
-            },
+                dataset: [this.datasetEditing],
+            }
         );
 
         await config.save()
