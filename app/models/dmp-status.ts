@@ -1,7 +1,7 @@
 import DS from 'ember-data';
-import OsfModel from './osf-model';
 
 import { DMPDatasetModel } from 'ember-osf-web/models/dataset-status';
+import OsfModel from './osf-model';
 
 const { attr } = DS;
 
