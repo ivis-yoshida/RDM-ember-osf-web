@@ -8,7 +8,7 @@ import Intl from 'ember-intl/services/intl';
 import Toast from 'ember-toastr/services/toast';
 
 import DMPModel, {
-    DMPDatasetModel, DistributionModel, HostModel, LicenseModel, IdentifierModel, MemberModel
+    DMPDatasetModel, DistributionModel, HostModel, LicenseModel, IdentifierModel, MemberModel,
 } from 'ember-osf-web/models/dmp-status';
 import Node from 'ember-osf-web/models/node';
 import Analytics from 'ember-osf-web/services/analytics';
@@ -110,7 +110,6 @@ export default class GuidNodeNiirdccore extends Controller {
             return this.datasetEditing.description;
         }
         return '';
-
     }
     set datasetDescription(value: string | undefined) {
         if (this.datasetEditing === undefined || value === undefined) {
@@ -337,7 +336,7 @@ export default class GuidNodeNiirdccore extends Controller {
         config.setProperties(
             {
                 dataset: [this.datasetEditing]
-            }
+            },
         );
 
         await config.save()
@@ -393,7 +392,7 @@ export default class GuidNodeNiirdccore extends Controller {
         this.set('datasetEditing', {} as DMPDatasetModel);
 
         // datasetId
-        let datasetId = {} as IdentifierModel;
+        const datasetId = {} as IdentifierModel;
         datasetId.identifier = '';
         datasetId.type = '';
 
