@@ -8,8 +8,9 @@ import Intl from 'ember-intl/services/intl';
 import Toast from 'ember-toastr/services/toast';
 
 import DMPModel, {
-    DMPDatasetModel, DistributionModel, HostModel, LicenseModel, IdentifierModel, MemberModel,
+    DistributionModel, HostModel, LicenseModel, IdentifierModel, MemberModel,
 } from 'ember-osf-web/models/dmp-status';
+import { DMPDatasetModel } from 'ember-osf-web/models/dataset-status'
 import Node from 'ember-osf-web/models/node';
 import Analytics from 'ember-osf-web/services/analytics';
 import StatusMessages from 'ember-osf-web/services/status-messages';

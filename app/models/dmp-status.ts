@@ -1,6 +1,8 @@
 import DS from 'ember-data';
 import OsfModel from './osf-model';
 
+import { DMPDatasetModel } from 'ember-osf-web/models/dataset-status';
+
 const { attr } = DS;
 
 export interface IdentifierModel {
@@ -51,19 +53,19 @@ export interface DistributionModel{
     license: LicenseModel;
 }
 
-export class DMPDatasetModel {
-    @attr() datasetId!: IdentifierModel;
-    @attr('string') title!: string;
-    @attr('string') description!: string;
-    @attr('string') type!: string;
-    @attr('string') accessPolicy!: string;
-    @attr('string') dataAccess!: string;
-    @attr('string') issued!: string;
-    @attr() creator!: MemberModel;
-    @attr() contact!: MemberModel;
-    @attr() distribution!: DistributionModel;
-    @attr('boolean') datasetIsNew!: boolean;
-}
+// export class DMPDatasetModel {
+//     @attr() datasetId!: IdentifierModel;
+//     @attr('string') title!: string;
+//     @attr('string') description!: string;
+//     @attr('string') type!: string;
+//     @attr('string') accessPolicy!: string;
+//     @attr('string') dataAccess!: string;
+//     @attr('string') issued!: string;
+//     @attr() creator!: MemberModel;
+//     @attr() contact!: MemberModel;
+//     @attr() distribution!: DistributionModel;
+//     @attr('boolean') datasetIsNew!: boolean;
+// }
 
 export default class DMPModel extends OsfModel {
     @attr() dmpId!: IdentifierModel;
