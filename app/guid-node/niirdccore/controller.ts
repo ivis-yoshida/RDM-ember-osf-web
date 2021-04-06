@@ -336,7 +336,7 @@ export default class GuidNodeNiirdccore extends Controller {
         config.setProperties(
             {
                 dataset: [this.datasetEditing],
-            }
+            },
         );
 
         await config.save()
