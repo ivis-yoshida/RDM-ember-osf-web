@@ -33,7 +33,7 @@
     "linters": {
       "*.js": "eslint --max-warnings=0",
       "*.ts": [
-        "eslint --max-warnings=0",
+        "eslint --max-warnings=2",
         "tslint"
       ],
       "*.scss": "stylelint",
