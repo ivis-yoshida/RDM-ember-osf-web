@@ -14,7 +14,7 @@
     "build:test": "ember build --environment=test",
     "start": "ember server",
     "lint": "eslint --ext js,ts --max-warnings=0 . && tslint -p . && stylelint 'app/**/*.scss' 'lib/**/*.scss'",
-    "lint:es": "eslint --ext js,ts --max-warnings=2 .",
+    "lint:es": "eslint --ext js,ts --max-warnings=0 .",
     "lint:ts": "tslint -p .",
     "lint:style": "stylelint 'app/**/*.scss' 'lib/**/*.scss'",
     "lint:template": "ember-template-lint app/**/*.hbs lib/**/*.hbs",
@@ -33,7 +33,7 @@
     "linters": {
       "*.js": "eslint --max-warnings=0",
       "*.ts": [
-        "eslint --max-warnings=2",
+        "eslint --max-warnings=0",
         "tslint"
       ],
       "*.scss": "stylelint",
