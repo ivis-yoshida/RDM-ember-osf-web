@@ -1,7 +1,7 @@
 import DS from 'ember-data';
 
-import {
-    DMPDatasetModel, IdentifierModel, MemberModel, ProjectModel,
+import DMPDatasetModel, {
+    IdentifierModel, MemberModel, ProjectModel,
 } from 'ember-osf-web/models/dataset-status';
 import OsfModel from './osf-model';
 

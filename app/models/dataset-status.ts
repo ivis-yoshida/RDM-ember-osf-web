@@ -51,7 +51,7 @@ export interface DistributionModel {
     license: LicenseModel;
 }
 
-export class DMPDatasetModel extends OsfModel {
+export default class DMPDatasetModel extends OsfModel {
     @attr() datasetId!: IdentifierModel;
     @attr('string') title!: string;
     @attr('string') description!: string;
