@@ -9,7 +9,7 @@ import Toast from 'ember-toastr/services/toast';
 
 import DMPModel from 'ember-osf-web/models/dmp-status';
 import {
-    DMPDatasetModel, DistributionModel, HostModel, LicenseModel, IdentifierModel, MemberModel,
+    DistributionModel, DMPDatasetModel, HostModel, IdentifierModel,  LicenseModel, MemberModel,
 } from 'ember-osf-web/models/dataset-status';
 import Node from 'ember-osf-web/models/node';
 import Analytics from 'ember-osf-web/services/analytics';
@@ -235,8 +235,8 @@ export default class GuidNodeNiirdccore extends Controller {
         }
         return this.datasetEditing.creator.name;
     }
-    @action
-    setDatasetCreatorName(value: string) {
+    // for manual setting
+    set datasetCreatorName(value: string) {
         if (typeof this.datasetEditing.creator === 'undefined') {
             const tmp = {} as MemberModel;
             tmp.name = value;
@@ -246,8 +246,8 @@ export default class GuidNodeNiirdccore extends Controller {
         }
         this.set('isPageDirty', true);
     }
-    // for manual setting
-    set datasetCreatorName(value: string) {
+    @action
+    setDatasetCreatorName(value: string) {
         if (typeof this.datasetEditing.creator === 'undefined') {
             const tmp = {} as MemberModel;
             tmp.name = value;
@@ -285,8 +285,8 @@ export default class GuidNodeNiirdccore extends Controller {
         }
         return this.datasetEditing.contact.name;
     }
-    @action
-    setDatasetManagerName(value: string) {
+    // for manual setting
+    set datasetManagerName(value: string) {
         if (typeof this.datasetEditing.contact === 'undefined') {
             const tmp = {} as MemberModel;
             tmp.name = value;
@@ -296,8 +296,8 @@ export default class GuidNodeNiirdccore extends Controller {
         }
         this.set('isPageDirty', true);
     }
-    // for manual setting
-    set datasetManagerName(value: string) {
+    @action
+    setDatasetManagerName(value: string) {
         if (typeof this.datasetEditing.contact === 'undefined') {
             const tmp = {} as MemberModel;
             tmp.name = value;

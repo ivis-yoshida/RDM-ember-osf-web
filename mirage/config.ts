@@ -6,6 +6,7 @@ import { searchCollections } from './views/collection-search';
 import { reportDelete } from './views/comment';
 import { createBibliographicContributor } from './views/contributor';
 import { createDeveloperApp, updateDeveloperApp } from './views/developer-app';
+import { dmpStatus } from './views/dmp-status';
 import { createDraftRegistration } from './views/draft-registration';
 import {
     folderFilesList,
@@ -19,7 +20,6 @@ import { guidDetail } from './views/guid';
 import { identifierCreate } from './views/identifier';
 import { summaryMetrics } from './views/institution';
 import { iqbrimsStatus } from './views/iqbrims-status';
-import { dmpStatus } from './views/dmp-status';
 import { createNode } from './views/node';
 import { osfNestedResource, osfResource, osfToManyRelationship } from './views/osf-resource';
 import { getProviderSubjects } from './views/provider-subjects';
