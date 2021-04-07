@@ -7,11 +7,11 @@ import DS from 'ember-data';
 import Intl from 'ember-intl/services/intl';
 import Toast from 'ember-toastr/services/toast';
 
-import DMPModel from 'ember-osf-web/models/dmp-status';
 import {
     DistributionModel, DMPDatasetModel, HostModel, IdentifierModel,
     LicenseModel, MemberModel,
 } from 'ember-osf-web/models/dataset-status';
+import DMPModel from 'ember-osf-web/models/dmp-status';
 import Node from 'ember-osf-web/models/node';
 import Analytics from 'ember-osf-web/services/analytics';
 import StatusMessages from 'ember-osf-web/services/status-messages';
