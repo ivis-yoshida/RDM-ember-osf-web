@@ -5,7 +5,7 @@ import { getCitation } from './views/citation';
 import { searchCollections } from './views/collection-search';
 import { reportDelete } from './views/comment';
 import { createBibliographicContributor } from './views/contributor';
-import { datasetStatus } from './views/dataset-status';
+// import { datasetStatus } from './views/dataset-status';
 import { createDeveloperApp, updateDeveloperApp } from './views/developer-app';
 import { dmpStatus } from './views/dmp-status';
 import { createDraftRegistration } from './views/draft-registration';
@@ -255,8 +255,8 @@ export default function(this: Server) {
     this.namespace = '/api/v1';
 
     this.get('/project/:id/iqbrims/status', iqbrimsStatus);
-    this.get('/project/:id/niirdccore/status', datasetStatus);
-    this.get('/project/:id/niirdccore/status', dmpStatus);
+    // this.get('/project/:id/niirdccore/status', datasetStatus);
+    this.get('/project/:id/niirdccore/dmp', dmpStatus);
 
     this.urlPrefix = apiUrl;
     this.namespace = apiNamespace;
