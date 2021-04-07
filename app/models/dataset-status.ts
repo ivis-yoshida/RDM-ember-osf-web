@@ -1,4 +1,5 @@
 import DS from 'ember-data';
+import OsfModel from './osf-model';
 
 const { attr } = DS;
 
@@ -50,7 +51,7 @@ export interface DistributionModel {
     license: LicenseModel;
 }
 
-export class DMPDatasetModel {
+export class DMPDatasetModel extends OsfModel {
     @attr() datasetId!: IdentifierModel;
     @attr('string') title!: string;
     @attr('string') description!: string;
