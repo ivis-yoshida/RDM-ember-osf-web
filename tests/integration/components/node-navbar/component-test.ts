@@ -308,7 +308,10 @@ module('Integration | Component | node-navbar', () => {
                 const niirdccoreEnabled = testCase.conditions.filter(c => c === NavCondition.NiirdccoreEnabled);
                 this.set('niirdccoreEnabled', niirdccoreEnabled.length > 0);
 
-                await render(hbs`{{node-navbar node=this.node iqbrimsEnabled=this.iqbrimsEnabled niirdccoreEnabled=this.niirdccoreEnabled renderInPlace=true}}`);
+                await render(hbs`{{node-navbar
+                    node=this.node iqbrimsEnabled=this.iqbrimsEnabled
+                    niirdccoreEnabled=this.niirdccoreEnabled
+                    renderInPlace=true}}`);
 
                 assert.dom('[data-test-node-navbar-link]').exists({ count: testCase.links.length });
 
