@@ -11,7 +11,7 @@ module('Acceptance | guid-node/niirdccore', hooks => {
 
     test('logged in', async assert => {
         const node = server.create('node', { id: 'i9bri' });
-        server.create('dmp-status', 'this is dummy dmp');
+        server.create('dmp-status', { id: node.id });
         const url = `/${node.id}/niirdccore`;
 
         await visit(url);
